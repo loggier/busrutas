@@ -55,21 +55,19 @@ export default function RouteDashboardClient({
   }, [currentTime]);
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-full">
+    <div className="h-screen bg-background p-4 md:p-8 flex flex-col overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 flex-1 overflow-hidden">
         {/* Left Column: Control Points */}
-        <div className="md:col-span-8 flex flex-col h-full gap-6">
+        <div className="md:col-span-8 flex flex-col gap-6 overflow-hidden">
           <RouteHeaderCard routeInfo={routeInfo} />
           <ControlPointsSection controlPoints={controlPoints} /> {/* isLoadingEta removed */}
         </div>
 
         {/* Right Column: Units Ahead and Behind */}
-        <div className="md:col-span-4 flex flex-col h-full gap-6">
+        <div className="md:col-span-4 flex flex-col gap-6 overflow-y-auto"> {/* Added overflow-y-auto here */}
           <UnitInfoCard unitDetails={unitAhead} />
           <UnitInfoCard unitDetails={unitBehind} />
-          {/* ETA Update Button removed, replaced with a generic refresh button if needed in future */}
-          {/* Or completely remove the button if no manual refresh action is desired */}
-           <Button onClick={handleManualRefresh} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+           <Button onClick={handleManualRefresh} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground mt-auto"> {/* Added mt-auto to push button to bottom if space allows */}
              <RefreshCw size={18} className="mr-2" />
              Refrescar Datos
            </Button>
