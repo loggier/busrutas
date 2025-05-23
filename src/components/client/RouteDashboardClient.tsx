@@ -1,13 +1,13 @@
 'use client';
 
 import type { RouteInfo, ControlPoint, UnitDetails } from '@/types';
-import { predictETA, type PredictETAInput } from '@/ai/flows/predict-eta';
+// import { predictETA, type PredictETAInput } from '@/ai/flows/predict-eta'; // ETA functionality removed
 import { useCurrentTime } from '@/hooks/use-current-time';
 import { useState, useEffect, useCallback }  from 'react';
 import RouteHeaderCard from '@/components/route/RouteHeaderCard';
 import ControlPointsSection from '@/components/control-points/ControlPointsSection';
 import UnitInfoCard from '@/components/units/UnitInfoCard';
-import { useToast } from "@/hooks/use-toast";
+// import { useToast } from "@/hooks/use-toast"; // Toast for ETA removed
 import { Button } from '@/components/ui/button';
 import { RefreshCw } from 'lucide-react';
 
@@ -16,7 +16,7 @@ interface RouteDashboardClientProps {
   initialControlPoints: ControlPoint[];
   initialUnitAhead: UnitDetails;
   initialUnitBehind: UnitDetails;
-  historicalData: string;
+  historicalData: string; // Kept for potential future use, but not used now
 }
 
 export default function RouteDashboardClient({
@@ -24,77 +24,35 @@ export default function RouteDashboardClient({
   initialControlPoints,
   initialUnitAhead,
   initialUnitBehind,
-  historicalData,
+  // historicalData, // Not used for now
 }: RouteDashboardClientProps) {
   const [routeInfo] = useState<RouteInfo>(initialRouteInfo);
   const [controlPoints, setControlPoints] = useState<ControlPoint[]>(initialControlPoints);
   const [unitAhead] = useState<UnitDetails>(initialUnitAhead);
   const [unitBehind] = useState<UnitDetails>(initialUnitBehind);
-  const [isLoadingEta, setIsLoadingEta] = useState<boolean>(false);
-  const { toast } = useToast();
+  // const [isLoadingEta, setIsLoadingEta] = useState<boolean>(false); // ETA functionality removed
+  // const { toast } = useToast(); // Toast for ETA removed
 
   const currentTime = useCurrentTime(); // Updates every 10 seconds by default
 
-  const fetchAndSetEtas = useCallback(async () => {
-    setIsLoadingEta(true);
-    try {
-      const currentCpIndex = controlPoints.findIndex(cp => cp.isCurrent);
-      const currentPoint = currentCpIndex !== -1 ? controlPoints[currentCpIndex] : controlPoints[0];
-      
-      const upcomingPointsObjects = controlPoints.slice(currentCpIndex !== -1 ? currentCpIndex : 0);
-      const upcomingControlPointNames = upcomingPointsObjects.map(cp => cp.name);
+  // ETA Fetching logic removed
+  const handleManualRefresh = useCallback(() => {
+    // Placeholder for any manual refresh logic if needed in the future,
+    // for now, it might just re-render or re-fetch basic data if applicable.
+    // console.log("Manual refresh triggered at:", currentTime.toLocaleTimeString());
+    // For now, let's just simulate a loading state for the button if clicked
+    // setIsLoadingEta(true); // If we had a loading state for other things
+    // setTimeout(() => setIsLoadingEta(false), 1000); // Simulate loading
+  }, []);
 
-      if (upcomingControlPointNames.length === 0) {
-        setIsLoadingEta(false);
-        return;
-      }
-      
-      const input: PredictETAInput = {
-        currentLocation: currentPoint.name,
-        upcomingControlPoints: upcomingControlPointNames,
-        currentTime: currentTime.toLocaleTimeString('es-EC', { hour: '2-digit', minute: '2-digit' }),
-        historicalData: historicalData,
-      };
 
-      const result = await predictETA(input);
-
-      setControlPoints(prevPoints => {
-        const updatedPoints = [...prevPoints];
-        let overallDelayReasonApplied = false;
-
-        upcomingPointsObjects.forEach((upPoint, index) => {
-          const pointIndexInOriginal = updatedPoints.findIndex(p => p.id === upPoint.id);
-          if (pointIndexInOriginal !== -1) {
-            updatedPoints[pointIndexInOriginal].predictedTime = result.estimatedArrivalTimes[index] || null;
-            if (!overallDelayReasonApplied && result.delayReasons && result.delayReasons.length > 0) {
-               updatedPoints[pointIndexInOriginal].delayReason = result.delayReasons;
-               overallDelayReasonApplied = true; // Show general delay reason on the first upcoming point
-            } else {
-               updatedPoints[pointIndexInOriginal].delayReason = null;
-            }
-          }
-        });
-        return updatedPoints;
-      });
-
-      if (result.delayReasons) {
-        // toast({ title: "AI ETA Prediction", description: `Potential delay: ${result.delayReasons}` });
-      }
-
-    } catch (error) {
-      console.error('Error predicting ETA:', error);
-      toast({ title: "Error", description: "Failed to predict ETA.", variant: "destructive" });
-      // Reset predicted times on error
-      setControlPoints(prevPoints => prevPoints.map(p => ({ ...p, predictedTime: null, delayReason: null })));
-    } finally {
-      setIsLoadingEta(false);
-    }
-  }, [controlPoints, currentTime, historicalData, toast]);
-
+  // useEffect to update something based on currentTime, if necessary, can be added here.
+  // For example, updating displayed times if they are dynamic beyond the control points.
   useEffect(() => {
-    fetchAndSetEtas();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentTime]); // Re-fetch ETAs when currentTime changes (debounced by useCurrentTime hook)
+    // Example: console.log("Current time updated in dashboard:", currentTime.toLocaleTimeString());
+    // If there were other parts of the UI that needed to react to time changes,
+    // independent of ETA, that logic would go here.
+  }, [currentTime]);
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
@@ -102,17 +60,19 @@ export default function RouteDashboardClient({
         {/* Left Column: Control Points */}
         <div className="md:col-span-8 flex flex-col h-full gap-6">
           <RouteHeaderCard routeInfo={routeInfo} />
-          <ControlPointsSection controlPoints={controlPoints} isLoadingEta={isLoadingEta} />
+          <ControlPointsSection controlPoints={controlPoints} /> {/* isLoadingEta removed */}
         </div>
 
         {/* Right Column: Units Ahead and Behind */}
         <div className="md:col-span-4 flex flex-col h-full gap-6">
           <UnitInfoCard unitDetails={unitAhead} />
           <UnitInfoCard unitDetails={unitBehind} />
-          <Button onClick={fetchAndSetEtas} disabled={isLoadingEta} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-            <RefreshCw size={18} className={isLoadingEta ? "animate-spin mr-2" : "mr-2"} />
-            {isLoadingEta ? "Actualizando ETA..." : "Actualizar ETA Manualmente"}
-          </Button>
+          {/* ETA Update Button removed, replaced with a generic refresh button if needed in future */}
+          {/* Or completely remove the button if no manual refresh action is desired */}
+           <Button onClick={handleManualRefresh} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+             <RefreshCw size={18} className="mr-2" />
+             Refrescar Datos
+           </Button>
         </div>
       </div>
     </div>

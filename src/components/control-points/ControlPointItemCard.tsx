@@ -1,7 +1,7 @@
 import type { ControlPoint } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Clock } from 'lucide-react';
+// import { Clock } from 'lucide-react'; // Clock icon removed as ETA is removed
 
 interface ControlPointItemCardProps {
   point: ControlPoint;
@@ -22,7 +22,8 @@ export default function ControlPointItemCard({ point }: ControlPointItemCardProp
           <span className={cn("text-2xl text-foreground", point.isCurrent ? "font-bold text-3xl" : "font-semibold")}>{point.name}</span>
           <span className={cn("text-2xl text-foreground", point.isCurrent ? "font-semibold" : "font-semibold")}>{point.scheduledTime}</span>
         </div>
-        {point.predictedTime && (
+        {/* Predicted time and delay reason removed */}
+        {/* {point.predictedTime && (
           <div className="flex justify-between items-center text-lg text-accent-foreground">
             <span className="flex items-center gap-1">
               <Clock size={16} className="text-accent" />
@@ -33,7 +34,7 @@ export default function ControlPointItemCard({ point }: ControlPointItemCardProp
         )}
         {point.delayReason && (
            <p className="text-sm text-destructive text-right">Razón del Retraso: {point.delayReason}</p>
-        )}
+        )} */}
         {point.isCurrent && point.meta && (
           <div className="flex justify-between items-center text-2xl">
             <span>{point.meta}</span>
