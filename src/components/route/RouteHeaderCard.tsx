@@ -13,15 +13,15 @@ export default function RouteHeaderCard({ routeInfo }: RouteHeaderCardProps) {
         <Image
           src="https://control.puntoexacto.ec/images/logo.png?t=1734027539"
           alt="Logo de la Empresa"
-          width={128} // Mantendremos el ancho, el alto se ajustará automáticamente o podemos definirlo
-          height={64} // Podemos ajustar esto si el aspect ratio del nuevo logo es diferente
-          className="h-16 w-auto object-contain" // 'h-16' y 'w-auto' podrían necesitar ajuste
-          data-ai-hint="company logo" // Mantenemos el hint
+          width={128}
+          height={64}
+          className="h-12 md:h-16 w-auto object-contain" // Ajustado h-12 para móviles/tablets pequeñas
+          data-ai-hint="company logo"
         />
         <div>
-          <h1 className="text-4xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
-          <p className="text-2xl text-muted-foreground">{routeInfo.currentDate}</p>
-          <p className="text-3xl font-medium mt-2 text-primary">{routeInfo.unitId}</p>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
+          <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground">{routeInfo.currentDate}</p>
+          <p className="text-xl sm:text-2xl md:text-3xl font-medium mt-2 text-primary">{routeInfo.unitId}</p>
         </div>
       </CardContent>
     </Card>
