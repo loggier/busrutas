@@ -1,8 +1,11 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { LogOut, Info } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface DigitalClockProps {
   currentTime: Date | null;
@@ -29,17 +32,26 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
   }, [currentTime]);
 
   useEffect(() => {
-    // Colon blink effect, only if timeString is available
     if (timeString) {
       const colonTimer = setInterval(() => {
         setShowColon((prev) => !prev);
-      }, 1000); // Blink every second
+      }, 1000); 
 
       return () => {
         clearInterval(colonTimer);
       };
     }
-  }, [timeString]); // Rerun if timeString changes (e.g. from null to actual time)
+  }, [timeString]);
+
+  const handleInfoClick = () => {
+    console.log("Información de la app presionada. Versión: 1.0.0, Copyright 2024 MiEmpresa");
+    // Aquí podrías abrir un modal con la información
+  };
+
+  const handleLogoutClick = () => {
+    console.log("Cerrar sesión presionado");
+    // Aquí implementarías la lógica de cierre de sesión
+  };
 
   if (!timeString) {
     return (
@@ -59,7 +71,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
   const [hours, minutes, seconds] = timeString.split(':');
 
   return (
-    <div className="bg-button-custom-dark-gray text-primary-foreground p-3 rounded-lg shadow-md text-center mb-6">
+    <div className="bg-button-custom-dark-gray text-primary-foreground p-4 rounded-lg shadow-md text-center mb-6">
       <div className="font-mono text-2xl md:text-3xl tracking-wider">
         <span>{hours}</span>
         <span className={`transition-opacity duration-150 ease-in-out mx-1 ${showColon ? 'opacity-100' : 'opacity-25'}`}>:</span>
@@ -70,6 +82,26 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
       {dateString && (
         <div className="text-sm text-gray-300 mt-1">{dateString}</div>
       )}
+      <div className="mt-3 flex justify-center space-x-4">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleInfoClick}
+          className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground"
+          aria-label="Información de la aplicación"
+        >
+          <Info size={20} />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleLogoutClick}
+          className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground"
+          aria-label="Cerrar sesión"
+        >
+          <LogOut size={20} />
+        </Button>
+      </div>
     </div>
   );
 }
