@@ -67,7 +67,10 @@ export default function RouteDashboardClient({
         <div className="md:col-span-4 flex flex-col gap-6 overflow-y-auto"> {/* Added overflow-y-auto here */}
           <UnitInfoCard unitDetails={unitAhead} />
           <UnitInfoCard unitDetails={unitBehind} />
-           <Button onClick={handleManualRefresh} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground mt-auto"> {/* Changed to primary colors */}
+           <Button 
+             onClick={handleManualRefresh} 
+             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto"
+           >
              <RefreshCw size={18} className="mr-2" />
              Refrescar Datos
            </Button>

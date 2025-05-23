@@ -43,6 +43,9 @@ body {
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
 
+    /* Custom color for the refresh button */
+    --button-custom-dark-gray: 0 0% 18.4%; /* #2f2f2f */
+
     /* Sidebar variables - kept for consistency if sidebar is used later */
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -80,6 +83,10 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    /* Custom color for the refresh button - ensure it's defined for dark mode if needed */
+    --button-custom-dark-gray: 0 0% 18.4%; /* #2f2f2f */
+
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
