@@ -32,7 +32,7 @@ export default function ControlPointItemCard({ point }: ControlPointItemCardProp
           </div>
         )}
         {point.delayReason && (
-           <p className="text-sm text-destructive text-right">Retraso: {point.delayReason}</p>
+           <p className="text-sm text-destructive text-right">Razón del Retraso: {point.delayReason}</p>
         )}
         {point.isCurrent && point.meta && (
           <div className="flex justify-between items-center text-2xl">
