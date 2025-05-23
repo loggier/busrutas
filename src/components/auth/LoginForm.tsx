@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useRouter } from 'next/navigation'; // Importar useRouter
 
 import { Button } from '@/components/ui/button';
 import {
@@ -26,8 +27,12 @@ const formSchema = z.object({
     .regex(/^\d{6}$/, { message: 'El PIN debe contener solo números.' }),
 });
 
+const VALID_UNIT_NAME = "00890";
+const VALID_PIN = "123456";
+
 export default function LoginForm() {
   const { toast } = useToast();
+  const router = useRouter(); // Inicializar useRouter
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,16 +42,22 @@ export default function LoginForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('Login attempt:', values);
-    toast({
-      title: 'Intento de Ingreso',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      ),
-    });
-    // Aquí se manejaría la lógica de autenticación real
+    if (values.unitName === VALID_UNIT_NAME && values.pin === VALID_PIN) {
+      toast({
+        title: 'Ingreso Exitoso',
+        description: 'Bienvenido. Redirigiendo a la página principal...',
+        variant: 'default', // Puedes usar 'default' o crear una variante 'success' si la tienes
+      });
+      router.push('/'); // Redirigir a la página principal
+    } else {
+      toast({
+        title: 'Error de Ingreso',
+        description: 'Nombre de unidad o PIN incorrectos. Intente nuevamente.',
+        variant: 'destructive',
+      });
+      // Limpiar el campo de PIN para que el usuario lo reingrese
+      form.setValue('pin', '');
+    }
   }
 
   return (
@@ -73,7 +84,7 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel>Nombre de la Unidad</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ej: U-001 o NombreUnidad" {...field} />
+                    <Input placeholder="Ej: U-001 o 00890" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
