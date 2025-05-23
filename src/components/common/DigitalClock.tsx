@@ -35,7 +35,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
     if (timeString) {
       const colonTimer = setInterval(() => {
         setShowColon((prev) => !prev);
-      }, 1000); 
+      }, 1000);
 
       return () => {
         clearInterval(colonTimer);
@@ -56,6 +56,26 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
   if (!timeString) {
     return (
       <div className="bg-button-custom-dark-gray text-primary-foreground p-3 rounded-lg shadow-md text-center mb-6">
+        <div className="flex justify-end space-x-1 mb-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-7 w-7 opacity-50 cursor-not-allowed"
+              aria-label="Información de la aplicación"
+              disabled
+            >
+              <Info size={18} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-7 w-7 opacity-50 cursor-not-allowed"
+              aria-label="Cerrar sesión"
+              disabled
+            >
+              <LogOut size={18} />
+            </Button>
+          </div>
         <div className="font-mono text-2xl md:text-3xl tracking-wider">
           <span>--</span>
           <span className="opacity-50 mx-1">:</span>
@@ -71,23 +91,13 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
   const [hours, minutes, seconds] = timeString.split(':');
 
   return (
-    <div className="bg-button-custom-dark-gray text-primary-foreground p-4 rounded-lg shadow-md text-center mb-6">
-      <div className="font-mono text-2xl md:text-3xl tracking-wider">
-        <span>{hours}</span>
-        <span className={`transition-opacity duration-150 ease-in-out mx-1 ${showColon ? 'opacity-100' : 'opacity-25'}`}>:</span>
-        <span>{minutes}</span>
-        <span className={`transition-opacity duration-150 ease-in-out mx-1 ${showColon ? 'opacity-100' : 'opacity-25'}`}>:</span>
-        <span>{seconds}</span>
-      </div>
-      {dateString && (
-        <div className="text-sm text-gray-300 mt-1">{dateString}</div>
-      )}
-      <div className="mt-3 flex justify-center space-x-4">
+    <div className="bg-button-custom-dark-gray text-primary-foreground p-4 rounded-lg shadow-md mb-6 flex flex-col">
+      <div className="flex justify-end space-x-1 mb-2">
         <Button
           variant="ghost"
           size="icon"
           onClick={handleInfoClick}
-          className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground"
+          className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-8 w-8"
           aria-label="Información de la aplicación"
         >
           <Info size={20} />
@@ -96,11 +106,23 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
           variant="ghost"
           size="icon"
           onClick={handleLogoutClick}
-          className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground"
+          className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-8 w-8"
           aria-label="Cerrar sesión"
         >
           <LogOut size={20} />
         </Button>
+      </div>
+      <div className="text-center">
+        <div className="font-mono text-2xl md:text-3xl tracking-wider">
+          <span>{hours}</span>
+          <span className={`transition-opacity duration-150 ease-in-out mx-1 ${showColon ? 'opacity-100' : 'opacity-25'}`}>:</span>
+          <span>{minutes}</span>
+          <span className={`transition-opacity duration-150 ease-in-out mx-1 ${showColon ? 'opacity-100' : 'opacity-25'}`}>:</span>
+          <span>{seconds}</span>
+        </div>
+        {dateString && (
+          <div className="text-sm text-gray-300 mt-1">{dateString}</div>
+        )}
       </div>
     </div>
   );
