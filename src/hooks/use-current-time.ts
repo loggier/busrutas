@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-export function useCurrentTime(updateInterval: number = 10000) { // Update every 10 seconds
+export function useCurrentTime(updateInterval: number = 1000) { // Update every second
   const [currentTime, setCurrentTime] = useState<Date | null>(null); // Initialize to null
 
   useEffect(() => {
@@ -13,7 +13,7 @@ export function useCurrentTime(updateInterval: number = 10000) { // Update every
       setCurrentTime(new Date());
     }, updateInterval);
     return () => clearInterval(timerId);
-  }, [updateInterval]); // Empty dependency array ensures this runs once on mount for initial set, then interval logic takes over
+  }, [updateInterval]);
 
   return currentTime;
 }
