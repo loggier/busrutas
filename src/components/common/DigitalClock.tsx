@@ -5,7 +5,17 @@ import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { LogOut, Info } from 'lucide-react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface DigitalClockProps {
   currentTime: Date | null;
@@ -42,11 +52,6 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
       };
     }
   }, [timeString]);
-
-  const handleInfoClick = () => {
-    console.log("Información de la app presionada. Versión: 1.0.0, Copyright 2024 MiEmpresa");
-    // Aquí podrías abrir un modal con la información
-  };
 
   const handleLogoutClick = () => {
     console.log("Cerrar sesión presionado");
@@ -93,15 +98,42 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
   return (
     <div className="bg-button-custom-dark-gray text-primary-foreground p-4 rounded-lg shadow-md mb-6 flex flex-col">
       <div className="flex justify-end space-x-1 mb-2">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleInfoClick}
-          className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-8 w-8"
-          aria-label="Información de la aplicación"
-        >
-          <Info size={20} />
-        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-8 w-8"
+              aria-label="Información de la aplicación"
+            >
+              <Info size={20} />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-center">Información de la Aplicación</AlertDialogTitle>
+            </AlertDialogHeader>
+            <div className="flex flex-col items-center gap-4 py-4">
+              <Image
+                src="https://control.puntoexacto.ec/images/logo.png?t=1734027539"
+                alt="PuntoExacto Logo"
+                width={128}
+                height={64}
+                className="object-contain"
+                data-ai-hint="company logo"
+              />
+              <p className="text-sm text-muted-foreground text-center">
+                Todos los derechos reservados PuntoExacto - 2025
+              </p>
+              <p className="text-sm text-muted-foreground text-center">
+                Versión 1.0.2
+              </p>
+            </div>
+            <AlertDialogFooter>
+              <AlertDialogAction>Cerrar</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
         <Button
           variant="ghost"
           size="icon"
@@ -127,3 +159,4 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
     </div>
   );
 }
+
