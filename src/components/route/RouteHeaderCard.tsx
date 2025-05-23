@@ -11,12 +11,12 @@ export default function RouteHeaderCard({ routeInfo }: RouteHeaderCardProps) {
     <Card className="shadow-xl">
       <CardContent className="p-6 flex items-center gap-6">
         <Image
-          src="https://placehold.co/128x64/F44336/FFFFFF.png?text=Logo" // Placeholder logo
+          src="https://control.puntoexacto.ec/images/logo.png?t=1734027539"
           alt="Logo de la Empresa"
-          width={128}
-          height={64}
-          className="h-16 w-auto object-contain"
-          data-ai-hint="company logo"
+          width={128} // Mantendremos el ancho, el alto se ajustará automáticamente o podemos definirlo
+          height={64} // Podemos ajustar esto si el aspect ratio del nuevo logo es diferente
+          className="h-16 w-auto object-contain" // 'h-16' y 'w-auto' podrían necesitar ajuste
+          data-ai-hint="company logo" // Mantenemos el hint
         />
         <div>
           <h1 className="text-4xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
