@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 interface RouteHeaderCardProps {
   routeInfo: RouteInfo;
-  currentTimeFormatted: string;
+  currentTimeFormatted: string | null;
 }
 
 export default function RouteHeaderCard({ routeInfo, currentTimeFormatted }: RouteHeaderCardProps) {
@@ -23,7 +23,11 @@ export default function RouteHeaderCard({ routeInfo, currentTimeFormatted }: Rou
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
           <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground">
             {routeInfo.currentDate}
-            <span className="ml-2 font-medium text-foreground tabular-nums">{currentTimeFormatted}</span>
+            {currentTimeFormatted ? (
+              <span className="ml-2 font-medium text-foreground tabular-nums">{currentTimeFormatted}</span>
+            ) : (
+              <span className="ml-2 font-medium text-foreground tabular-nums">--:--:--</span>
+            )}
           </p>
           <p className="text-xl sm:text-2xl md:text-3xl font-medium mt-2 text-primary">{routeInfo.unitId}</p>
         </div>

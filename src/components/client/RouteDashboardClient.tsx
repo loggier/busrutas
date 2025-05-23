@@ -14,7 +14,7 @@ interface RouteDashboardClientProps {
   initialControlPoints: ControlPoint[];
   initialUnitAhead: UnitDetails;
   initialUnitBehind: UnitDetails;
-  historicalData: string;
+  historicalData: string; // Kept for potential future use with AI ETA
 }
 
 export default function RouteDashboardClient({
@@ -22,9 +22,10 @@ export default function RouteDashboardClient({
   initialControlPoints,
   initialUnitAhead,
   initialUnitBehind,
+  // historicalData, // Currently unused
 }: RouteDashboardClientProps) {
   const [routeInfo] = useState<RouteInfo>(initialRouteInfo);
-  const [controlPoints, setControlPoints] = useState<ControlPoint[]>(initialControlPoints);
+  const [controlPoints] = useState<ControlPoint[]>(initialControlPoints); // Removed setControlPoints as it's not used after AI removal
   const [unitAhead] = useState<UnitDetails>(initialUnitAhead);
   const [unitBehind] = useState<UnitDetails>(initialUnitBehind);
 
@@ -32,17 +33,24 @@ export default function RouteDashboardClient({
 
   const handleManualRefresh = useCallback(() => {
     // Placeholder for any manual refresh logic
+    // For example, re-fetch data for control points or unit details if they can change
+    console.log("Datos refrescados manualmente (placeholder)");
   }, []);
 
+  // This useEffect is no longer strictly necessary just for currentTime if no other logic depends on its update here.
+  // Kept for clarity or if other effects depending on currentTime are added back.
   useEffect(() => {
     // Logic to run when currentTime updates, if any additional logic is needed.
   }, [currentTime]);
 
-  const currentTimeFormatted = currentTime.toLocaleTimeString('es-ES', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  });
+  const currentTimeFormatted = currentTime
+    ? currentTime.toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      })
+    : null;
+
 
   return (
     <div className="h-screen bg-background p-4 md:p-8 flex flex-col overflow-hidden">
