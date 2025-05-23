@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { LogOut, Info } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation'; // Importar useRouter
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -25,6 +26,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
   const [showColon, setShowColon] = useState(true);
   const [timeString, setTimeString] = useState<string | null>(null);
   const [dateString, setDateString] = useState<string | null>(null);
+  const router = useRouter(); // Inicializar useRouter
 
   useEffect(() => {
     if (currentTime) {
@@ -54,8 +56,8 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
   }, [timeString]);
 
   const handleLogoutClick = () => {
-    console.log("Cerrar sesión presionado");
-    // Aquí implementarías la lógica de cierre de sesión
+    console.log("Cerrar sesión presionado, redirigiendo a /login");
+    router.push('/login'); // Redirigir a la página de login
   };
 
   if (!timeString) {
