@@ -4,7 +4,7 @@ import {
   MOCK_CONTROL_POINTS,
   MOCK_UNIT_AHEAD,
   MOCK_UNIT_BEHIND,
-  MOCK_HISTORICAL_DATA
+  // MOCK_HISTORICAL_DATA // Ya no se importa ni se pasa
 } from '@/lib/constants';
 
 // This page will be a Server Component by default
@@ -14,7 +14,7 @@ export default async function RouteSchedulePage() {
   const controlPoints = MOCK_CONTROL_POINTS;
   const unitAhead = MOCK_UNIT_AHEAD;
   const unitBehind = MOCK_UNIT_BEHIND;
-  const historicalData = MOCK_HISTORICAL_DATA;
+  // const historicalData = MOCK_HISTORICAL_DATA; // Ya no se usa
 
   return (
     <RouteDashboardClient
@@ -22,7 +22,7 @@ export default async function RouteSchedulePage() {
       initialControlPoints={controlPoints}
       initialUnitAhead={unitAhead}
       initialUnitBehind={unitBehind}
-      historicalData={historicalData}
+      // historicalData prop ya no se pasa
     />
   );
 }

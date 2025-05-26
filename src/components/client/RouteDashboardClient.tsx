@@ -6,7 +6,7 @@ import { useState, useCallback }  from 'react';
 import RouteHeaderCard from '@/components/route/RouteHeaderCard';
 import ControlPointsSection from '@/components/control-points/ControlPointsSection';
 import UnitInfoCard from '@/components/units/UnitInfoCard';
-import DigitalClock from '@/components/common/DigitalClock'; // Import DigitalClock
+import DigitalClock from '@/components/common/DigitalClock';
 import { Button } from '@/components/ui/button';
 import { RefreshCw } from 'lucide-react';
 
@@ -15,7 +15,7 @@ interface RouteDashboardClientProps {
   initialControlPoints: ControlPoint[];
   initialUnitAhead: UnitDetails;
   initialUnitBehind: UnitDetails;
-  historicalData: string;
+  historicalData?: string; // Prop hecha opcional
 }
 
 export default function RouteDashboardClient({
@@ -23,17 +23,18 @@ export default function RouteDashboardClient({
   initialControlPoints,
   initialUnitAhead,
   initialUnitBehind,
-  // historicalData, // Currently unused
+  // historicalData, // Prop opcional, actualmente no usada directamente en la UI
 }: RouteDashboardClientProps) {
   const [routeInfo] = useState<RouteInfo>(initialRouteInfo);
   const [controlPoints] = useState<ControlPoint[]>(initialControlPoints);
   const [unitAhead] = useState<UnitDetails>(initialUnitAhead);
   const [unitBehind] = useState<UnitDetails>(initialUnitBehind);
 
-  const currentTime = useCurrentTime(); // Updates every second by default
+  const currentTime = useCurrentTime();
 
   const handleManualRefresh = useCallback(() => {
     console.log("Datos refrescados manualmente (placeholder)");
+    // Aquí podrías añadir lógica para volver a obtener datos de una API si fuera necesario
   }, []);
 
   return (

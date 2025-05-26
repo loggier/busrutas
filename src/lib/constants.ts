@@ -2,7 +2,7 @@ import type { RouteInfo, ControlPoint, UnitDetails } from '@/types';
 
 export const MOCK_ROUTE_INFO: RouteInfo = {
   routeName: 'RUTA 123',
-  currentDate: 'Martes, 15 de Abril 2025',
+  currentDate: '2025-04-15', // Formato YYYY-MM-DD
   unitId: 'Unidad: 39 (1875)',
 };
 
@@ -46,7 +46,7 @@ export const MOCK_CONTROL_POINTS: ControlPoint[] = [
 export const MOCK_UNIT_AHEAD: UnitDetails = {
   id: 'unit-ahead',
   label: 'Unidad Adelante',
-  unitIdentifier: '39 (1875)', // This seems to be the current unit, example might need adjustment
+  unitIdentifier: '39 (1875)', 
   totalAT: 22,
   totalAD: 0,
   lastKnownLocation: 'C. Ballen',
@@ -68,11 +68,5 @@ export const MOCK_UNIT_BEHIND: UnitDetails = {
   isPrimary: false,
 };
 
-export const MOCK_HISTORICAL_DATA: string = `
-  Kennedy a C. Ballen: 2025-04-14 17:30, 7 mins; 2025-04-13 17:32, 6 mins.
-  C. Ballen a 9 de Octubre: 2025-04-14 17:38, 8 mins; 2025-04-13 17:40, 9 mins.
-  9 de Octubre a Quisquis y Carchi: 2025-04-14 17:47, 5 mins; 2025-04-13 17:49, 5 mins.
-  Quisquis y Carchi a Cementerio: 2025-04-14 17:53, 8 mins; 2025-04-13 17:55, 7 mins.
-  Cementerio a Florida Norte: 2025-04-14 18:02, 15 mins; 2025-04-13 18:03, 14 mins.
-  Datos adicionales: Hora pico (17:00-19:00) puede incrementar tiempos en 2-5 minutos por tramo. Lluvia fuerte reportada el 2025-04-13 incrementó tiempos en 5-10 minutos.
-`.trim();
+// MOCK_HISTORICAL_DATA ya no es necesario aquí si no se va a usar
+// export const MOCK_HISTORICAL_DATA: string = `...`;

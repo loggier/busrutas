@@ -6,8 +6,9 @@ export interface ControlPoint {
   metaTime?: string;
   status?: string;
   isCurrent?: boolean;
-  predictedTime?: string | null; // AI predicted ETA
-  delayReason?: string | null; // Reason for delay from AI
+  // Campos de ETA removidos de la interfaz por ahora
+  // predictedTime?: string | null;
+  // delayReason?: string | null;
 }
 
 export interface UnitDetails {
@@ -26,6 +27,6 @@ export interface UnitDetails {
 
 export interface RouteInfo {
   routeName: string;
-  currentDate: string;
+  currentDate: string; // Se espera formato YYYY-MM-DD
   unitId: string;
 }
