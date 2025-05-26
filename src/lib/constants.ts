@@ -5,8 +5,8 @@ export const MOCK_ROUTE_INFO: RouteInfo = {
   routeName: 'RUTA 123',
   currentDate: '2025-04-15', // Formato YYYY-MM-DD
   unitId: 'Unidad: 39 (1875)',
-  totalAT: 0, // Añadido para MOCK
-  totalAD: 0, // Añadido para MOCK
+  totalAT: 0,
+  totalAD: 0,
 };
 
 export const MOCK_CONTROL_POINTS: ControlPoint[] = [
@@ -71,5 +71,16 @@ export const MOCK_UNIT_BEHIND: UnitDetails = {
   totalAD: 1,
   lastKnownLocation: 'Kennedy',
   lastKnownTime: '17:43',
+  isPrimary: false,
+};
+
+export const EMPTY_UNIT_DETAILS: UnitDetails = {
+  id: 'empty-unit',
+  label: '', // Será sobreescrito
+  unitIdentifier: 'N/A',
+  totalAT: 0,
+  totalAD: 0,
+  lastKnownLocation: 'N/A',
+  lastKnownTime: '--:--',
   isPrimary: false,
 };
