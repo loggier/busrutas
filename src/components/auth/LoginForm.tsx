@@ -5,7 +5,8 @@ import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useRouter } from 'next/navigation'; // Importar useRouter
+import { useRouter } from 'next/navigation';
+import { useState } from 'react'; // Para el estado de carga
 
 import { Button } from '@/components/ui/button';
 import {
@@ -19,6 +20,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { RefreshCw } from 'lucide-react';
 
 const formSchema = z.object({
   unitName: z.string().min(1, { message: 'El nombre de la unidad es requerido.' }),
@@ -27,12 +29,11 @@ const formSchema = z.object({
     .regex(/^\d{6}$/, { message: 'El PIN debe contener solo números.' }),
 });
 
-const VALID_UNIT_NAME = "00890";
-const VALID_PIN = "123456";
-
 export default function LoginForm() {
   const { toast } = useToast();
-  const router = useRouter(); // Inicializar useRouter
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,22 +42,56 @@ export default function LoginForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    if (values.unitName === VALID_UNIT_NAME && values.pin === VALID_PIN) {
-      toast({
-        title: 'Ingreso Exitoso',
-        description: 'Bienvenido. Redirigiendo a la página principal...',
-        variant: 'default', // Puedes usar 'default' o crear una variante 'success' si la tienes
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    try {
+      const response = await fetch('https://control.puntoexacto.ec/api/login_unidad', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Asumiendo que la API espera JSON
+        },
+        body: JSON.stringify({
+          unidad: values.unitName,
+          pin: values.pin,
+        }),
       });
-      router.push('/'); // Redirigir a la página principal
-    } else {
+
+      const data = await response.json();
+
+      if (response.ok && data.status === 1) {
+        localStorage.setItem('currentUnitId', values.unitName); // Guardar el unitName ingresado
+        toast({
+          title: 'Ingreso Exitoso',
+          description: 'Bienvenido. Redirigiendo a la página principal...',
+          variant: 'default',
+        });
+        router.push('/');
+      } else if (data.status === 0 && data.msg) {
+        toast({
+          title: 'Error de Ingreso',
+          description: data.msg,
+          variant: 'destructive',
+        });
+        form.setValue('pin', ''); // Limpiar PIN
+      } else {
+        // Error genérico si la respuesta no es la esperada
+        toast({
+          title: 'Error de Ingreso',
+          description: 'Ocurrió un error inesperado. Intente nuevamente.',
+          variant: 'destructive',
+        });
+        form.setValue('pin', ''); // Limpiar PIN
+      }
+    } catch (error) {
+      console.error('Error en la petición de login:', error);
       toast({
-        title: 'Error de Ingreso',
-        description: 'Nombre de unidad o PIN incorrectos. Intente nuevamente.',
+        title: 'Error de Conexión',
+        description: 'No se pudo conectar con el servidor. Verifique su conexión e intente nuevamente.',
         variant: 'destructive',
       });
-      // Limpiar el campo de PIN para que el usuario lo reingrese
-      form.setValue('pin', '');
+      form.setValue('pin', ''); // Limpiar PIN
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -69,7 +104,7 @@ export default function LoginForm() {
           width={160}
           height={80}
           className="object-contain mb-6"
-          priority // Prioritize loading the logo
+          priority
           data-ai-hint="company logo"
         />
         <CardTitle className="text-2xl font-bold text-center">Iniciar Sesión</CardTitle>
@@ -84,7 +119,7 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel>Nombre de la Unidad</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ej: U-001 o 00890" {...field} />
+                    <Input placeholder="Ej: U-001 o 00890" {...field} disabled={isLoading} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -97,24 +132,36 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel>PIN (6 dígitos)</FormLabel>
                   <FormControl>
-                    <Input 
-                      type="password" 
-                      placeholder="••••••" 
-                      {...field} 
-                       onInput={(e) => {
+                    <Input
+                      type="password"
+                      placeholder="••••••"
+                      {...field}
+                      onInput={(e) => {
                         const target = e.target as HTMLInputElement;
                         target.value = target.value.replace(/[^0-9]/g, '').slice(0, 6);
-                        field.onChange(target.value); // Ensure react-hook-form is updated
+                        field.onChange(target.value);
                       }}
                       maxLength={6}
+                      disabled={isLoading}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-lg py-6">
-              Ingresar
+            <Button
+              type="submit"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-lg py-6"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                  Ingresando...
+                </>
+              ) : (
+                'Ingresar'
+              )}
             </Button>
           </form>
         </Form>
