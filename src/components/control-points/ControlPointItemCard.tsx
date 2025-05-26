@@ -15,7 +15,7 @@ export default function ControlPointItemCard({ point }: ControlPointItemCardProp
   );
 
   return (
-    <Card className={cardClasses}>
+    <Card className={cardClasses} id={`control-point-card-${point.id}`}>
       <CardContent className={cn("flex flex-col gap-2 p-0", point.isCurrent && "gap-3")}>
         <div className="flex justify-between items-center">
           <span className={cn("text-lg sm:text-xl md:text-2xl text-foreground", point.isCurrent ? "font-bold md:text-3xl" : "font-semibold")}>{point.name}</span>
