@@ -15,8 +15,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'RouteWise - Horarios',
-  description: 'Gestión de horarios y predicción ETA para rutas.',
+  title: 'Unidad PuntoExacto',
+  description: 'Aplicación de seguimiento y despacho para unidades de PuntoExacto.',
+  manifest: '/manifest.json',
+  themeColor: '#F44336', // Corresponds to --primary color (Vivid Coral)
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Unidad PuntoExacto',
+    // startupImage: [], // Puedes añadir imágenes de inicio para iOS aquí
+  },
 };
 
 export default function RootLayout({
@@ -28,10 +36,9 @@ export default function RootLayout({
     <html lang="es">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
         <div className="flex flex-col min-h-screen">
-          <main className="flex-grow"> {/* Eliminado pb-16 md:pb-0 */}
+          <main className="flex-grow">
             {children}
           </main>
-          {/* Eliminado BottomNavigationBar */}
           <Toaster />
         </div>
       </body>

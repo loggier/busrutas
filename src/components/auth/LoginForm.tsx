@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react'; // Para el estado de carga
+import { useState, useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -20,7 +20,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, Download } from 'lucide-react'; // Importado Download
 
 const formSchema = z.object({
   unitName: z.string().min(1, { message: 'El nombre de la unidad es requerido.' }),
@@ -29,10 +29,68 @@ const formSchema = z.object({
     .regex(/^\d{6}$/, { message: 'El PIN debe contener solo números.' }),
 });
 
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: Array<string>;
+  readonly userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed',
+    platform: string
+  }>;
+  prompt(): Promise<void>;
+}
+
+
 export default function LoginForm() {
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [installPromptEvent, setInstallPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isAppInstalled, setIsAppInstalled] = useState(false);
+
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (event: Event) => {
+      event.preventDefault();
+      setInstallPromptEvent(event as BeforeInstallPromptEvent);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    // Comprobar si la PWA ya está instalada
+    if (window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true) {
+      setIsAppInstalled(true);
+    }
+
+    const handleAppInstalled = () => {
+      setIsAppInstalled(true);
+      setInstallPromptEvent(null);
+      toast({
+          title: 'Aplicación Instalada',
+          description: 'Unidad PuntoExacto se ha instalado correctamente.',
+          variant: 'default',
+      });
+    };
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, [toast]);
+
+  const handleInstallClick = async () => {
+    if (!installPromptEvent) {
+      return;
+    }
+    installPromptEvent.prompt();
+    const { outcome } = await installPromptEvent.userChoice;
+    if (outcome === 'accepted') {
+      console.log('El usuario aceptó la instalación');
+      setIsAppInstalled(true); // Actualiza el estado para ocultar el botón
+    } else {
+      console.log('El usuario rechazó la instalación');
+    }
+    setInstallPromptEvent(null);
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,7 +103,6 @@ export default function LoginForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      // Construir la URL con query parameters
       const params = new URLSearchParams({
         unidad: values.unitName,
         pin: values.pin,
@@ -53,19 +110,18 @@ export default function LoginForm() {
       const url = `https://control.puntoexacto.ec/api/login_unidad?${params.toString()}`;
 
       const response = await fetch(url, {
-        method: 'GET', // Cambiado a GET
-        // No se necesita 'headers' ni 'body' para GET con query params
+        method: 'GET',
       });
 
       const data = await response.json();
 
       if (response.ok && data.status === 1) {
-        localStorage.setItem('currentUnitId', values.unitName); // Guardar el unitName ingresado
+        localStorage.setItem('currentUnitId', values.unitName);
         toast({
           title: 'Ingreso Exitoso',
           description: 'Bienvenido. Redirigiendo a la página principal...',
           variant: 'default',
-          duration: 10000, // Ocultar después de 10 segundos
+          duration: 10000,
         });
         router.push('/');
       } else if (data.status === 0 && data.msg) {
@@ -74,15 +130,14 @@ export default function LoginForm() {
           description: data.msg,
           variant: 'destructive',
         });
-        form.setValue('pin', ''); // Limpiar PIN
+        form.setValue('pin', '');
       } else {
-        // Error genérico si la respuesta no es la esperada
         toast({
           title: 'Error de Ingreso',
           description: data.msg || 'Ocurrió un error inesperado. Intente nuevamente.',
           variant: 'destructive',
         });
-        form.setValue('pin', ''); // Limpiar PIN
+        form.setValue('pin', '');
       }
     } catch (error) {
       console.error('Error en la petición de login:', error);
@@ -91,7 +146,7 @@ export default function LoginForm() {
         description: 'No se pudo conectar con el servidor. Verifique su conexión e intente nuevamente.',
         variant: 'destructive',
       });
-      form.setValue('pin', ''); // Limpiar PIN
+      form.setValue('pin', '');
     } finally {
       setIsLoading(false);
     }
@@ -165,6 +220,18 @@ export default function LoginForm() {
                 'Ingresar'
               )}
             </Button>
+            {installPromptEvent && !isAppInstalled && (
+              <Button
+                variant="outline"
+                onClick={handleInstallClick}
+                className="w-full mt-4"
+                disabled={isLoading}
+                type="button" // Asegurar que no envíe el formulario
+              >
+                <Download className="mr-2 h-4 w-4" />
+                Instalar Aplicación
+              </Button>
+            )}
           </form>
         </Form>
       </CardContent>
