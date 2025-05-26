@@ -45,15 +45,16 @@ export default function LoginForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const response = await fetch('https://control.puntoexacto.ec/api/login_unidad', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // Asumiendo que la API espera JSON
-        },
-        body: JSON.stringify({
-          unidad: values.unitName,
-          pin: values.pin,
-        }),
+      // Construir la URL con query parameters
+      const params = new URLSearchParams({
+        unidad: values.unitName,
+        pin: values.pin,
+      });
+      const url = `https://control.puntoexacto.ec/api/login_unidad?${params.toString()}`;
+
+      const response = await fetch(url, {
+        method: 'GET', // Cambiado a GET
+        // No se necesita 'headers' ni 'body' para GET con query params
       });
 
       const data = await response.json();
@@ -77,7 +78,7 @@ export default function LoginForm() {
         // Error genérico si la respuesta no es la esperada
         toast({
           title: 'Error de Ingreso',
-          description: 'Ocurrió un error inesperado. Intente nuevamente.',
+          description: data.msg || 'Ocurrió un error inesperado. Intente nuevamente.',
           variant: 'destructive',
         });
         form.setValue('pin', ''); // Limpiar PIN
