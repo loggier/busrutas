@@ -21,11 +21,14 @@ export default function ControlPointItemCard({ point }: ControlPointItemCardProp
           <span className={cn("text-lg sm:text-xl md:text-2xl text-foreground", point.isCurrent ? "font-bold md:text-3xl" : "font-semibold")}>{point.name}</span>
           <span className={cn("text-lg sm:text-xl md:text-2xl text-foreground", point.isCurrent ? "font-semibold" : "font-semibold")}>{point.scheduledTime}</span>
         </div>
-        {point.isCurrent && point.meta && (
-          <div className="flex justify-between items-center text-base sm:text-lg md:text-xl"> {/* Ajustado tamaño de fuente base */}
-            <span>{point.meta}</span>
-            <span className="font-bold">{point.metaTime}</span>
-            <span className="text-primary font-bold">{point.status}</span>
+        {/* Mostrar detalles si 'meta' está presente, independientemente de 'isCurrent' */}
+        {point.meta && (
+          <div className="flex justify-between items-center text-base sm:text-lg md:text-xl">
+            <div> {/* Contenedor para agrupar meta y metaTime si ambos existen */}
+              <span>{point.meta}</span>
+              {point.metaTime && <span className="font-bold ml-1">{point.metaTime}</span>}
+            </div>
+            {point.status && <span className="text-primary font-bold">{point.status}</span>}
           </div>
         )}
       </CardContent>
