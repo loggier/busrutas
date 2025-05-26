@@ -34,16 +34,24 @@ async function getDespachoData(unitId: string): Promise<ProcessedApiData> {
       try {
         errorBody = await response.text();
       } catch (e) { /* no-op */ }
-      throw new Error(`Error de API: ${response.status} ${response.statusText}. ${errorBody}`);
+      console.error(`Error de API al obtener datos para ${unitId}: ${response.status} ${response.statusText}. ${errorBody}`);
+      // Fallback a MOCK_DATA si la API falla y no hay routeInfo
+      return {
+        routeInfo: { ...MOCK_ROUTE_INFO, unitId: `Error Unidad ${unitId}` },
+        controlPoints: MOCK_CONTROL_POINTS, // O [] si prefieres
+        unitAhead: MOCK_UNIT_AHEAD,
+        unitBehind: MOCK_UNIT_BEHIND,
+      };
     }
     const rawData: RawApiData = await response.json();
     
+    // Fallback si routeInfo no viene, aunque la API haya respondido OK.
     if (!rawData.routeInfo) {
-      console.error('API Error: routeInfo is missing. Falling back to MOCK_DATA.');
+      console.error(`API Error: routeInfo es nulo o indefinido para la unidad ${unitId} a pesar de respuesta OK. Usando MOCK_ROUTE_INFO.`);
       return {
-        routeInfo: MOCK_ROUTE_INFO,
-        controlPoints: MOCK_CONTROL_POINTS,
-        unitAhead: MOCK_UNIT_AHEAD,
+        routeInfo: { ...MOCK_ROUTE_INFO, unitId: `Fallback Unidad ${unitId}` },
+        controlPoints: Array.isArray(rawData.controlPoints) ? rawData.controlPoints : MOCK_CONTROL_POINTS,
+        unitAhead: MOCK_UNIT_AHEAD, // Asumimos que si routeInfo falla, el resto también podría
         unitBehind: MOCK_UNIT_BEHIND,
       };
     }
@@ -51,30 +59,28 @@ async function getDespachoData(unitId: string): Promise<ProcessedApiData> {
     let processedUnitAhead: UnitDetails;
     let processedUnitBehind: UnitDetails;
 
+    // Procesar unitAhead
     if (Array.isArray(rawData.unitAhead) && rawData.unitAhead.length === 0) {
-      processedUnitAhead = { ...EMPTY_UNIT_DETAILS, id: `empty-ahead-initial-${unitId}`, label: 'Adelante' };
-       // If it's the current unit and controlPoints are empty, unitAhead might represent the current unit's "empty" state
-      if (Array.isArray(rawData.controlPoints) && rawData.controlPoints.length === 0) {
-        processedUnitAhead.unitIdentifier = rawData.routeInfo.unitId || 'N/A';
-        processedUnitAhead.isPrimary = true;
-      }
+      processedUnitAhead = { ...EMPTY_UNIT_DETAILS, id: `empty-ahead-api-${unitId}`, label: 'Adelante' };
     } else if (typeof rawData.unitAhead === 'object' && rawData.unitAhead !== null && !Array.isArray(rawData.unitAhead)) {
       processedUnitAhead = rawData.unitAhead as UnitDetails;
+      if (!processedUnitAhead.label) processedUnitAhead.label = 'Adelante'; // Asegurar etiqueta por defecto
     } else {
-      console.warn('API response for unitAhead is not a valid object or empty array, using default. Received:', rawData.unitAhead);
-      processedUnitAhead = { ...EMPTY_UNIT_DETAILS, id: `empty-ahead-fallback-${unitId}`, label: 'Adelante' };
+      console.warn(`API response for unitAhead (unidad ${unitId}) is not a valid object or empty array, using default. Received:`, rawData.unitAhead);
+      processedUnitAhead = { ...EMPTY_UNIT_DETAILS, id: `empty-ahead-fallback-api-${unitId}`, label: 'Adelante' };
     }
 
+    // Procesar unitBehind
     if (Array.isArray(rawData.unitBehind) && rawData.unitBehind.length === 0) {
-      processedUnitBehind = { ...EMPTY_UNIT_DETAILS, id: `empty-behind-initial-${unitId}`, label: 'Atrás' };
+      processedUnitBehind = { ...EMPTY_UNIT_DETAILS, id: `empty-behind-api-${unitId}`, label: 'Atrás' };
     } else if (typeof rawData.unitBehind === 'object' && rawData.unitBehind !== null && !Array.isArray(rawData.unitBehind)) {
       processedUnitBehind = rawData.unitBehind as UnitDetails;
+      if (!processedUnitBehind.label) processedUnitBehind.label = 'Atrás'; // Asegurar etiqueta por defecto
     } else {
-      console.warn('API response for unitBehind is not a valid object or empty array, using default. Received:', rawData.unitBehind);
-      processedUnitBehind = { ...EMPTY_UNIT_DETAILS, id: `empty-behind-fallback-${unitId}`, label: 'Atrás' };
+      console.warn(`API response for unitBehind (unidad ${unitId}) is not a valid object or empty array, using default. Received:`, rawData.unitBehind);
+      processedUnitBehind = { ...EMPTY_UNIT_DETAILS, id: `empty-behind-fallback-api-${unitId}`, label: 'Atrás' };
     }
     
-    // Ensure controlPoints is an array
     const processedControlPoints = Array.isArray(rawData.controlPoints) ? rawData.controlPoints : [];
 
     const processedData: ProcessedApiData = {
@@ -84,18 +90,16 @@ async function getDespachoData(unitId: string): Promise<ProcessedApiData> {
       unitBehind: processedUnitBehind,
     };
     
-    // Asegurarse de que currentDate en routeInfo está en formato YYYY-MM-DD si la API lo devuelve diferente
     if (processedData.routeInfo && typeof processedData.routeInfo.currentDate === 'string' && !/^\d{4}-\d{2}-\d{2}$/.test(processedData.routeInfo.currentDate)) {
         console.warn(`Formato de fecha inesperado de la API para routeInfo.currentDate: ${processedData.routeInfo.currentDate}. Se esperaba YYYY-MM-DD.`);
     }
 
     return processedData;
   } catch (error) {
-    console.error(`Error al obtener datos del despacho para la unidad ${unitId}:`, error);
-    // Devolver datos mock como fallback
+    console.error(`Error crítico al obtener datos del despacho para la unidad ${unitId}:`, error);
     return {
-      routeInfo: MOCK_ROUTE_INFO,
-      controlPoints: MOCK_CONTROL_POINTS, // Consider if MOCK_CONTROL_POINTS should be empty in some error cases
+      routeInfo: { ...MOCK_ROUTE_INFO, unitId: `Error Crítico Unidad ${unitId}` },
+      controlPoints: MOCK_CONTROL_POINTS,
       unitAhead: MOCK_UNIT_AHEAD,
       unitBehind: MOCK_UNIT_BEHIND,
     };
