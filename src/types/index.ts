@@ -1,3 +1,4 @@
+
 export interface ControlPoint {
   id: string;
   name: string;
@@ -6,9 +7,6 @@ export interface ControlPoint {
   metaTime?: string;
   status?: string;
   isCurrent?: boolean;
-  // Campos de ETA removidos de la interfaz por ahora
-  // predictedTime?: string | null;
-  // delayReason?: string | null;
 }
 
 export interface UnitDetails {
@@ -29,4 +27,6 @@ export interface RouteInfo {
   routeName: string;
   currentDate: string; // Se espera formato YYYY-MM-DD
   unitId: string;
+  totalAT?: number; // Nuevo campo
+  totalAD?: number; // Nuevo campo
 }

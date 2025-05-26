@@ -1,9 +1,12 @@
+
 import type { RouteInfo, ControlPoint, UnitDetails } from '@/types';
 
 export const MOCK_ROUTE_INFO: RouteInfo = {
   routeName: 'RUTA 123',
   currentDate: '2025-04-15', // Formato YYYY-MM-DD
   unitId: 'Unidad: 39 (1875)',
+  totalAT: 0, // Añadido para MOCK
+  totalAD: 0, // Añadido para MOCK
 };
 
 export const MOCK_CONTROL_POINTS: ControlPoint[] = [
@@ -14,12 +17,15 @@ export const MOCK_CONTROL_POINTS: ControlPoint[] = [
     meta: 'M:',
     metaTime: '17:42',
     status: 'l: 9',
-    isCurrent: true,
   },
   {
     id: 'cp2',
     name: 'C. Ballen',
     scheduledTime: '17:39',
+    isCurrent: true,
+    meta: 'M:',
+    metaTime: '17:52',
+    status: 'l: 3',
   },
   {
     id: 'cp3',
@@ -46,7 +52,7 @@ export const MOCK_CONTROL_POINTS: ControlPoint[] = [
 export const MOCK_UNIT_AHEAD: UnitDetails = {
   id: 'unit-ahead',
   label: 'Unidad Adelante',
-  unitIdentifier: '39 (1875)', 
+  unitIdentifier: '39 (1875)',
   totalAT: 22,
   totalAD: 0,
   lastKnownLocation: 'C. Ballen',
@@ -67,6 +73,3 @@ export const MOCK_UNIT_BEHIND: UnitDetails = {
   lastKnownTime: '17:43',
   isPrimary: false,
 };
-
-// MOCK_HISTORICAL_DATA ya no es necesario aquí si no se va a usar
-// export const MOCK_HISTORICAL_DATA: string = `...`;
