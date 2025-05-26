@@ -25,14 +25,13 @@ export default function RouteHeaderCard({ routeInfo }: RouteHeaderCardProps) {
       console.warn("RouteHeaderCard: Could not parse routeInfo.currentDate:", routeInfo.currentDate, error);
     }
   } else if (routeInfo.currentDate) {
-     // Si no es YYYY-MM-DD, la mostramos tal cual o se puede agregar lógica para otros formatos si es necesario
      console.warn("RouteHeaderCard: routeInfo.currentDate is not in YYYY-MM-DD format:", routeInfo.currentDate);
   }
 
 
   return (
     <Card className="shadow-xl">
-      <CardContent className="p-6 flex items-center gap-6">
+      <CardContent className="p-4 sm:p-6 flex items-center gap-4 sm:gap-6">
         <Image
           src="https://control.puntoexacto.ec/images/logo.png?t=1734027539"
           alt="Logo de la Empresa"

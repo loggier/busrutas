@@ -4,7 +4,7 @@ import ControlPointItemCard from './ControlPointItemCard';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useEffect } from 'react';
-import { Info } from 'lucide-react'; // Importar el icono Info
+import { Info } from 'lucide-react';
 
 interface ControlPointsSectionProps {
   controlPoints: ControlPoint[];
@@ -33,11 +33,11 @@ export default function ControlPointsSection({ controlPoints }: ControlPointsSec
     <Card className="shadow-xl flex-1 flex flex-col overflow-hidden">
       {controlPoints.length === 0 ? (
         <CardContent className="p-6 flex-1 flex flex-col items-center justify-center text-center">
-          <Info className="h-12 w-12 text-primary mb-4" /> {/* Usar color primario del tema */}
-          <p className="text-xl font-semibold text-foreground">
+          <Info className="h-12 w-12 text-primary mb-4" />
+          <p className="text-lg sm:text-xl font-semibold text-foreground">
             La unidad no tiene despacho asignado.
           </p>
-          <p className="text-sm text-muted-foreground mt-2">
+          <p className="text-sm text-muted-foreground mt-1 sm:mt-2">
             No hay puntos de control para mostrar. Intente refrescar más tarde.
           </p>
         </CardContent>
