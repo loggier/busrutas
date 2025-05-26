@@ -3,7 +3,7 @@
 
 import type { RouteInfo, ControlPoint, UnitDetails } from '@/types';
 import { useCurrentTime } from '@/hooks/use-current-time';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import RouteHeaderCard from '@/components/route/RouteHeaderCard';
 import ControlPointsSection from '@/components/control-points/ControlPointsSection';
@@ -18,7 +18,10 @@ interface RouteDashboardClientProps {
   initialUnitAhead: UnitDetails;
   initialUnitBehind: UnitDetails;
   currentUnitId: string; // ID de la unidad para refrescar
+  historicalData?: string; // Hecho opcional
 }
+
+const AUTO_REFRESH_INTERVAL = 30000; // 30 segundos
 
 export default function RouteDashboardClient({
   initialRouteInfo,
@@ -36,44 +39,69 @@ export default function RouteDashboardClient({
   const { toast } = useToast();
   const currentTime = useCurrentTime();
 
-  const handleManualRefresh = useCallback(async () => {
-    setIsLoading(true);
+  const fetchData = useCallback(async (unitId: string, isBackgroundRefresh: boolean = false) => {
+    if (!isBackgroundRefresh) {
+      setIsLoading(true);
+    }
     try {
-      const response = await fetch(`https://control.puntoexacto.ec/api/get_despacho/${currentUnitId}`);
+      const response = await fetch(`https://control.puntoexacto.ec/api/get_despacho/${unitId}`);
       if (!response.ok) {
         let errorBody = '';
         try {
           errorBody = await response.text();
         } catch(e) { /* no-op */ }
-        throw new Error(`Error al refrescar: ${response.status} ${response.statusText}. ${errorBody}`);
+        throw new Error(`Error al ${isBackgroundRefresh ? 'actualizar en segundo plano' : 'refrescar'}: ${response.status} ${response.statusText}. ${errorBody}`);
       }
       const data = await response.json();
 
       if (!data.routeInfo || !data.controlPoints || !data.unitAhead || !data.unitBehind) {
-        throw new Error('La respuesta de la API para el refresco no tiene la estructura esperada.');
+        throw new Error('La respuesta de la API no tiene la estructura esperada.');
       }
 
       setRouteInfo(data.routeInfo);
       setControlPoints(data.controlPoints);
       setUnitAhead(data.unitAhead);
       setUnitBehind(data.unitBehind);
-      toast({
-        title: 'Datos Actualizados',
-        description: 'La información del despacho ha sido refrescada.',
-        variant: 'default',
-      });
+
+      if (!isBackgroundRefresh) {
+        toast({
+          title: 'Datos Actualizados',
+          description: 'La información del despacho ha sido refrescada.',
+          variant: 'default',
+        });
+      }
     } catch (error) {
-      console.error("Error en handleManualRefresh:", error);
-      const errorMessage = error instanceof Error ? error.message : "Error desconocido al refrescar.";
+      console.error(`Error en fetchData (${isBackgroundRefresh ? 'background' : 'manual'}):`, error);
+      const errorMessage = error instanceof Error ? error.message : `Error desconocido al ${isBackgroundRefresh ? 'actualizar en segundo plano' : 'refrescar'}.`;
+      // Mostrar toast de error siempre, incluso para actualizaciones en segundo plano, para alertar de problemas.
       toast({
-        title: 'Error al Refrescar',
+        title: `Error al ${isBackgroundRefresh ? 'Actualizar Automáticamente' : 'Refrescar'}`,
         description: errorMessage,
         variant: 'destructive',
       });
     } finally {
-      setIsLoading(false);
+      if (!isBackgroundRefresh) {
+        setIsLoading(false);
+      }
     }
-  }, [currentUnitId, toast]);
+  }, [toast]);
+
+  const handleManualRefresh = useCallback(() => {
+    fetchData(currentUnitId, false);
+  }, [currentUnitId, fetchData]);
+
+  useEffect(() => {
+    // Realiza la primera actualización en segundo plano poco después de la carga inicial,
+    // si no quieres esperar los 30s completos. Puedes comentar esto si no es necesario.
+    // setTimeout(() => fetchData(currentUnitId, true), 5000); 
+
+    const intervalId = setInterval(() => {
+      fetchData(currentUnitId, true);
+    }, AUTO_REFRESH_INTERVAL);
+
+    return () => clearInterval(intervalId);
+  }, [currentUnitId, fetchData]);
+
 
   return (
     <div className="h-screen bg-background p-4 md:p-8 flex flex-col overflow-hidden">
@@ -85,7 +113,7 @@ export default function RouteDashboardClient({
         </div>
 
         {/* Right Column: Units Ahead and Behind, Clock, Refresh Button */}
-        <div className="md:col-span-4 flex flex-col gap-6 overflow-y-auto">
+        <div className="md:col-span-4 flex flex-col gap-6 overflow-y-auto"> {/* Permitir scroll solo en esta columna si es necesario */}
           <DigitalClock currentTime={currentTime} />
           <UnitInfoCard unitDetails={unitAhead} />
           <UnitInfoCard unitDetails={unitBehind} />
