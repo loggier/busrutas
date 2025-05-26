@@ -65,6 +65,7 @@ export default function LoginForm() {
           title: 'Ingreso Exitoso',
           description: 'Bienvenido. Redirigiendo a la página principal...',
           variant: 'default',
+          duration: 10000, // Ocultar después de 10 segundos
         });
         router.push('/');
       } else if (data.status === 0 && data.msg) {
