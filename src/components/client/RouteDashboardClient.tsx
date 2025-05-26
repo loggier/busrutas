@@ -21,7 +21,7 @@ interface RouteDashboardClientProps {
   historicalData?: string; // Hecho opcional
 }
 
-const AUTO_REFRESH_INTERVAL = 30000; // 30 segundos
+const AUTO_REFRESH_INTERVAL = 10000; // 10 segundos
 
 export default function RouteDashboardClient({
   initialRouteInfo,
