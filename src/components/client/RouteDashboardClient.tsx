@@ -10,13 +10,10 @@ import ControlPointsSection from '@/components/control-points/ControlPointsSecti
 import UnitInfoCard from '@/components/units/UnitInfoCard';
 import DigitalClock from '@/components/common/DigitalClock';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { RefreshCw, AlertTriangle } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { EMPTY_UNIT_DETAILS } from '@/lib/constants';
 
 
-// Define ProcessedApiData and RawApiData interfaces similar to page.tsx if needed for fetchData
-// For simplicity, assuming fetchData will receive a structure that can be destructured or is already ProcessedApiData-like
 interface RawApiDataForClient {
   routeInfo: RouteInfo;
   controlPoints: ControlPoint[];
@@ -52,22 +49,46 @@ export default function RouteDashboardClient({
 
   const processRawDataForClient = (rawData: RawApiDataForClient, unitId: string): { routeInfo: RouteInfo, controlPoints: ControlPoint[], unitAhead: UnitDetails, unitBehind: UnitDetails } => {
     if (!rawData.routeInfo) {
-      throw new Error('routeInfo es requerido en la respuesta de la API.');
+      // En un caso real, esto podría venir de MOCK_ROUTE_INFO si la API falla completamente
+      // o se podría lanzar un error más específico si routeInfo es crucial.
+      console.error('API Error: routeInfo is missing in processRawDataForClient. Using potentially incomplete data.');
+      // Devolvemos un objeto RouteInfo vacío o con valores por defecto para evitar errores de renderizado.
+      const fallbackRouteInfo: RouteInfo = { 
+        routeName: 'Error: Ruta Desconocida', 
+        currentDate: new Date().toISOString().split('T')[0], 
+        unitId: unitId,
+        totalAD: 0,
+        totalAT: 0
+      };
+       return {
+        routeInfo: rawData.routeInfo || fallbackRouteInfo, // Usar fallback si rawData.routeInfo es undefined
+        controlPoints: Array.isArray(rawData.controlPoints) ? rawData.controlPoints : [],
+        unitAhead: { ...EMPTY_UNIT_DETAILS, id: `empty-ahead-client-critical-fallback-${unitId}`, label: 'Adelante', unitIdentifier: rawData.routeInfo?.unitId || 'N/A', isPrimary: true },
+        unitBehind: { ...EMPTY_UNIT_DETAILS, id: `empty-behind-client-critical-fallback-${unitId}`, label: 'Atrás' },
+      };
     }
     
     let processedUnitAhead: UnitDetails;
     let processedUnitBehind: UnitDetails;
 
     if (Array.isArray(rawData.unitAhead) && rawData.unitAhead.length === 0) {
-      processedUnitAhead = { ...EMPTY_UNIT_DETAILS, id: `empty-ahead-client-${unitId}`, label: 'Adelante' };
-       if (Array.isArray(rawData.controlPoints) && rawData.controlPoints.length === 0) {
+      processedUnitAhead = { ...EMPTY_UNIT_DETAILS, id: `empty-ahead-client-${unitId}`, label: 'Adelante' }; // Etiqueta original
+       // Si no hay puntos de control, la tarjeta 'unitAhead' representa la unidad actual.
+      if (Array.isArray(rawData.controlPoints) && rawData.controlPoints.length === 0) {
         processedUnitAhead.unitIdentifier = rawData.routeInfo.unitId || 'N/A';
-        processedUnitAhead.isPrimary = true;
+        processedUnitAhead.isPrimary = true; // Resaltar como unidad principal
+        // Podríamos considerar cambiar el 'label' aquí si queremos que diga "Unidad Actual"
+        // processedUnitAhead.label = "Unidad Actual"; 
       }
     } else if (typeof rawData.unitAhead === 'object' && rawData.unitAhead !== null && !Array.isArray(rawData.unitAhead)) {
       processedUnitAhead = rawData.unitAhead as UnitDetails;
     } else {
+      console.warn('API response for unitAhead is not a valid object or empty array, using default. Received:', rawData.unitAhead);
       processedUnitAhead = { ...EMPTY_UNIT_DETAILS, id: `empty-ahead-client-fallback-${unitId}`, label: 'Adelante' };
+      if (Array.isArray(rawData.controlPoints) && rawData.controlPoints.length === 0 && rawData.routeInfo) {
+        processedUnitAhead.unitIdentifier = rawData.routeInfo.unitId || 'N/A';
+        processedUnitAhead.isPrimary = true;
+      }
     }
 
     if (Array.isArray(rawData.unitBehind) && rawData.unitBehind.length === 0) {
@@ -75,6 +96,7 @@ export default function RouteDashboardClient({
     } else if (typeof rawData.unitBehind === 'object' && rawData.unitBehind !== null && !Array.isArray(rawData.unitBehind)) {
       processedUnitBehind = rawData.unitBehind as UnitDetails;
     } else {
+      console.warn('API response for unitBehind is not a valid object or empty array, using default. Received:', rawData.unitBehind);
       processedUnitBehind = { ...EMPTY_UNIT_DETAILS, id: `empty-behind-client-fallback-${unitId}`, label: 'Atrás' };
     }
 
@@ -89,116 +111,86 @@ export default function RouteDashboardClient({
   };
 
 
-  const fetchData = useCallback(async (unitId: string, isBackgroundRefresh: boolean = false) => {
+  const fetchData = useCallback(async (unitIdToFetch: string, isBackgroundRefresh: boolean = false) => {
     if (!isBackgroundRefresh) {
       setIsLoading(true);
     }
     try {
-      const response = await fetch(`https://control.puntoexacto.ec/api/get_despacho/${unitId}`);
+      const response = await fetch(`https://control.puntoexacto.ec/api/get_despacho/${unitIdToFetch}`);
       if (!response.ok) {
         let errorBody = '';
         try { errorBody = await response.text(); } catch(e) { /* no-op */ }
+        // Si el error es por no encontrar despacho, la API podría devolver un 404 o una estructura específica.
+        // Aquí asumimos que un !response.ok es un error genérico de API.
+        // El manejo de "no despacho" se hace por la estructura de datos (controlPoints vacío).
         throw new Error(`Error al ${isBackgroundRefresh ? 'actualizar en segundo plano' : 'refrescar'}: ${response.status} ${response.statusText}. ${errorBody}`);
       }
       const rawData: RawApiDataForClient = await response.json();
-      const processedData = processRawDataForClient(rawData, unitId);
+      const processedData = processRawDataForClient(rawData, unitIdToFetch);
 
       setRouteInfo(processedData.routeInfo);
       setControlPoints(processedData.controlPoints);
       setUnitAhead(processedData.unitAhead);
       setUnitBehind(processedData.unitBehind);
 
-      if (!isBackgroundRefresh && processedData.controlPoints.length > 0) {
-        toast({
-          title: 'Datos Actualizados',
-          description: 'La información del despacho ha sido refrescada.',
-          variant: 'default',
-        });
-      } else if (!isBackgroundRefresh && processedData.controlPoints.length === 0) {
-         toast({
-          title: 'Información',
-          description: 'La unidad no tiene despacho asignado actualmente.',
-          variant: 'default', // Or a more neutral variant
-        });
+      if (!isBackgroundRefresh) { // Solo mostrar toast en refresco manual
+        if (processedData.controlPoints.length > 0) {
+          toast({
+            title: 'Datos Actualizados',
+            description: 'La información del despacho ha sido refrescada.',
+            variant: 'default',
+          });
+        } else { // No hay puntos de control, significa que no hay despacho
+           toast({
+            title: 'Información',
+            description: 'La unidad no tiene despacho asignado actualmente.',
+            variant: 'default',
+          });
+        }
       }
     } catch (error) {
       console.error(`Error en fetchData (${isBackgroundRefresh ? 'background' : 'manual'}):`, error);
-      const errorMessage = error instanceof Error ? error.message : `Error desconocido al ${isBackgroundRefresh ? 'actualizar en segundo plano' : 'refrescar'}.`;
-      toast({
-        title: `Error al ${isBackgroundRefresh ? 'Actualizar Automáticamente' : 'Refrescar'}`,
-        description: errorMessage,
-        variant: 'destructive',
-      });
+      // No mostrar toast de error si es un error esperado de "no encontrado" que ya se maneja con el mensaje en UI.
+      // Solo mostrar toast de error para fallos inesperados de la API o de red.
+      if (!isBackgroundRefresh) { // Solo mostrar toast de error en refresco manual
+        const errorMessage = error instanceof Error ? error.message : `Error desconocido al refrescar.`;
+        toast({
+          title: `Error al Refrescar`,
+          description: errorMessage,
+          variant: 'destructive',
+        });
+      }
     } finally {
       if (!isBackgroundRefresh) {
         setIsLoading(false);
       }
     }
-  }, [toast]);
+  }, [toast]); // No necesitamos currentUnitId aquí como dependencia, usamos el que se pasa a fetchData.
 
   const handleManualRefresh = useCallback(() => {
     fetchData(currentUnitId, false);
   }, [currentUnitId, fetchData]);
 
   useEffect(() => {
+    // Carga inicial de datos ya se hace en page.tsx (Server Component)
+    // Este efecto es solo para el auto-refresco
     const intervalId = setInterval(() => {
-      fetchData(currentUnitId, true);
+      fetchData(currentUnitId, true); // isBackgroundRefresh = true
     }, AUTO_REFRESH_INTERVAL);
     return () => clearInterval(intervalId);
   }, [currentUnitId, fetchData]);
 
-  if (controlPoints.length === 0 && routeInfo) {
-    return (
-      <div className="h-screen bg-background p-4 md:p-8 flex flex-col">
-        <div className="mb-6">
-          <RouteHeaderCard routeInfo={routeInfo} />
-        </div>
-
-        <div className="flex-1 flex flex-col items-center justify-center">
-          <Card className="shadow-xl w-full max-w-lg">
-            <CardContent className="p-8 text-center">
-              <AlertTriangle className="mx-auto h-12 w-12 text-primary mb-4" />
-              <p className="text-xl font-semibold text-foreground">
-                La unidad no tiene despacho asignado.
-              </p>
-              <p className="text-sm text-muted-foreground mt-2">
-                Intente refrescar los datos o contacte al administrador si cree que esto es un error.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="mt-6 w-full max-w-sm mx-auto">
-          <DigitalClock currentTime={currentTime} />
-          <Button
-            onClick={handleManualRefresh}
-            className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-4"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <RefreshCw size={18} className="mr-2 animate-spin" />
-                Refrescando...
-              </>
-            ) : (
-              <>
-                <RefreshCw size={18} className="mr-2" />
-                Refrescar Datos
-              </>
-            )}
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="h-screen bg-background p-4 md:p-8 flex flex-col overflow-hidden">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 flex-1 overflow-hidden">
+        {/* Columna Izquierda: Información de Ruta y Puntos de Control */}
         <div className="md:col-span-8 flex flex-col gap-6 overflow-hidden">
           <RouteHeaderCard routeInfo={routeInfo} />
           <ControlPointsSection controlPoints={controlPoints} />
         </div>
+
+        {/* Columna Derecha: Reloj, Unidades Adicionales y Botón de Refresco */}
         <div className="md:col-span-4 flex flex-col gap-6 overflow-y-auto">
           <DigitalClock currentTime={currentTime} />
           <UnitInfoCard unitDetails={unitAhead} />
