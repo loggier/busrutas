@@ -62,35 +62,35 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
 
   if (!timeString) {
     return (
-      <div className="bg-button-custom-dark-gray text-primary-foreground p-2 sm:p-3 rounded-lg shadow-md text-center mb-3 sm:mb-4 md:mb-6">
+      <div className="bg-button-custom-dark-gray text-primary-foreground p-1.5 sm:p-2 rounded-lg shadow-md text-center mb-2 sm:mb-3 md:mb-4">
         <div className="flex justify-end space-x-1 mb-1">
             <Button
               variant="ghost"
               size="icon"
-              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-6 w-6 sm:h-7 sm:w-7 opacity-50 cursor-not-allowed"
+              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-5 w-5 sm:h-6 sm:w-6 opacity-50 cursor-not-allowed"
               aria-label="Información de la aplicación"
               disabled
             >
-              <Info size={16} />
+              <Info size={14} />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-6 w-6 sm:h-7 sm:w-7 opacity-50 cursor-not-allowed"
+              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-5 w-5 sm:h-6 sm:w-6 opacity-50 cursor-not-allowed"
               aria-label="Cerrar sesión"
               disabled
             >
-              <LogOut size={16} />
+              <LogOut size={14} />
             </Button>
           </div>
-        <div className="font-mono text-xl sm:text-2xl md:text-3xl tracking-wider">
+        <div className="font-mono text-lg sm:text-xl md:text-2xl tracking-wider">
           <span>--</span>
           <span className="opacity-50 mx-1">:</span>
           <span>--</span>
           <span className="opacity-50 mx-1">:</span>
           <span>--</span>
         </div>
-        <div className="text-xs text-gray-400 mt-1">Cargando...</div>
+        <div className="text-xs text-gray-400 mt-0.5">Cargando...</div>
       </div>
     );
   }
@@ -98,17 +98,17 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
   const [hours, minutes, seconds] = timeString.split(':');
 
   return (
-    <div className="bg-button-custom-dark-gray text-primary-foreground p-2 sm:p-3 rounded-lg shadow-md mb-3 sm:mb-4 md:mb-6 flex flex-col">
-      <div className="flex justify-end space-x-1 mb-1 sm:mb-2">
+    <div className="bg-button-custom-dark-gray text-primary-foreground p-1.5 sm:p-2 rounded-lg shadow-md mb-2 sm:mb-3 md:mb-4 flex flex-col">
+      <div className="flex justify-end space-x-1 mb-0.5 sm:mb-1">
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
               variant="ghost"
               size="icon"
-              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-6 w-6 sm:h-7 sm:w-7"
+              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-5 w-5 sm:h-6 sm:w-6"
               aria-label="Información de la aplicación"
             >
-              <Info size={18} />
+              <Info size={16} />
             </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
@@ -140,14 +140,14 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
           variant="ghost"
           size="icon"
           onClick={handleLogoutClick}
-          className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-6 w-6 sm:h-7 sm:w-7"
+          className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-5 w-5 sm:h-6 sm:w-6"
           aria-label="Cerrar sesión"
         >
-          <LogOut size={18} />
+          <LogOut size={16} />
         </Button>
       </div>
       <div className="text-center">
-        <div className="font-mono text-xl sm:text-2xl md:text-3xl tracking-wider">
+        <div className="font-mono text-lg sm:text-xl md:text-2xl tracking-wider">
           <span>{hours}</span>
           <span className={`transition-opacity duration-150 ease-in-out mx-0.5 sm:mx-1 ${showColon ? 'opacity-100' : 'opacity-25'}`}>:</span>
           <span>{minutes}</span>
@@ -155,7 +155,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
           <span>{seconds}</span>
         </div>
         {dateString && (
-          <div className="text-xs sm:text-sm text-gray-300 mt-0.5 sm:mt-1">{dateString}</div>
+          <div className="text-xs text-gray-300 mt-0.5">{dateString}</div>
         )}
       </div>
     </div>

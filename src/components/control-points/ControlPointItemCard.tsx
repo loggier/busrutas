@@ -9,21 +9,21 @@ interface ControlPointItemCardProps {
 
 export default function ControlPointItemCard({ point }: ControlPointItemCardProps) {
   const cardClasses = cn(
-    "rounded-lg p-3 sm:p-4 shadow-md", 
+    "rounded-lg p-2 sm:p-3 shadow-md", 
     point.isCurrent
-      ? "border-2 sm:border-4 border-primary bg-primary/10" // Borde más delgado en móvil
+      ? "border-2 border-primary bg-primary/10" 
       : "border border-dashed border-primary"
   );
 
   return (
     <Card className={cardClasses} id={`control-point-card-${point.id}`}>
-      <CardContent className={cn("flex flex-col gap-1.5 sm:gap-2 p-0", point.isCurrent && "sm:gap-3")}>
+      <CardContent className={cn("flex flex-col gap-1 sm:gap-1.5 p-0", point.isCurrent && "sm:gap-2")}>
         <div className="flex justify-between items-center">
-          <span className={cn("text-base sm:text-lg md:text-xl text-foreground", point.isCurrent ? "font-bold sm:text-xl md:text-2xl" : "font-semibold")}>{point.name}</span>
-          <span className={cn("text-base sm:text-lg md:text-xl text-foreground", point.isCurrent ? "font-semibold" : "font-semibold")}>{point.scheduledTime}</span>
+          <span className={cn("text-sm sm:text-base md:text-lg text-foreground", point.isCurrent ? "font-bold sm:text-lg md:text-xl" : "font-semibold")}>{point.name}</span>
+          <span className={cn("text-sm sm:text-base md:text-lg text-foreground", point.isCurrent ? "font-semibold" : "font-semibold")}>{point.scheduledTime}</span>
         </div>
         {point.meta && (
-          <div className="flex justify-between items-center text-sm sm:text-base md:text-lg">
+          <div className="flex justify-between items-center text-xs sm:text-sm md:text-base">
             <div> 
               <span>{point.meta}</span>
               {point.metaTime && <span className="font-bold ml-1">{point.metaTime}</span>}

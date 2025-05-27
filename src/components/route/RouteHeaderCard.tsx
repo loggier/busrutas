@@ -31,23 +31,23 @@ export default function RouteHeaderCard({ routeInfo }: RouteHeaderCardProps) {
 
   return (
     <Card className="shadow-xl">
-      <CardContent className="p-3 sm:p-4 md:p-5 flex items-center gap-3 sm:gap-4">
+      <CardContent className="p-2 sm:p-3 md:p-4 flex items-center gap-2 sm:gap-3">
         <Image
           src="https://control.puntoexacto.ec/images/logo.png?t=1734027539"
           alt="Logo de la Empresa"
-          width={100} // Reducido
-          height={50}  // Reducido
-          className="h-10 sm:h-12 md:h-14 w-auto object-contain"
+          width={80} 
+          height={40} 
+          className="h-8 sm:h-10 md:h-12 w-auto object-contain"
           data-ai-hint="company logo"
         />
-        <div>
-          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
-          <p className="text-xs sm:text-sm md:text-base text-muted-foreground mt-0.5 sm:mt-1">
+        <div className="flex-1">
+          <h1 className="text-base sm:text-lg md:text-xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
+          <p className="text-xs sm:text-xs md:text-sm text-muted-foreground mt-0.5">
             {displayDate}
           </p>
-          <p className="text-base sm:text-lg md:text-xl font-medium mt-0.5 sm:mt-1 text-primary">{routeInfo.unitId}</p>
+          <p className="text-sm sm:text-base md:text-lg font-medium mt-0.5 text-primary">{routeInfo.unitId}</p>
           {(typeof routeInfo.totalAT === 'number' || typeof routeInfo.totalAD === 'number') && (
-            <p className="text-xs sm:text-sm md:text-base text-foreground mt-0.5 sm:mt-1">
+            <p className="text-xs sm:text-xs md:text-sm text-foreground mt-0.5">
               {typeof routeInfo.totalAT === 'number' && (
                 <>
                   Total AT: <span className="font-semibold">{routeInfo.totalAT}</span>

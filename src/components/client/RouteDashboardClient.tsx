@@ -47,8 +47,8 @@ export default function RouteDashboardClient({
 }: RouteDashboardClientProps) {
   const [routeInfo, setRouteInfo] = useState<RouteInfo>(initialRouteInfo);
   const [controlPoints, setControlPoints] = useState<ControlPoint[]>(initialControlPoints);
-  const [unitAhead, setUnitAhead] = useState<UnitDetails>(initialUnitAhead);
-  const [unitBehind, setUnitBehind] = useState<UnitDetails>(initialUnitBehind);
+  const [unitAheadDetails, setUnitAheadDetails] = useState<UnitDetails>(initialUnitAhead);
+  const [unitBehindDetails, setUnitBehindDetails] = useState<UnitDetails>(initialUnitBehind);
   const [isLoading, setIsLoading] = useState(false);
 
   const { toast } = useToast();
@@ -95,6 +95,12 @@ export default function RouteDashboardClient({
     };
   }, []);
 
+  const updateClientData = (data: ProcessedClientData) => {
+    setRouteInfo(data.routeInfo);
+    setControlPoints(data.controlPoints);
+    setUnitAheadDetails(data.unitAhead);
+    setUnitBehindDetails(data.unitBehind);
+  };
 
   const fetchData = useCallback(async (unitIdToFetch: string, isBackgroundRefresh: boolean = false) => {
     if (!isBackgroundRefresh) {
@@ -109,11 +115,7 @@ export default function RouteDashboardClient({
       }
       const rawData: RawApiDataForClient = await response.json();
       const processedData = processRawDataForClient(rawData, unitIdToFetch);
-
-      setRouteInfo(processedData.routeInfo);
-      setControlPoints(processedData.controlPoints);
-      setUnitAhead(processedData.unitAhead);
-      setUnitBehind(processedData.unitBehind);
+      updateClientData(processedData);
 
       if (!isBackgroundRefresh) { 
         if (processedData.controlPoints.length > 0) {
@@ -158,32 +160,40 @@ export default function RouteDashboardClient({
     return () => clearInterval(intervalId);
   }, [currentUnitId, fetchData]);
 
+  // Update state if initial props change (e.g., after initial load in page.tsx)
+  useEffect(() => {
+    setRouteInfo(initialRouteInfo);
+    setControlPoints(initialControlPoints);
+    setUnitAheadDetails(initialUnitAhead);
+    setUnitBehindDetails(initialUnitBehind);
+  }, [initialRouteInfo, initialControlPoints, initialUnitAhead, initialUnitBehind]);
+
 
   return (
-    <div className="h-screen bg-background p-2 sm:p-4 md:p-6 flex flex-col overflow-hidden">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 md:gap-6 flex-1 overflow-hidden">
-        <div className="md:col-span-8 flex flex-col gap-3 sm:gap-4 md:gap-6 overflow-hidden">
+    <div className="h-screen bg-background p-1 sm:p-2 md:p-3 flex flex-col overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-2 sm:gap-3 md:gap-4 flex-1 overflow-hidden">
+        <div className="md:col-span-8 flex flex-col gap-2 sm:gap-3 md:gap-4 overflow-hidden">
           <RouteHeaderCard routeInfo={routeInfo} />
           <ControlPointsSection controlPoints={controlPoints} />
         </div>
 
-        <div className="md:col-span-4 flex flex-col gap-3 sm:gap-4 md:gap-6 overflow-y-auto">
+        <div className="md:col-span-4 flex flex-col gap-2 sm:gap-3 md:gap-4 overflow-y-auto">
           <DigitalClock currentTime={currentTime} />
-          <UnitInfoCard unitDetails={unitAhead} />
-          <UnitInfoCard unitDetails={unitBehind} />
+          <UnitInfoCard unitDetails={unitAheadDetails} />
+          <UnitInfoCard unitDetails={unitBehindDetails} />
            <Button
              onClick={handleManualRefresh}
-             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-2 sm:py-3"
+             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-1.5 sm:py-2"
              disabled={isLoading}
            >
              {isLoading ? (
                <>
-                 <RefreshCw size={16} className="mr-2 animate-spin" />
+                 <RefreshCw size={14} className="mr-2 animate-spin" />
                  Refrescando...
                </>
              ) : (
                <>
-                 <RefreshCw size={16} className="mr-2" />
+                 <RefreshCw size={14} className="mr-2" />
                  Refrescar Datos
                </>
              )}
