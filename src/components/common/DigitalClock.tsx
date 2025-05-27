@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { LogOut, Info } from 'lucide-react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation'; // Importar useRouter
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -26,7 +26,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
   const [showColon, setShowColon] = useState(true);
   const [timeString, setTimeString] = useState<string | null>(null);
   const [dateString, setDateString] = useState<string | null>(null);
-  const router = useRouter(); // Inicializar useRouter
+  const router = useRouter();
 
   useEffect(() => {
     if (currentTime) {
@@ -57,33 +57,33 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
 
   const handleLogoutClick = () => {
     console.log("Cerrar sesión presionado, redirigiendo a /login");
-    router.push('/login'); // Redirigir a la página de login
+    router.push('/login');
   };
 
   if (!timeString) {
     return (
-      <div className="bg-button-custom-dark-gray text-primary-foreground p-3 rounded-lg shadow-md text-center mb-6">
+      <div className="bg-button-custom-dark-gray text-primary-foreground p-2 sm:p-3 rounded-lg shadow-md text-center mb-3 sm:mb-4 md:mb-6">
         <div className="flex justify-end space-x-1 mb-1">
             <Button
               variant="ghost"
               size="icon"
-              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-7 w-7 opacity-50 cursor-not-allowed"
+              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-6 w-6 sm:h-7 sm:w-7 opacity-50 cursor-not-allowed"
               aria-label="Información de la aplicación"
               disabled
             >
-              <Info size={18} />
+              <Info size={16} />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-7 w-7 opacity-50 cursor-not-allowed"
+              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-6 w-6 sm:h-7 sm:w-7 opacity-50 cursor-not-allowed"
               aria-label="Cerrar sesión"
               disabled
             >
-              <LogOut size={18} />
+              <LogOut size={16} />
             </Button>
           </div>
-        <div className="font-mono text-2xl md:text-3xl tracking-wider">
+        <div className="font-mono text-xl sm:text-2xl md:text-3xl tracking-wider">
           <span>--</span>
           <span className="opacity-50 mx-1">:</span>
           <span>--</span>
@@ -98,17 +98,17 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
   const [hours, minutes, seconds] = timeString.split(':');
 
   return (
-    <div className="bg-button-custom-dark-gray text-primary-foreground p-4 rounded-lg shadow-md mb-6 flex flex-col">
-      <div className="flex justify-end space-x-1 mb-2">
+    <div className="bg-button-custom-dark-gray text-primary-foreground p-2 sm:p-3 rounded-lg shadow-md mb-3 sm:mb-4 md:mb-6 flex flex-col">
+      <div className="flex justify-end space-x-1 mb-1 sm:mb-2">
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
               variant="ghost"
               size="icon"
-              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-8 w-8"
+              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-6 w-6 sm:h-7 sm:w-7"
               aria-label="Información de la aplicación"
             >
-              <Info size={20} />
+              <Info size={18} />
             </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
@@ -119,8 +119,8 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
               <Image
                 src="https://control.puntoexacto.ec/images/logo.png?t=1734027539"
                 alt="PuntoExacto Logo"
-                width={128}
-                height={64}
+                width={100} 
+                height={50}
                 className="object-contain"
                 data-ai-hint="company logo"
               />
@@ -140,25 +140,24 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
           variant="ghost"
           size="icon"
           onClick={handleLogoutClick}
-          className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-8 w-8"
+          className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-6 w-6 sm:h-7 sm:w-7"
           aria-label="Cerrar sesión"
         >
-          <LogOut size={20} />
+          <LogOut size={18} />
         </Button>
       </div>
       <div className="text-center">
-        <div className="font-mono text-2xl md:text-3xl tracking-wider">
+        <div className="font-mono text-xl sm:text-2xl md:text-3xl tracking-wider">
           <span>{hours}</span>
-          <span className={`transition-opacity duration-150 ease-in-out mx-1 ${showColon ? 'opacity-100' : 'opacity-25'}`}>:</span>
+          <span className={`transition-opacity duration-150 ease-in-out mx-0.5 sm:mx-1 ${showColon ? 'opacity-100' : 'opacity-25'}`}>:</span>
           <span>{minutes}</span>
-          <span className={`transition-opacity duration-150 ease-in-out mx-1 ${showColon ? 'opacity-100' : 'opacity-25'}`}>:</span>
+          <span className={`transition-opacity duration-150 ease-in-out mx-0.5 sm:mx-1 ${showColon ? 'opacity-100' : 'opacity-25'}`}>:</span>
           <span>{seconds}</span>
         </div>
         {dateString && (
-          <div className="text-sm text-gray-300 mt-1">{dateString}</div>
+          <div className="text-xs sm:text-sm text-gray-300 mt-0.5 sm:mt-1">{dateString}</div>
         )}
       </div>
     </div>
   );
 }
-

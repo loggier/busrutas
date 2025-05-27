@@ -54,8 +54,7 @@ export default function RouteDashboardClient({
   const { toast } = useToast();
   const currentTime = useCurrentTime();
 
-  const processRawDataForClient = (rawData: RawApiDataForClient, unitId: string): ProcessedClientData => {
-    // Fallback si routeInfo no viene, aunque la API haya respondido OK.
+  const processRawDataForClient = useCallback((rawData: RawApiDataForClient, unitId: string): ProcessedClientData => {
     const resolvedRouteInfo = rawData.routeInfo || { 
         routeName: 'Error: Ruta Desconocida', 
         currentDate: new Date().toISOString().split('T')[0], 
@@ -65,9 +64,6 @@ export default function RouteDashboardClient({
       };
     
     let processedUnitAhead: UnitDetails;
-    let processedUnitBehind: UnitDetails;
-
-    // Procesar unitAhead
     if (Array.isArray(rawData.unitAhead) && rawData.unitAhead.length === 0) {
       processedUnitAhead = { ...EMPTY_UNIT_DETAILS, id: `empty-ahead-client-api-${unitId}`, label: 'Adelante' };
     } else if (typeof rawData.unitAhead === 'object' && rawData.unitAhead !== null && !Array.isArray(rawData.unitAhead)) {
@@ -78,7 +74,7 @@ export default function RouteDashboardClient({
       processedUnitAhead = { ...EMPTY_UNIT_DETAILS, id: `empty-ahead-client-fallback-${unitId}`, label: 'Adelante' };
     }
 
-    // Procesar unitBehind
+    let processedUnitBehind: UnitDetails;
     if (Array.isArray(rawData.unitBehind) && rawData.unitBehind.length === 0) {
       processedUnitBehind = { ...EMPTY_UNIT_DETAILS, id: `empty-behind-client-api-${unitId}`, label: 'Atrás' };
     } else if (typeof rawData.unitBehind === 'object' && rawData.unitBehind !== null && !Array.isArray(rawData.unitBehind)) {
@@ -97,7 +93,7 @@ export default function RouteDashboardClient({
       unitAhead: processedUnitAhead,
       unitBehind: processedUnitBehind,
     };
-  };
+  }, []);
 
 
   const fetchData = useCallback(async (unitIdToFetch: string, isBackgroundRefresh: boolean = false) => {
@@ -130,7 +126,7 @@ export default function RouteDashboardClient({
            toast({
             title: 'Información',
             description: 'La unidad no tiene despacho asignado actualmente.',
-            variant: 'default', // Usar 'default' o un estilo informativo no destructivo
+            variant: 'default',
           });
         }
       }
@@ -149,7 +145,7 @@ export default function RouteDashboardClient({
         setIsLoading(false);
       }
     }
-  }, [toast]); 
+  }, [toast, processRawDataForClient]); 
 
   const handleManualRefresh = useCallback(() => {
     fetchData(currentUnitId, false);
@@ -164,30 +160,30 @@ export default function RouteDashboardClient({
 
 
   return (
-    <div className="h-screen bg-background p-4 md:p-8 flex flex-col overflow-hidden">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 flex-1 overflow-hidden">
-        <div className="md:col-span-8 flex flex-col gap-6 overflow-hidden">
+    <div className="h-screen bg-background p-2 sm:p-4 md:p-6 flex flex-col overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 md:gap-6 flex-1 overflow-hidden">
+        <div className="md:col-span-8 flex flex-col gap-3 sm:gap-4 md:gap-6 overflow-hidden">
           <RouteHeaderCard routeInfo={routeInfo} />
           <ControlPointsSection controlPoints={controlPoints} />
         </div>
 
-        <div className="md:col-span-4 flex flex-col gap-6 overflow-y-auto">
+        <div className="md:col-span-4 flex flex-col gap-3 sm:gap-4 md:gap-6 overflow-y-auto">
           <DigitalClock currentTime={currentTime} />
           <UnitInfoCard unitDetails={unitAhead} />
           <UnitInfoCard unitDetails={unitBehind} />
            <Button
              onClick={handleManualRefresh}
-             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto"
+             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-2 sm:py-3"
              disabled={isLoading}
            >
              {isLoading ? (
                <>
-                 <RefreshCw size={18} className="mr-2 animate-spin" />
+                 <RefreshCw size={16} className="mr-2 animate-spin" />
                  Refrescando...
                </>
              ) : (
                <>
-                 <RefreshCw size={18} className="mr-2" />
+                 <RefreshCw size={16} className="mr-2" />
                  Refrescar Datos
                </>
              )}

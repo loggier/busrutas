@@ -1,3 +1,4 @@
+
 import type { ControlPoint } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -8,23 +9,22 @@ interface ControlPointItemCardProps {
 
 export default function ControlPointItemCard({ point }: ControlPointItemCardProps) {
   const cardClasses = cn(
-    "rounded-xl p-4 md:p-5 shadow-md", // Ajustado padding
+    "rounded-lg p-3 sm:p-4 shadow-md", 
     point.isCurrent
-      ? "border-4 border-primary bg-primary/10"
-      : "border-2 border-dashed border-primary"
+      ? "border-2 sm:border-4 border-primary bg-primary/10" // Borde más delgado en móvil
+      : "border border-dashed border-primary"
   );
 
   return (
     <Card className={cardClasses} id={`control-point-card-${point.id}`}>
-      <CardContent className={cn("flex flex-col gap-2 p-0", point.isCurrent && "gap-3")}>
+      <CardContent className={cn("flex flex-col gap-1.5 sm:gap-2 p-0", point.isCurrent && "sm:gap-3")}>
         <div className="flex justify-between items-center">
-          <span className={cn("text-lg sm:text-xl md:text-2xl text-foreground", point.isCurrent ? "font-bold md:text-3xl" : "font-semibold")}>{point.name}</span>
-          <span className={cn("text-lg sm:text-xl md:text-2xl text-foreground", point.isCurrent ? "font-semibold" : "font-semibold")}>{point.scheduledTime}</span>
+          <span className={cn("text-base sm:text-lg md:text-xl text-foreground", point.isCurrent ? "font-bold sm:text-xl md:text-2xl" : "font-semibold")}>{point.name}</span>
+          <span className={cn("text-base sm:text-lg md:text-xl text-foreground", point.isCurrent ? "font-semibold" : "font-semibold")}>{point.scheduledTime}</span>
         </div>
-        {/* Mostrar detalles si 'meta' está presente, independientemente de 'isCurrent' */}
         {point.meta && (
-          <div className="flex justify-between items-center text-base sm:text-lg md:text-xl">
-            <div> {/* Contenedor para agrupar meta y metaTime si ambos existen */}
+          <div className="flex justify-between items-center text-sm sm:text-base md:text-lg">
+            <div> 
               <span>{point.meta}</span>
               {point.metaTime && <span className="font-bold ml-1">{point.metaTime}</span>}
             </div>

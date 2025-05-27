@@ -20,7 +20,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { RefreshCw, Download } from 'lucide-react'; // Importado Download
+import { RefreshCw, Download } from 'lucide-react';
 
 const formSchema = z.object({
   unitName: z.string().min(1, { message: 'El nombre de la unidad es requerido.' }),
@@ -55,7 +55,6 @@ export default function LoginForm() {
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
-    // Comprobar si la PWA ya está instalada
     if (window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true) {
       setIsAppInstalled(true);
     }
@@ -85,7 +84,7 @@ export default function LoginForm() {
     const { outcome } = await installPromptEvent.userChoice;
     if (outcome === 'accepted') {
       console.log('El usuario aceptó la instalación');
-      setIsAppInstalled(true); // Actualiza el estado para ocultar el botón
+      setIsAppInstalled(true);
     } else {
       console.log('El usuario rechazó la instalación');
     }
@@ -153,22 +152,22 @@ export default function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-md shadow-xl">
-      <CardHeader className="items-center pt-6 pb-4">
+    <Card className="w-full max-w-sm sm:max-w-md shadow-lg">
+      <CardHeader className="items-center pt-4 sm:pt-6 pb-3 sm:pb-4">
         <Image
           src="https://control.puntoexacto.ec/images/logo.png?t=1734027539"
           alt="PuntoExacto Logo"
-          width={160}
-          height={80}
-          className="object-contain mb-6"
+          width={120} 
+          height={60} 
+          className="object-contain mb-4"
           priority
           data-ai-hint="company logo"
         />
-        <CardTitle className="text-2xl font-bold text-center">Iniciar Sesión</CardTitle>
+        <CardTitle className="text-xl sm:text-2xl font-bold text-center">Iniciar Sesión</CardTitle>
       </CardHeader>
-      <CardContent className="pb-6">
+      <CardContent className="pb-4 sm:pb-6">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
             <FormField
               control={form.control}
               name="unitName"
@@ -208,7 +207,7 @@ export default function LoginForm() {
             />
             <Button
               type="submit"
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-lg py-6"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-base sm:text-lg py-3 sm:py-4"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -224,9 +223,9 @@ export default function LoginForm() {
               <Button
                 variant="outline"
                 onClick={handleInstallClick}
-                className="w-full mt-4"
+                className="w-full mt-2 sm:mt-4 text-sm sm:text-base py-2 sm:py-3"
                 disabled={isLoading}
-                type="button" // Asegurar que no envíe el formulario
+                type="button"
               >
                 <Download className="mr-2 h-4 w-4" />
                 Instalar Aplicación
