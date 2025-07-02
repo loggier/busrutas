@@ -47,12 +47,12 @@ export default function ControlPointItemCard({ point }: ControlPointItemCardProp
           <span className={cn("text-sm sm:text-base md:text-base text-foreground font-semibold")}>{displayScheduledTime}</span> {/* Ajustado y unificado */}
         </div>
         {point.meta && (
-          <div className="flex justify-between items-center text-sm sm:text-base">
+          <div className="flex justify-between items-center text-lg sm:text-xl font-bold">
             <div>
               <span>{point.meta}</span>
-              {point.metaTime && <span className="font-bold ml-1">{displayMetaTime}</span>}
+              {point.metaTime && <span className="ml-1">{displayMetaTime}</span>}
             </div>
-            {point.status && <span className={cn("font-bold", statusColorClass)}>{point.status}</span>}
+            {point.status && <span className={cn(statusColorClass)}>{point.status}</span>}
           </div>
         )}
       </CardContent>
