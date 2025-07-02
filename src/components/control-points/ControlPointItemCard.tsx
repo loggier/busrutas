@@ -23,6 +23,22 @@ export default function ControlPointItemCard({ point }: ControlPointItemCardProp
     ? point.metaTime.substring(0, 5)
     : point.metaTime;
 
+  // Logic for status color based on its numeric value
+  let statusColorClass = 'text-foreground'; // Default color for 0, 1, or non-numeric status
+  if (point.status) {
+    // parseInt handles strings with signs like "+1" or "-1"
+    const statusValue = parseInt(point.status, 10);
+
+    if (!isNaN(statusValue)) {
+      if (statusValue < 0) {
+        statusColorClass = 'text-green-600'; // Green for early
+      } else if (statusValue > 1) {
+        statusColorClass = 'text-destructive'; // Red for late (e.g., +2, +3...)
+      }
+    }
+  }
+
+
   return (
     <Card className={cardClasses} id={`control-point-card-${point.id}`}>
       <CardContent className={cn("flex flex-col gap-0.5 sm:gap-1 p-0", point.isCurrent && "sm:gap-1.5")}> {/* Reducido de gap-1 sm:gap-1.5 y sm:gap-2 */}
@@ -36,7 +52,7 @@ export default function ControlPointItemCard({ point }: ControlPointItemCardProp
               <span>{point.meta}</span>
               {point.metaTime && <span className="font-bold ml-1">{displayMetaTime}</span>}
             </div>
-            {point.status && <span className="text-primary font-bold">{point.status}</span>}
+            {point.status && <span className={cn("font-bold", statusColorClass)}>{point.status}</span>}
           </div>
         )}
       </CardContent>
