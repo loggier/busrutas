@@ -8,11 +8,19 @@ interface ControlPointItemCardProps {
 }
 
 export default function ControlPointItemCard({ point }: ControlPointItemCardProps) {
+  const { status, isCurrent } = point;
+  const statusValue = status ? parseInt(status, 10) : NaN;
+
   const cardClasses = cn(
-    "rounded-lg p-1.5 sm:p-2 shadow-md",
-    point.isCurrent
-      ? "border-2 border-primary bg-primary/10"
-      : "border border-dashed border-primary"
+    "rounded-lg p-1.5 sm:p-2 transition-all duration-300", // Base style for all cards
+    isCurrent
+      ? {
+          // Current card styles
+          "border-2 shadow-xl": true, // "3D" effect with a more prominent shadow and border
+          "border-primary bg-primary/10": isNaN(statusValue) || statusValue >= 1, // Reddish for late or no status
+          "border-green-600 bg-green-500/10": !isNaN(statusValue) && statusValue <= 0, // Greenish for on-time/early
+        }
+      : "border border-dashed border-primary shadow-md" // Non-current card style
   );
 
   const displayScheduledTime = point.scheduledTime && typeof point.scheduledTime === 'string' && point.scheduledTime.length >= 5
@@ -23,18 +31,13 @@ export default function ControlPointItemCard({ point }: ControlPointItemCardProp
     ? point.metaTime.substring(0, 5)
     : point.metaTime;
 
-  // Logic for status color based on its numeric value
+  // Logic for status text color based on its numeric value
   let statusColorClass = 'text-foreground'; // Default color
-  if (point.status) {
-    // parseInt handles strings with signs like "+1" or "-1"
-    const statusValue = parseInt(point.status, 10);
-
-    if (!isNaN(statusValue)) {
-      if (statusValue > 0) {
-        statusColorClass = 'text-destructive'; // Red for late
-      } else { // Handles <= 0
-        statusColorClass = 'text-green-600'; // Green for early or on-time
-      }
+  if (!isNaN(statusValue)) {
+    if (statusValue > 0) {
+      statusColorClass = 'text-destructive'; // Red for late
+    } else { // Handles <= 0
+      statusColorClass = 'text-green-600'; // Green for early or on-time
     }
   }
 
