@@ -28,6 +28,10 @@ export default function RouteHeaderCard({ routeInfo }: RouteHeaderCardProps) {
      console.warn("RouteHeaderCard: routeInfo.currentDate is not in YYYY-MM-DD format:", routeInfo.currentDate);
   }
 
+  const displayTime = routeInfo.currentTime && /^\d{2}:\d{2}:\d{2}$/.test(routeInfo.currentTime)
+    ? routeInfo.currentTime.substring(0, 5) 
+    : null;
+
 
   return (
     <Card className="shadow-xl">
@@ -45,6 +49,11 @@ export default function RouteHeaderCard({ routeInfo }: RouteHeaderCardProps) {
           <p className="text-xs sm:text-xs md:text-sm text-muted-foreground mt-0.5">
             {displayDate}
           </p>
+          {displayTime && (
+            <p className="text-xs sm:text-xs md:text-sm text-muted-foreground">
+              Hora Despacho: <span className="font-semibold">{displayTime}</span>
+            </p>
+          )}
           <p className="text-sm sm:text-base md:text-lg font-medium mt-0.5 text-primary">{routeInfo.unitId}</p>
           {(typeof routeInfo.totalAT === 'number' || typeof routeInfo.totalAD === 'number') && (
             <p className="text-xs sm:text-xs md:text-sm text-foreground mt-0.5">

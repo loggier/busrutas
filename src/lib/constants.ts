@@ -4,6 +4,7 @@ import type { RouteInfo, ControlPoint, UnitDetails } from '@/types';
 export const MOCK_ROUTE_INFO: RouteInfo = {
   routeName: 'RUTA 123',
   currentDate: '2025-04-15', // Formato YYYY-MM-DD
+  currentTime: '17:30:00',
   unitId: 'Unidad: 39 (1875)',
   totalAT: 0,
   totalAD: 0,

@@ -58,6 +58,7 @@ export default function RouteDashboardClient({
     const resolvedRouteInfo = rawData.routeInfo || { 
         routeName: 'Error: Ruta Desconocida', 
         currentDate: new Date().toISOString().split('T')[0], 
+        currentTime: '--:--:--',
         unitId: `Fallback Unidad ${unitId}`,
         totalAD: 0,
         totalAT: 0
