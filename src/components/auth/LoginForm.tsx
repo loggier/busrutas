@@ -114,11 +114,11 @@ export default function LoginForm() {
 
       const data = await response.json();
 
-      if (response.ok && data.status === 1) {
-        localStorage.setItem('currentUnitId', values.unitName);
+      if (response.ok && data.status === 1 && data.id_unidad) {
+        localStorage.setItem('currentUnitId', String(data.id_unidad));
         toast({
           title: 'Ingreso Exitoso',
-          description: 'Bienvenido. Redirigiendo a la página principal...',
+          description: data.msg || 'Bienvenido. Redirigiendo a la página principal...',
           variant: 'default',
           duration: 10000,
         });
@@ -157,9 +157,9 @@ export default function LoginForm() {
         <Image
           src="https://control.puntoexacto.ec/images/logo.png?t=1734027539"
           alt="PuntoExacto Logo"
-          width={120} 
-          height={60} 
-          className="object-contain mb-4"
+          width={100} 
+          height={50} 
+          className="object-contain mb-2 sm:mb-4"
           priority
           data-ai-hint="company logo"
         />
