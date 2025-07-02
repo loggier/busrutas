@@ -15,12 +15,16 @@ export default function ControlPointItemCard({ point }: ControlPointItemCardProp
       : "border border-dashed border-primary"
   );
 
+  const displayScheduledTime = point.scheduledTime && typeof point.scheduledTime === 'string' && point.scheduledTime.length >= 5
+    ? point.scheduledTime.substring(0, 5)
+    : point.scheduledTime;
+
   return (
     <Card className={cardClasses} id={`control-point-card-${point.id}`}>
       <CardContent className={cn("flex flex-col gap-1 sm:gap-1.5 p-0", point.isCurrent && "sm:gap-2")}>
         <div className="flex justify-between items-center">
           <span className={cn("text-sm sm:text-base md:text-lg text-foreground", point.isCurrent ? "font-bold sm:text-lg md:text-xl" : "font-semibold")}>{point.name}</span>
-          <span className={cn("text-sm sm:text-base md:text-lg text-foreground", point.isCurrent ? "font-semibold" : "font-semibold")}>{point.scheduledTime}</span>
+          <span className={cn("text-sm sm:text-base md:text-lg text-foreground", point.isCurrent ? "font-semibold" : "font-semibold")}>{displayScheduledTime}</span>
         </div>
         {point.meta && (
           <div className="flex justify-between items-center text-xs sm:text-sm md:text-base">
