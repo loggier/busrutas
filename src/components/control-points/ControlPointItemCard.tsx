@@ -47,7 +47,7 @@ export default function ControlPointItemCard({ point }: ControlPointItemCardProp
           <span className={cn("text-sm sm:text-base md:text-base text-foreground font-semibold")}>{displayScheduledTime}</span> {/* Ajustado y unificado */}
         </div>
         {point.meta && (
-          <div className="flex justify-between items-center text-xs sm:text-sm md:text-sm"> {/* Ajustado md:text-base a sm */}
+          <div className="flex justify-between items-center text-sm sm:text-base">
             <div>
               <span>{point.meta}</span>
               {point.metaTime && <span className="font-bold ml-1">{displayMetaTime}</span>}
