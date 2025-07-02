@@ -24,16 +24,16 @@ export default function ControlPointItemCard({ point }: ControlPointItemCardProp
     : point.metaTime;
 
   // Logic for status color based on its numeric value
-  let statusColorClass = 'text-foreground'; // Default color for 0, 1, or non-numeric status
+  let statusColorClass = 'text-foreground'; // Default color
   if (point.status) {
     // parseInt handles strings with signs like "+1" or "-1"
     const statusValue = parseInt(point.status, 10);
 
     if (!isNaN(statusValue)) {
-      if (statusValue < 0) {
-        statusColorClass = 'text-green-600'; // Green for early
-      } else if (statusValue > 1) {
-        statusColorClass = 'text-destructive'; // Red for late (e.g., +2, +3...)
+      if (statusValue > 0) {
+        statusColorClass = 'text-destructive'; // Red for late
+      } else { // Handles <= 0
+        statusColorClass = 'text-green-600'; // Green for early or on-time
       }
     }
   }
