@@ -44,11 +44,11 @@ export default function ControlPointItemCard({ point }: ControlPointItemCardProp
     <Card className={cardClasses} id={`control-point-card-${point.id}`}>
       <CardContent className={cn("flex flex-col p-0", isCurrent ? "gap-2 sm:gap-3" : "gap-0.5 sm:gap-1")}>
         <div className="flex justify-between items-center">
-          <span className={cn("text-foreground", isCurrent ? "font-bold text-lg sm:text-xl" : "font-semibold text-sm sm:text-base")}>{point.name}</span>
-          <span className={cn("text-foreground font-semibold", isCurrent ? "text-lg sm:text-xl" : "text-sm sm:text-base")}>{displayScheduledTime}</span>
+          <span className={cn("text-foreground", isCurrent ? "font-bold text-xl sm:text-2xl" : "font-semibold text-base sm:text-lg")}>{point.name}</span>
+          <span className={cn("text-foreground font-semibold", isCurrent ? "text-xl sm:text-2xl" : "text-base sm:text-lg")}>{displayScheduledTime}</span>
         </div>
         {point.meta && (
-          <div className={cn("flex justify-between items-center font-bold", isCurrent ? "text-xl sm:text-2xl" : "text-lg sm:text-xl")}>
+          <div className={cn("flex justify-between items-center font-bold", isCurrent ? "text-2xl sm:text-3xl" : "text-xl sm:text-2xl")}>
             <div>
               <span>{point.meta}</span>
               {point.metaTime && <span className="ml-2">{displayMetaTime}</span>}

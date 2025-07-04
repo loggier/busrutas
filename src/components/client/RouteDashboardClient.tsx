@@ -184,17 +184,17 @@ export default function RouteDashboardClient({
           <UnitInfoCard unitDetails={unitBehindDetails} />
            <Button
              onClick={handleManualRefresh}
-             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-1.5 sm:py-2"
+             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-1.5 sm:py-2 text-base"
              disabled={isLoading}
            >
              {isLoading ? (
                <>
-                 <RefreshCw size={14} className="mr-2 animate-spin" />
+                 <RefreshCw size={16} className="mr-2 animate-spin" />
                  Refrescando...
                </>
              ) : (
                <>
-                 <RefreshCw size={14} className="mr-2" />
+                 <RefreshCw size={16} className="mr-2" />
                  Refrescar Datos
                </>
              )}
