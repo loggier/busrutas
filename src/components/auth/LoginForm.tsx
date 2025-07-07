@@ -114,26 +114,23 @@ export default function LoginForm() {
 
       const data = await response.json();
 
+      // Explicitly check for a successful status from the API payload.
       if (response.ok && data.status === 1 && data.id_unidad) {
+        // Handle success
         localStorage.setItem('currentUnitId', String(data.id_unidad));
         toast({
           title: 'Ingreso Exitoso',
-          description: data.msg || 'Bienvenido. Redirigiendo a la página principal...',
+          description: data.msg || 'Bienvenido. Redirigiendo...',
           variant: 'default',
-          duration: 10000,
+          duration: 3000,
         });
         router.push('/');
-      } else if (data.status === 0 && data.msg) {
-        toast({
-          title: 'Error de Ingreso',
-          description: data.msg,
-          variant: 'destructive',
-        });
-        form.setValue('pin', '');
       } else {
+        // Handle ALL failures (status 0, other errors, etc.)
+        const errorMessage = data.msg || 'Credenciales incorrectas o error inesperado.';
         toast({
           title: 'Error de Ingreso',
-          description: data.msg || 'Ocurrió un error inesperado. Intente nuevamente.',
+          description: errorMessage,
           variant: 'destructive',
         });
         form.setValue('pin', '');
@@ -173,9 +170,9 @@ export default function LoginForm() {
               name="unitName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-lg">Nombre de la Unidad</FormLabel>
+                  <FormLabel className="text-lg sm:text-xl md:text-2xl">Nombre de la Unidad</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ej: U-001 o 00890" {...field} disabled={isLoading} />
+                    <Input placeholder="Ej: U-001 o 00890" {...field} disabled={isLoading} className="text-2xl sm:text-3xl" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -186,7 +183,7 @@ export default function LoginForm() {
               name="pin"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-lg">PIN (6 dígitos)</FormLabel>
+                  <FormLabel className="text-lg sm:text-xl md:text-2xl">PIN (6 dígitos)</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
@@ -199,6 +196,7 @@ export default function LoginForm() {
                       }}
                       maxLength={6}
                       disabled={isLoading}
+                      className="text-2xl sm:text-3xl"
                     />
                   </FormControl>
                   <FormMessage />
@@ -207,7 +205,7 @@ export default function LoginForm() {
             />
             <Button
               type="submit"
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-xl sm:text-2xl py-3 sm:py-4"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-2xl sm:text-3xl py-3 sm:py-4"
               disabled={isLoading}
             >
               {isLoading ? (
