@@ -56,7 +56,8 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
   }, [timeString]);
 
   const handleLogoutClick = () => {
-    console.log("Cerrar sesión presionado, redirigiendo a /login");
+    console.log("Cerrar sesión: limpiando datos y redirigiendo a /login");
+    localStorage.removeItem('currentUnitId');
     router.push('/login');
   };
 
