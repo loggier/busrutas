@@ -26,19 +26,19 @@ export default function UnitInfoCard({ unitDetails }: UnitInfoCardProps) {
   return (
     <Card className={cardClasses}>
       <CardHeader className="p-0 mb-0.5 sm:mb-1 items-center"> {/* Reducido mb-1 */}
-        <CardTitle className={cn("text-sm sm:text-base font-medium", unitDetails.isPrimary ? "text-primary" : "text-muted-foreground")}>
+        <CardTitle className={cn("text-base sm:text-lg font-medium", unitDetails.isPrimary ? "text-primary" : "text-muted-foreground")}>
           {unitDetails.label}: {unitDetails.unitIdentifier}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0 flex flex-col items-center text-center">
-        <div className="text-sm sm:text-base text-foreground">
+        <div className="text-base sm:text-lg text-foreground">
           Total AT: <span className="text-primary font-bold">{unitDetails.totalAT}</span> Total AD: <span className="font-bold text-foreground">{unitDetails.totalAD}</span>
         </div>
-        <div className="mt-0.5 sm:mt-1 font-semibold text-base sm:text-lg md:text-lg text-foreground"> {/* Reducido mt-1 y md:text-lg */}
+        <div className="mt-0.5 sm:mt-1 font-semibold text-lg sm:text-xl md:text-xl text-foreground"> {/* Reducido mt-1 y md:text-lg */}
           {unitDetails.lastKnownLocation} - {displayLastKnownTime}
         </div>
         {unitDetails.meta && (
-          <div className="text-sm sm:text-base md:text-base mt-0.5 sm:mt-1"> {/* Reducido mt-1, md:text-base */}
+          <div className="text-base sm:text-lg md:text-lg mt-0.5 sm:mt-1"> {/* Reducido mt-1, md:text-base */}
             {unitDetails.meta} <span className="font-bold text-foreground">{displayMetaTime}</span> {unitDetails.status && <>l: <span className="text-primary font-bold">{unitDetails.status}</span></>}
           </div>
         )}

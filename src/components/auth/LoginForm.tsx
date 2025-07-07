@@ -163,7 +163,7 @@ export default function LoginForm() {
           priority
           data-ai-hint="company logo"
         />
-        <CardTitle className="text-2xl sm:text-3xl font-bold text-center">Iniciar Sesión</CardTitle>
+        <CardTitle className="text-3xl sm:text-4xl font-bold text-center">Iniciar Sesión</CardTitle>
       </CardHeader>
       <CardContent className="pb-4 sm:pb-6">
         <Form {...form}>
@@ -173,7 +173,7 @@ export default function LoginForm() {
               name="unitName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-base">Nombre de la Unidad</FormLabel>
+                  <FormLabel className="text-lg">Nombre de la Unidad</FormLabel>
                   <FormControl>
                     <Input placeholder="Ej: U-001 o 00890" {...field} disabled={isLoading} />
                   </FormControl>
@@ -186,7 +186,7 @@ export default function LoginForm() {
               name="pin"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-base">PIN (6 dígitos)</FormLabel>
+                  <FormLabel className="text-lg">PIN (6 dígitos)</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
@@ -207,7 +207,7 @@ export default function LoginForm() {
             />
             <Button
               type="submit"
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-lg sm:text-xl py-3 sm:py-4"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-xl sm:text-2xl py-3 sm:py-4"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -223,7 +223,7 @@ export default function LoginForm() {
               <Button
                 variant="outline"
                 onClick={handleInstallClick}
-                className="w-full mt-2 sm:mt-4 text-base sm:text-lg py-2 sm:py-3"
+                className="w-full mt-2 sm:mt-4 text-lg sm:text-xl py-2 sm:py-3"
                 disabled={isLoading}
                 type="button"
               >

@@ -83,14 +83,14 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
               <LogOut size={14} />
             </Button>
           </div>
-        <div className="font-mono text-xl sm:text-2xl md:text-3xl tracking-wider">
+        <div className="font-mono text-2xl sm:text-3xl md:text-4xl tracking-wider">
           <span>--</span>
           <span className="opacity-50 mx-1">:</span>
           <span>--</span>
           <span className="opacity-50 mx-1">:</span>
           <span>--</span>
         </div>
-        <div className="text-sm text-gray-400 mt-0.5">Cargando...</div>
+        <div className="text-base text-gray-400 mt-0.5">Cargando...</div>
       </div>
     );
   }
@@ -113,7 +113,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle className="text-center text-xl">Información de la Aplicación</AlertDialogTitle>
+              <AlertDialogTitle className="text-center text-2xl">Información de la Aplicación</AlertDialogTitle>
             </AlertDialogHeader>
             <div className="flex flex-col items-center gap-4 py-4">
               <Image
@@ -124,10 +124,10 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
                 className="object-contain"
                 data-ai-hint="company logo"
               />
-              <p className="text-base text-muted-foreground text-center">
+              <p className="text-lg text-muted-foreground text-center">
                 Todos los derechos reservados PuntoExacto - 2025
               </p>
-              <p className="text-base text-muted-foreground text-center">
+              <p className="text-lg text-muted-foreground text-center">
                 Versión 1.0.2
               </p>
             </div>
@@ -147,7 +147,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
         </Button>
       </div>
       <div className="text-center">
-        <div className="font-mono text-xl sm:text-2xl md:text-3xl tracking-wider">
+        <div className="font-mono text-2xl sm:text-3xl md:text-4xl tracking-wider">
           <span>{hours}</span>
           <span className={`transition-opacity duration-150 ease-in-out mx-0.5 sm:mx-1 ${showColon ? 'opacity-100' : 'opacity-25'}`}>:</span>
           <span>{minutes}</span>
@@ -155,7 +155,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
           <span>{seconds}</span>
         </div>
         {dateString && (
-          <div className="text-sm text-gray-300 mt-0.5">{dateString}</div>
+          <div className="text-base text-gray-300 mt-0.5">{dateString}</div>
         )}
       </div>
     </div>

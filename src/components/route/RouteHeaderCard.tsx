@@ -45,18 +45,18 @@ export default function RouteHeaderCard({ routeInfo }: RouteHeaderCardProps) {
           data-ai-hint="company logo"
         />
         <div className="flex-1">
-          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
-          <p className="text-sm sm:text-sm md:text-base text-muted-foreground mt-0.5">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
+          <p className="text-base sm:text-base md:text-lg text-muted-foreground mt-0.5">
             {displayDate}
           </p>
           {displayTime && (
-            <p className="text-sm sm:text-sm md:text-base text-muted-foreground">
+            <p className="text-base sm:text-base md:text-lg text-muted-foreground">
               Hora Despacho: <span className="font-semibold">{displayTime}</span>
             </p>
           )}
-          <p className="text-base sm:text-lg md:text-xl font-medium mt-0.5 text-primary">{routeInfo.unitId}</p>
+          <p className="text-lg sm:text-xl md:text-2xl font-medium mt-0.5 text-primary">{routeInfo.unitId}</p>
           {(typeof routeInfo.totalAT === 'number' || typeof routeInfo.totalAD === 'number') && (
-            <p className="text-sm sm:text-sm md:text-base text-foreground mt-0.5">
+            <p className="text-base sm:text-base md:text-lg text-foreground mt-0.5">
               {typeof routeInfo.totalAT === 'number' && (
                 <>
                   Total AT: <span className="font-semibold">{routeInfo.totalAT}</span>
