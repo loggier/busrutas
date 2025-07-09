@@ -4,6 +4,7 @@
 import type { RouteInfo, ControlPoint, UnitDetails } from '@/types';
 import { useCurrentTime } from '@/hooks/use-current-time';
 import { useState, useCallback, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import RouteHeaderCard from '@/components/route/RouteHeaderCard';
 import ControlPointsSection from '@/components/control-points/ControlPointsSection';
@@ -12,7 +13,6 @@ import DigitalClock from '@/components/common/DigitalClock';
 import { Button } from '@/components/ui/button';
 import { RefreshCw } from 'lucide-react';
 import { EMPTY_UNIT_DETAILS } from '@/lib/constants';
-
 
 interface RawApiDataForClient {
   routeInfo: RouteInfo;
@@ -52,17 +52,25 @@ export default function RouteDashboardClient({
   const [isLoading, setIsLoading] = useState(false);
 
   const { toast } = useToast();
+  const router = useRouter();
   const currentTime = useCurrentTime();
 
-  const processRawDataForClient = useCallback((rawData: RawApiDataForClient, unitId: string): ProcessedClientData => {
-    const resolvedRouteInfo = rawData.routeInfo || { 
-        routeName: 'Error: Ruta Desconocida', 
-        currentDate: new Date().toISOString().split('T')[0], 
-        currentTime: '--:--:--',
-        unitId: `Fallback Unidad ${unitId}`,
-        totalAD: 0,
-        totalAT: 0
-      };
+  const handleLogoutAndRedirect = useCallback((message: string) => {
+    localStorage.removeItem('currentUnitId');
+    toast({
+      title: 'Error de Sesión',
+      description: message,
+      variant: 'destructive',
+    });
+    router.push('/login');
+  }, [router, toast]);
+
+  const processRawDataForClient = useCallback((rawData: RawApiDataForClient, unitId: string): ProcessedClientData | null => {
+    if (!rawData.routeInfo || !rawData.routeInfo.unitId) {
+        return null;
+    }
+  
+    const resolvedRouteInfo = rawData.routeInfo;
     
     let processedUnitAhead: UnitDetails;
     if (Array.isArray(rawData.unitAhead) && rawData.unitAhead.length === 0) {
@@ -71,7 +79,6 @@ export default function RouteDashboardClient({
       processedUnitAhead = rawData.unitAhead as UnitDetails;
       if (!processedUnitAhead.label) processedUnitAhead.label = 'Adelante';
     } else {
-      console.warn(`Client: API response for unitAhead (unidad ${unitId}) is not a valid object or empty array, using default. Received:`, rawData.unitAhead);
       processedUnitAhead = { ...EMPTY_UNIT_DETAILS, id: `empty-ahead-client-fallback-${unitId}`, label: 'Adelante' };
     }
 
@@ -82,7 +89,6 @@ export default function RouteDashboardClient({
       processedUnitBehind = rawData.unitBehind as UnitDetails;
       if (!processedUnitBehind.label) processedUnitBehind.label = 'Atrás';
     } else {
-      console.warn(`Client: API response for unitBehind (unidad ${unitId}) is not a valid object or empty array, using default. Received:`, rawData.unitBehind);
       processedUnitBehind = { ...EMPTY_UNIT_DETAILS, id: `empty-behind-client-fallback-${unitId}`, label: 'Atrás' };
     }
 
@@ -110,45 +116,35 @@ export default function RouteDashboardClient({
     try {
       const response = await fetch(`https://control.puntoexacto.ec/api/get_despacho/${unitIdToFetch}`);
       if (!response.ok) {
-        let errorBody = '';
-        try { errorBody = await response.text(); } catch(e) { /* no-op */ }
-        throw new Error(`Error al ${isBackgroundRefresh ? 'actualizar en segundo plano' : 'refrescar'}: ${response.status} ${response.statusText}. ${errorBody}`);
+        throw new Error(`Error de API (${response.status})`);
       }
       const rawData: RawApiDataForClient = await response.json();
       const processedData = processRawDataForClient(rawData, unitIdToFetch);
-      updateClientData(processedData);
 
-      if (!isBackgroundRefresh) { 
-        if (processedData.controlPoints.length > 0) {
+      if(processedData) {
+        updateClientData(processedData);
+        if (!isBackgroundRefresh) { 
           toast({
             title: 'Datos Actualizados',
             description: 'La información del despacho ha sido refrescada.',
             variant: 'default',
           });
-        } else { 
-           toast({
-            title: 'Información',
-            description: 'La unidad no tiene despacho asignado actualmente.',
-            variant: 'default',
-          });
         }
+      } else {
+        // Si no hay datos válidos, incluso en una actualización en segundo plano, es un problema.
+        throw new Error("Los datos recibidos no son válidos.");
       }
     } catch (error) {
       console.error(`Error en fetchData (${isBackgroundRefresh ? 'background' : 'manual'}):`, error);
-      if (!isBackgroundRefresh) { 
-        const errorMessage = error instanceof Error ? error.message : `Error desconocido al refrescar.`;
-        toast({
-          title: `Error al Refrescar`,
-          description: errorMessage,
-          variant: 'destructive',
-        });
-      }
+      const errorMessage = error instanceof Error ? error.message : `Error desconocido.`;
+      // Si la actualización falla (manual o en segundo plano), cerramos sesión.
+      handleLogoutAndRedirect(`La sesión ha expirado o los datos son inválidos. ${errorMessage}`);
     } finally {
       if (!isBackgroundRefresh) {
         setIsLoading(false);
       }
     }
-  }, [toast, processRawDataForClient]); 
+  }, [toast, processRawDataForClient, handleLogoutAndRedirect]); 
 
   const handleManualRefresh = useCallback(() => {
     fetchData(currentUnitId, false);
@@ -161,7 +157,6 @@ export default function RouteDashboardClient({
     return () => clearInterval(intervalId);
   }, [currentUnitId, fetchData]);
 
-  // Update state if initial props change (e.g., after initial load in page.tsx)
   useEffect(() => {
     setRouteInfo(initialRouteInfo);
     setControlPoints(initialControlPoints);
@@ -184,17 +179,17 @@ export default function RouteDashboardClient({
           <UnitInfoCard unitDetails={unitBehindDetails} />
            <Button
              onClick={handleManualRefresh}
-             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-1.5 sm:py-2 text-lg"
+             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-3 sm:py-4 text-2xl"
              disabled={isLoading}
            >
              {isLoading ? (
                <>
-                 <RefreshCw size={16} className="mr-2 animate-spin" />
+                 <RefreshCw size={24} className="mr-2 animate-spin" />
                  Refrescando...
                </>
              ) : (
                <>
-                 <RefreshCw size={16} className="mr-2" />
+                 <RefreshCw size={24} className="mr-2" />
                  Refrescar Datos
                </>
              )}
