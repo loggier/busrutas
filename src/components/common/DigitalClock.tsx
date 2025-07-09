@@ -129,7 +129,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
                 Todos los derechos reservados PuntoExacto - 2025
               </p>
               <p className="text-lg text-muted-foreground text-center">
-                Versión 1.0.2
+                Versión 1.0.3
               </p>
             </div>
             <AlertDialogFooter>
