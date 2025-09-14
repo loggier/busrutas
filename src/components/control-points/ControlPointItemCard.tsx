@@ -2,6 +2,7 @@
 import type { ControlPoint } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { Flag } from 'lucide-react';
 
 interface ControlPointItemCardProps {
   point: ControlPoint;
@@ -44,7 +45,10 @@ export default function ControlPointItemCard({ point }: ControlPointItemCardProp
     <Card className={cardClasses} id={`control-point-card-${point.id}`}>
       <CardContent className={cn("flex flex-col text-white p-0", isCurrent ? "gap-1 sm:gap-2" : "gap-0.5 sm:gap-1")}>
         <div className="flex justify-between items-center">
-          <span className={cn("text-white", isCurrent ? "font-bold text-lg sm:text-xl" : "font-semibold text-base sm:text-lg")}>{point.name}</span>
+          <div className="flex items-center gap-2">
+            {isCurrent && <Flag className="text-destructive" size={20} />}
+            <span className={cn("text-white", isCurrent ? "font-bold text-lg sm:text-xl" : "font-semibold text-base sm:text-lg")}>{point.name}</span>
+          </div>
           <span className={cn("text-white font-semibold", isCurrent ? "text-lg sm:text-xl" : "text-base sm:text-lg")}>{displayScheduledTime}</span>
         </div>
         {point.meta && (
