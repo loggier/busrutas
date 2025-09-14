@@ -220,7 +220,7 @@ export default function RouteDashboardClient({
 
            <Button
              onClick={handleManualRefresh}
-             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-3 sm:py-4 text-lg"
+             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-3 sm:py-4 text-base"
              disabled={isLoading}
            >
              {isLoading ? 'Actualizando...' : 'Actualizar'}
