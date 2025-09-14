@@ -10,7 +10,7 @@ export default {
   theme: {
   	extend: {
   		fontFamily: {
-        sans: ["var(--font-geist-sans)"],
+        sans: ["var(--font-orbitron)"],
         mono: ["var(--font-geist-mono)"],
         orbitron: ["var(--font-orbitron)"],
       },
