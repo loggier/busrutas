@@ -132,24 +132,14 @@ export default function RouteDashboardClient({
         
         {/* Left Column */}
         <div className="md:col-span-4 flex flex-col gap-2 sm:gap-3 md:gap-4 overflow-y-auto">
-          <RouteHeaderCard routeInfo={routeInfo} />
           <DigitalClock currentTime={currentTime} />
+          <RouteHeaderCard routeInfo={routeInfo} />
            <Button
              onClick={handleManualRefresh}
              className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-3 sm:py-4 text-2xl"
              disabled={isLoading}
            >
-             {isLoading ? (
-               <>
-                 <RefreshCw size={24} className="mr-2 animate-spin" />
-                 Refrescando...
-               </>
-             ) : (
-               <>
-                 <RefreshCw size={24} className="mr-2" />
-                 Refrescar Datos
-               </>
-             )}
+             {isLoading ? 'Actualizando...' : 'Actualizar'}
            </Button>
         </div>
 
