@@ -17,8 +17,8 @@ import { es } from 'date-fns/locale';
 interface RawApiDataForClient {
   routeInfo: RouteInfo;
   controlPoints: ControlPoint[];
-  unitAhead: UnitDetails | [];
-  unitBehind: UnitDetails | [];
+  unitAhead: UnitDetails | [] | null;
+  unitBehind: UnitDetails | [] | null;
 }
 
 interface ProcessedClientData {
@@ -94,8 +94,8 @@ export default function RouteDashboardClient({
     const resolvedRouteInfo = rawData.routeInfo;
     const processedControlPoints = Array.isArray(rawData.controlPoints) ? rawData.controlPoints : [];
     
-    const unitAhead = Array.isArray(rawData.unitAhead) || Object.keys(rawData.unitAhead).length === 0 ? null : rawData.unitAhead;
-    const unitBehind = Array.isArray(rawData.unitBehind) || Object.keys(rawData.unitBehind).length === 0 ? null : rawData.unitBehind;
+    const unitAhead = rawData.unitAhead && !Array.isArray(rawData.unitAhead) && Object.keys(rawData.unitAhead).length > 0 ? rawData.unitAhead : null;
+    const unitBehind = rawData.unitBehind && !Array.isArray(rawData.unitBehind) && Object.keys(rawData.unitBehind).length > 0 ? rawData.unitBehind : null;
 
     return {
       routeInfo: resolvedRouteInfo,
