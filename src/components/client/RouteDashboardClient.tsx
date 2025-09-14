@@ -1,13 +1,14 @@
 
 'use client';
 
-import type { RouteInfo, ControlPoint } from '@/types';
+import type { RouteInfo, ControlPoint, UnitDetails } from '@/types';
 import { useCurrentTime } from '@/hooks/use-current-time';
 import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import ControlPointsSection from '@/components/control-points/ControlPointsSection';
 import DigitalClock from '@/components/common/DigitalClock';
+import UnitInfoCard from '@/components/units/UnitInfoCard';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { format, parseISO, isValid } from 'date-fns';
@@ -16,18 +17,22 @@ import { es } from 'date-fns/locale';
 interface RawApiDataForClient {
   routeInfo: RouteInfo;
   controlPoints: ControlPoint[];
-  unitAhead: any | [];
-  unitBehind: any | [];
+  unitAhead: UnitDetails | [];
+  unitBehind: UnitDetails | [];
 }
 
 interface ProcessedClientData {
   routeInfo: RouteInfo;
   controlPoints: ControlPoint[];
+  unitAhead: UnitDetails | null;
+  unitBehind: UnitDetails | null;
 }
 
 interface RouteDashboardClientProps {
   initialRouteInfo: RouteInfo;
   initialControlPoints: ControlPoint[];
+  initialUnitAhead: UnitDetails | null;
+  initialUnitBehind: UnitDetails | null;
   currentUnitId: string;
 }
 
@@ -36,10 +41,14 @@ const AUTO_REFRESH_INTERVAL = 10000; // 10 segundos
 export default function RouteDashboardClient({
   initialRouteInfo,
   initialControlPoints,
+  initialUnitAhead,
+  initialUnitBehind,
   currentUnitId,
 }: RouteDashboardClientProps) {
   const [routeInfo, setRouteInfo] = useState<RouteInfo>(initialRouteInfo);
   const [controlPoints, setControlPoints] = useState<ControlPoint[]>(initialControlPoints);
+  const [unitAhead, setUnitAhead] = useState<UnitDetails | null>(initialUnitAhead);
+  const [unitBehind, setUnitBehind] = useState<UnitDetails | null>(initialUnitBehind);
   const [isLoading, setIsLoading] = useState(false);
 
   const { toast } = useToast();
@@ -84,16 +93,23 @@ export default function RouteDashboardClient({
 
     const resolvedRouteInfo = rawData.routeInfo;
     const processedControlPoints = Array.isArray(rawData.controlPoints) ? rawData.controlPoints : [];
+    
+    const unitAhead = !Array.isArray(rawData.unitAhead) ? rawData.unitAhead : null;
+    const unitBehind = !Array.isArray(rawData.unitBehind) ? rawData.unitBehind : null;
 
     return {
       routeInfo: resolvedRouteInfo,
       controlPoints: processedControlPoints,
+      unitAhead,
+      unitBehind
     };
   }, []);
 
   const updateClientData = (data: ProcessedClientData) => {
     setRouteInfo(data.routeInfo);
     setControlPoints(data.controlPoints);
+    setUnitAhead(data.unitAhead);
+    setUnitBehind(data.unitBehind);
   };
 
   const fetchData = useCallback(async (unitIdToFetch: string, isBackgroundRefresh: boolean = false) => {
@@ -145,7 +161,9 @@ export default function RouteDashboardClient({
   useEffect(() => {
     setRouteInfo(initialRouteInfo);
     setControlPoints(initialControlPoints);
-  }, [initialRouteInfo, initialControlPoints]);
+    setUnitAhead(initialUnitAhead);
+    setUnitBehind(initialUnitBehind);
+  }, [initialRouteInfo, initialControlPoints, initialUnitAhead, initialUnitBehind]);
 
 
   return (
@@ -169,7 +187,7 @@ export default function RouteDashboardClient({
               priority
             />
             <div className="flex-1 text-center">
-              <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
+              <h1 className="text-xl sm:text-xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
               <p className="text-sm sm:text-base text-muted-foreground mt-0.5">
                 Fecha Despacho: <span className="font-semibold">{displayDate}</span>
               </p>
@@ -178,7 +196,7 @@ export default function RouteDashboardClient({
                   Hora Despacho: <span className="font-semibold">{displayTime}</span>
                 </p>
               )}
-              <p className="text-base sm:text-lg font-medium mt-0.5 text-primary">{routeInfo.unitId}</p>
+              <p className="text-base font-medium mt-0.5 text-primary">{routeInfo.unitId}</p>
               {(typeof routeInfo.totalAT === 'number' || typeof routeInfo.totalAD === 'number') && (
                 <p className="text-sm sm:text-base text-foreground mt-0.5">
                   {typeof routeInfo.totalAT === 'number' && (
@@ -196,6 +214,9 @@ export default function RouteDashboardClient({
               )}
             </div>
           </div>
+          
+          {unitAhead && <UnitInfoCard title="Unidad de Adelante" unit={unitAhead} />}
+          {unitBehind && <UnitInfoCard title="Unidad de Atrás" unit={unitBehind} />}
 
            <Button
              onClick={handleManualRefresh}

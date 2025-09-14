@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import type { RouteInfo, ControlPoint } from '@/types';
+import type { RouteInfo, ControlPoint, UnitDetails } from '@/types';
 import RouteDashboardClient from '@/components/client/RouteDashboardClient';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from '@/hooks/use-toast';
@@ -11,13 +11,15 @@ import { useToast } from '@/hooks/use-toast';
 interface ProcessedClientData {
   routeInfo: RouteInfo;
   controlPoints: ControlPoint[];
+  unitAhead: UnitDetails | null;
+  unitBehind: UnitDetails | null;
 }
 
 interface RawApiData {
   routeInfo: RouteInfo;
   controlPoints: ControlPoint[];
-  unitAhead: any | [];
-  unitBehind: any | [];
+  unitAhead: UnitDetails | [];
+  unitBehind: UnitDetails | [];
 }
 
 export default function RouteSchedulePage() {
@@ -49,10 +51,16 @@ export default function RouteSchedulePage() {
     if (resolvedRouteInfo.currentDate && !/^\d{4}-\d{2}-\d{2}$/.test(resolvedRouteInfo.currentDate)) {
         resolvedRouteInfo.currentDate = new Date().toISOString().split('T')[0];
     }
+    
+    // La API devuelve un array vacío `[]` si no hay unidad, o un objeto si la hay.
+    const unitAhead = !Array.isArray(rawData.unitAhead) ? rawData.unitAhead : null;
+    const unitBehind = !Array.isArray(rawData.unitBehind) ? rawData.unitBehind : null;
 
     return {
       routeInfo: resolvedRouteInfo,
       controlPoints: processedControlPoints,
+      unitAhead,
+      unitBehind
     };
   }, []);
 
@@ -98,9 +106,11 @@ export default function RouteSchedulePage() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 w-full max-w-7xl">
           <div className="md:col-span-4 space-y-4">
+              <Skeleton className="h-24 w-full" />
               <Skeleton className="h-48 w-full" />
-              <Skeleton className="h-32 w-full" />
               <Skeleton className="h-20 w-full" />
+              <Skeleton className="h-20 w-full" />
+              <Skeleton className="h-12 w-full" />
           </div>
           <div className="md:col-span-8 space-y-4">
             <Skeleton className="h-full w-full min-h-[60vh]" />
@@ -114,6 +124,8 @@ export default function RouteSchedulePage() {
     <RouteDashboardClient
       initialRouteInfo={pageData.routeInfo}
       initialControlPoints={pageData.controlPoints}
+      initialUnitAhead={pageData.unitAhead}
+      initialUnitBehind={pageData.unitBehind}
       currentUnitId={currentUnitId}
     />
   );
