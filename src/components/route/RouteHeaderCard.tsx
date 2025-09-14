@@ -37,7 +37,7 @@ export default function RouteHeaderCard({ routeInfo }: RouteHeaderCardProps) {
     <Card className="shadow-xl">
       <CardContent className="p-2 sm:p-3 md:p-4 flex items-center gap-2 sm:gap-3">
         <Image
-          src="https://control.puntoexacto.ec/images/logo.png"
+          src="https://controlrutas.gpsplataforma.net/images/logo.png"
           alt="Logo de la Empresa"
           width={100} 
           height={60} 

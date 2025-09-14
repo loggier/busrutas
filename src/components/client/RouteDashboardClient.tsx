@@ -114,7 +114,7 @@ export default function RouteDashboardClient({
       setIsLoading(true);
     }
     try {
-      const response = await fetch(`https://control.puntoexacto.ec/api/get_despacho/${unitIdToFetch}`);
+      const response = await fetch(`https://controlrutas.gpsplataforma.net/api/get_despacho/${unitIdToFetch}`);
       if (!response.ok) {
         throw new Error(`Error de API (${response.status})`);
       }

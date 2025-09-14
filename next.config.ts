@@ -1,3 +1,4 @@
+
 import type {NextConfig} from 'next';
 const withPWA = require('next-pwa')({
   dest: 'public',
@@ -24,6 +25,12 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'control.puntoexacto.ec',
+        port: '',
+        pathname: '/images/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'controlrutas.gpsplataforma.net',
         port: '',
         pathname: '/images/**',
       },

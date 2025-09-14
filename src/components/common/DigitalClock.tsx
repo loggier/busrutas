@@ -118,7 +118,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
             </AlertDialogHeader>
             <div className="flex flex-col items-center gap-4 py-4">
               <Image
-                src="https://control.puntoexacto.ec/images/logo.png?t=1734027539"
+                src="https://controlrutas.gpsplataforma.net/images/logo.png?t=1734027539"
                 alt="PuntoExacto Logo"
                 width={100} 
                 height={50}

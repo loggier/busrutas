@@ -106,7 +106,7 @@ export default function LoginForm() {
         unidad: values.unitName,
         pin: values.pin,
       });
-      const url = `https://control.puntoexacto.ec/api/login_unidad?${params.toString()}`;
+      const url = `https://controlrutas.gpsplataforma.net/api/login_unidad?${params.toString()}`;
 
       const response = await fetch(url, {
         method: 'GET',
@@ -152,7 +152,7 @@ export default function LoginForm() {
     <Card className="w-full max-w-sm sm:max-w-md shadow-lg">
       <CardHeader className="items-center pt-4 sm:pt-6 pb-3 sm:pb-4">
         <Image
-          src="https://control.puntoexacto.ec/images/logo.png"
+          src="https://controlrutas.gpsplataforma.net/images/logo.png"
           alt="PuntoExacto Logo"
           width={100} 
           height={50} 
