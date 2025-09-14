@@ -156,11 +156,11 @@ export default function LoginForm() {
           alt="PuntoExacto Logo"
           width={300}
           height={150}
-          className="object-contain mb-2 sm:mb-4 w-[150px] h-auto"
+          className="object-contain mb-2 sm:mb-4 w-[225px] h-auto"
           priority
           data-ai-hint="company logo"
         />
-        <CardTitle className="text-3xl sm:text-4xl font-bold text-center">Iniciar Sesión</CardTitle>
+        <CardTitle className="text-2xl sm:text-3xl font-bold text-center">Iniciar Sesión</CardTitle>
       </CardHeader>
       <CardContent className="pb-4 sm:pb-6">
         <Form {...form}>
@@ -170,9 +170,9 @@ export default function LoginForm() {
               name="unitName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-lg sm:text-xl md:text-2xl">Nombre de la Unidad</FormLabel>
+                  <FormLabel className="text-base sm:text-lg">Nombre de la Unidad</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ej: U-001 o 00890" {...field} disabled={isLoading} className="text-3xl sm:text-4xl" />
+                    <Input placeholder="Ej: U-001 o 00890" {...field} disabled={isLoading} className="text-xl sm:text-2xl" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -183,7 +183,7 @@ export default function LoginForm() {
               name="pin"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-lg sm:text-xl md:text-2xl">PIN (6 dígitos)</FormLabel>
+                  <FormLabel className="text-base sm:text-lg">PIN (6 dígitos)</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
@@ -196,7 +196,7 @@ export default function LoginForm() {
                       }}
                       maxLength={6}
                       disabled={isLoading}
-                      className="text-3xl sm:text-4xl"
+                      className="text-xl sm:text-2xl"
                     />
                   </FormControl>
                   <FormMessage />
@@ -205,7 +205,7 @@ export default function LoginForm() {
             />
             <Button
               type="submit"
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-3xl sm:text-4xl py-3 sm:py-4"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-xl sm:text-2xl py-3 sm:py-4"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -221,7 +221,7 @@ export default function LoginForm() {
               <Button
                 variant="outline"
                 onClick={handleInstallClick}
-                className="w-full mt-2 sm:mt-4 text-xl sm:text-2xl py-2 sm:py-3"
+                className="w-full mt-2 sm:mt-4 text-lg sm:text-xl py-2 sm:py-3"
                 disabled={isLoading}
                 type="button"
               >
