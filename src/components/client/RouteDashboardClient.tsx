@@ -188,17 +188,17 @@ export default function RouteDashboardClient({
             />
             <div className="flex-1 text-center">
               <h1 className="text-xl sm:text-xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
-              <p className="text-sm sm:text-base text-muted-foreground mt-0.5">
+              <p className="text-sm text-muted-foreground mt-0.5">
                 Fecha Despacho: <span className="font-semibold">{displayDate}</span>
               </p>
               {displayTime && (
-                <p className="text-sm sm:text-base text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Hora Despacho: <span className="font-semibold">{displayTime}</span>
                 </p>
               )}
               <p className="text-base font-medium mt-0.5 text-primary">{routeInfo.unitId}</p>
               {(typeof routeInfo.totalAT === 'number' || typeof routeInfo.totalAD === 'number') && (
-                <p className="text-sm sm:text-base text-foreground mt-0.5">
+                <p className="text-sm text-foreground mt-0.5">
                   {typeof routeInfo.totalAT === 'number' && (
                     <>
                       Retraso: <span className="font-semibold">{routeInfo.totalAT}</span>

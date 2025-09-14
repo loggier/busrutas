@@ -9,8 +9,8 @@ interface UnitInfoCardProps {
 }
 
 export default function UnitInfoCard({ title, unit }: UnitInfoCardProps) {
-  if (!unit) {
-    return null; // Don't render if no unit data
+  if (!unit || !unit.status) {
+    return null; // Don't render if no unit data or status
   }
 
   const isAhead = title === 'Unidad de Adelante';
