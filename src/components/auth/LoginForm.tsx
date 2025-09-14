@@ -154,8 +154,8 @@ export default function LoginForm() {
         <Image
           src="https://controlrutas.gpsplataforma.net/images/logo.png"
           alt="PuntoExacto Logo"
-          width={100} 
-          height={50} 
+          width={150}
+          height={75}
           className="object-contain mb-2 sm:mb-4"
           priority
           data-ai-hint="company logo"
@@ -172,7 +172,7 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel className="text-lg sm:text-xl md:text-2xl">Nombre de la Unidad</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ej: U-001 o 00890" {...field} disabled={isLoading} className="text-2xl sm:text-3xl" />
+                    <Input placeholder="Ej: U-001 o 00890" {...field} disabled={isLoading} className="text-3xl sm:text-4xl" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -196,7 +196,7 @@ export default function LoginForm() {
                       }}
                       maxLength={6}
                       disabled={isLoading}
-                      className="text-2xl sm:text-3xl"
+                      className="text-3xl sm:text-4xl"
                     />
                   </FormControl>
                   <FormMessage />
@@ -205,7 +205,7 @@ export default function LoginForm() {
             />
             <Button
               type="submit"
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-2xl sm:text-3xl py-3 sm:py-4"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-3xl sm:text-4xl py-3 sm:py-4"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -221,7 +221,7 @@ export default function LoginForm() {
               <Button
                 variant="outline"
                 onClick={handleInstallClick}
-                className="w-full mt-2 sm:mt-4 text-lg sm:text-xl py-2 sm:py-3"
+                className="w-full mt-2 sm:mt-4 text-xl sm:text-2xl py-2 sm:py-3"
                 disabled={isLoading}
                 type="button"
               >
