@@ -154,9 +154,9 @@ export default function LoginForm() {
         <Image
           src="https://controlrutas.gpsplataforma.net/images/logo.png"
           alt="PuntoExacto Logo"
-          width={150}
-          height={75}
-          className="object-contain mb-2 sm:mb-4"
+          width={300}
+          height={150}
+          className="object-contain mb-2 sm:mb-4 w-[150px] h-auto"
           priority
           data-ai-hint="company logo"
         />
