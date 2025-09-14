@@ -12,7 +12,7 @@ export interface ControlPoint {
 export interface UnitDetails {
   unit: string;
   time: string;
-  status: string;
+  status?: string;
 }
 
 export interface RouteInfo {
