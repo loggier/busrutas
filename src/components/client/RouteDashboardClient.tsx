@@ -10,13 +10,12 @@ import RouteHeaderCard from '@/components/route/RouteHeaderCard';
 import ControlPointsSection from '@/components/control-points/ControlPointsSection';
 import DigitalClock from '@/components/common/DigitalClock';
 import { Button } from '@/components/ui/button';
-import { RefreshCw } from 'lucide-react';
 
 interface RawApiDataForClient {
   routeInfo: RouteInfo;
   controlPoints: ControlPoint[];
-  unitAhead: any | []; // No longer used, kept for API compatibility
-  unitBehind: any | []; // No longer used, kept for API compatibility
+  unitAhead: any | [];
+  unitBehind: any | [];
 }
 
 interface ProcessedClientData {
@@ -128,15 +127,20 @@ export default function RouteDashboardClient({
 
   return (
     <div className="h-screen bg-background p-1 sm:p-2 md:p-3 flex flex-col overflow-hidden">
+      {/* Header Section */}
+      <div className="mb-2 sm:mb-3 md:mb-4">
+        <RouteHeaderCard routeInfo={routeInfo} />
+      </div>
+
+      {/* Columns Section */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-2 sm:gap-3 md:gap-4 flex-1 overflow-hidden">
         
         {/* Left Column */}
         <div className="md:col-span-4 flex flex-col gap-2 sm:gap-3 md:gap-4 overflow-y-auto">
           <DigitalClock currentTime={currentTime} />
-          <RouteHeaderCard routeInfo={routeInfo} />
            <Button
              onClick={handleManualRefresh}
-             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-3 sm:py-4 text-2xl"
+             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-3 sm:py-4 text-3xl"
              disabled={isLoading}
            >
              {isLoading ? 'Actualizando...' : 'Actualizar'}
