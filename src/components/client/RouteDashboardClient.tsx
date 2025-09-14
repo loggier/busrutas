@@ -171,18 +171,18 @@ export default function RouteDashboardClient({
               priority
             />
             <div className="flex-1 text-center">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
-              <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground mt-0.5">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
+              <p className="text-base sm:text-lg md:text-xl text-muted-foreground mt-0.5">
                 {displayDate}
               </p>
               {displayTime && (
-                <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground">
+                <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
                   Hora Despacho: <span className="font-semibold">{displayTime}</span>
                 </p>
               )}
-              <p className="text-3xl sm:text-4xl md:text-5xl font-medium mt-0.5 text-primary">{routeInfo.unitId}</p>
+              <p className="text-2xl sm:text-3xl md:text-4xl font-medium mt-0.5 text-primary">{routeInfo.unitId}</p>
               {(typeof routeInfo.totalAT === 'number' || typeof routeInfo.totalAD === 'number') && (
-                <p className="text-lg sm:text-xl md:text-2xl text-foreground mt-0.5">
+                <p className="text-base sm:text-lg md:text-xl text-foreground mt-0.5">
                   {typeof routeInfo.totalAT === 'number' && (
                     <>
                       Total AT: <span className="font-semibold">{routeInfo.totalAT}</span>
@@ -201,7 +201,7 @@ export default function RouteDashboardClient({
 
            <Button
              onClick={handleManualRefresh}
-             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-3 sm:py-4 text-3xl"
+             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-3 sm:py-4 text-xl"
              disabled={isLoading}
            >
              {isLoading ? 'Actualizando...' : 'Actualizar'}
