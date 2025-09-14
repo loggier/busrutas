@@ -178,18 +178,18 @@ export default function RouteDashboardClient({
                   Hora Despacho: <span className="font-semibold">{displayTime}</span>
                 </p>
               )}
-              <p className="text-xl sm:text-2xl font-medium mt-0.5 text-primary">{routeInfo.unitId}</p>
+              <p className="text-lg sm:text-xl font-medium mt-0.5 text-primary">{routeInfo.unitId}</p>
               {(typeof routeInfo.totalAT === 'number' || typeof routeInfo.totalAD === 'number') && (
                 <p className="text-base sm:text-lg text-foreground mt-0.5">
                   {typeof routeInfo.totalAT === 'number' && (
                     <>
-                      Total AT: <span className="font-semibold">{routeInfo.totalAT}</span>
+                      Total Retraso: <span className="font-semibold">{routeInfo.totalAT}</span>
                     </>
                   )}
                   {typeof routeInfo.totalAT === 'number' && typeof routeInfo.totalAD === 'number' && " | "}
                   {typeof routeInfo.totalAD === 'number' && (
                     <>
-                      Total AD: <span className="font-semibold">{routeInfo.totalAD}</span>
+                      Total Adelanto: <span className="font-semibold">{routeInfo.totalAD}</span>
                     </>
                   )}
                 </p>
