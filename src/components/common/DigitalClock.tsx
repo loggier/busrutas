@@ -63,7 +63,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
 
   if (!timeString) {
     return (
-      <div className="bg-button-custom-dark-gray text-primary-foreground p-1.5 sm:p-2 rounded-lg shadow-md text-center mb-2 sm:mb-3 md:mb-4">
+      <div className="bg-button-custom-dark-gray text-primary-foreground p-1.5 sm:p-2 rounded-lg shadow-md text-center mb-2 sm:mb-3 md:mb-4 font-orbitron">
         <div className="flex justify-end space-x-1 mb-1">
             <Button
               variant="ghost"
@@ -84,14 +84,14 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
               <LogOut size={14} />
             </Button>
           </div>
-        <div className="font-orbitron text-2xl sm:text-3xl md:text-4xl tracking-wider">
+        <div className="text-2xl sm:text-3xl md:text-4xl tracking-wider">
           <span>--</span>
           <span className="opacity-50 mx-1">:</span>
           <span>--</span>
           <span className="opacity-50 mx-1">:</span>
           <span>--</span>
         </div>
-        <div className="font-orbitron text-base text-gray-400 mt-0.5">Cargando...</div>
+        <div className="text-base text-gray-400 mt-0.5">Cargando...</div>
       </div>
     );
   }
@@ -99,7 +99,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
   const [hours, minutes, seconds] = timeString.split(':');
 
   return (
-    <div className="bg-button-custom-dark-gray text-primary-foreground p-1.5 sm:p-2 rounded-lg shadow-md mb-2 sm:mb-3 md:mb-4 flex flex-col">
+    <div className="bg-button-custom-dark-gray text-primary-foreground p-1.5 sm:p-2 rounded-lg shadow-md mb-2 sm:mb-3 md:mb-4 flex flex-col font-orbitron">
       <div className="flex justify-end space-x-1 mb-0.5 sm:mb-1">
         <AlertDialog>
           <AlertDialogTrigger asChild>
@@ -147,7 +147,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
           <LogOut size={16} />
         </Button>
       </div>
-      <div className="text-center font-orbitron">
+      <div className="text-center">
         <div className="text-2xl sm:text-3xl md:text-4xl tracking-wider">
           <span>{hours}</span>
           <span className={`transition-opacity duration-150 ease-in-out mx-0.5 sm:mx-1 ${showColon ? 'opacity-100' : 'opacity-25'}`}>:</span>
