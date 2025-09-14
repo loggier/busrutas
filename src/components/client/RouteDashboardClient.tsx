@@ -6,10 +6,12 @@ import { useCurrentTime } from '@/hooks/use-current-time';
 import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
-import RouteHeaderCard from '@/components/route/RouteHeaderCard';
 import ControlPointsSection from '@/components/control-points/ControlPointsSection';
 import DigitalClock from '@/components/common/DigitalClock';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+import { format, parseISO, isValid } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 interface RawApiDataForClient {
   routeInfo: RouteInfo;
@@ -44,6 +46,29 @@ export default function RouteDashboardClient({
   const router = useRouter();
   const currentTime = useCurrentTime();
 
+  let displayDate = routeInfo.currentDate;
+  if (routeInfo.currentDate && /^\d{4}-\d{2}-\d{2}$/.test(routeInfo.currentDate)) {
+    try {
+      const dateObject = parseISO(routeInfo.currentDate);
+      if (isValid(dateObject)) {
+        const dayName = format(dateObject, 'EEEE', { locale: es });
+        const capitalizedDayName = dayName.charAt(0).toUpperCase() + dayName.slice(1);
+        displayDate = `${capitalizedDayName}, ${format(dateObject, "d 'de' MMMM, yyyy", { locale: es })}`;
+      } else {
+        console.warn("RouteDashboardClient: Parsed date is invalid:", routeInfo.currentDate);
+      }
+    } catch (error) {
+      console.warn("RouteDashboardClient: Could not parse routeInfo.currentDate:", routeInfo.currentDate, error);
+    }
+  } else if (routeInfo.currentDate) {
+     console.warn("RouteDashboardClient: routeInfo.currentDate is not in YYYY-MM-DD format:", routeInfo.currentDate);
+  }
+
+  const displayTime = routeInfo.currentTime && /^\d{2}:\d{2}:\d{2}$/.test(routeInfo.currentTime)
+    ? routeInfo.currentTime.substring(0, 5)
+    : null;
+
+
   const handleLogoutAndRedirect = useCallback((message: string) => {
     localStorage.removeItem('currentUnitId');
     toast({
@@ -58,7 +83,7 @@ export default function RouteDashboardClient({
     if (!rawData.routeInfo || !rawData.routeInfo.unitId) {
         return null;
     }
-  
+
     const resolvedRouteInfo = rawData.routeInfo;
     const processedControlPoints = Array.isArray(rawData.controlPoints) ? rawData.controlPoints : [];
 
@@ -87,7 +112,7 @@ export default function RouteDashboardClient({
 
       if(processedData) {
         updateClientData(processedData);
-        if (!isBackgroundRefresh) { 
+        if (!isBackgroundRefresh) {
           toast({
             title: 'Datos Actualizados',
             description: 'La información del despacho ha sido refrescada.',
@@ -106,7 +131,7 @@ export default function RouteDashboardClient({
         setIsLoading(false);
       }
     }
-  }, [toast, processRawDataForClient, handleLogoutAndRedirect]); 
+  }, [toast, processRawDataForClient, handleLogoutAndRedirect]);
 
   const handleManualRefresh = useCallback(() => {
     fetchData(currentUnitId, false);
@@ -114,7 +139,7 @@ export default function RouteDashboardClient({
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      fetchData(currentUnitId, true); 
+      fetchData(currentUnitId, true);
     }, AUTO_REFRESH_INTERVAL);
     return () => clearInterval(intervalId);
   }, [currentUnitId, fetchData]);
@@ -127,20 +152,55 @@ export default function RouteDashboardClient({
 
   return (
     <div className="h-screen bg-background p-1 sm:p-2 md:p-3 flex flex-col overflow-hidden">
-      {/* Header Section */}
-      <div className="mb-2 sm:mb-3 md:mb-4">
-        <RouteHeaderCard routeInfo={routeInfo} />
-      </div>
-
       {/* Columns Section */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-2 sm:gap-3 md:gap-4 flex-1 overflow-hidden">
-        
+
         {/* Left Column */}
         <div className="md:col-span-4 flex flex-col gap-2 sm:gap-3 md:gap-4 overflow-y-auto">
+          <div className="p-2 sm:p-3 md:p-4 flex items-center gap-2 sm:gap-3 bg-card shadow-xl rounded-lg">
+            <Image
+              src="https://controlrutas.gpsplataforma.net/images/logo.png"
+              alt="Logo de la Empresa"
+              width={100}
+              height={60}
+              className="h-12 sm:h-14 md:h-16 w-auto object-contain"
+              data-ai-hint="company logo"
+              priority
+            />
+            <div className="flex-1">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
+              <p className="text-xl sm:text-2xl md:text-3xl text-muted-foreground mt-0.5">
+                {displayDate}
+              </p>
+              {displayTime && (
+                <p className="text-xl sm:text-2xl md:text-3xl text-muted-foreground">
+                  Hora Despacho: <span className="font-semibold">{displayTime}</span>
+                </p>
+              )}
+              <p className="text-3xl sm:text-4xl md:text-5xl font-medium mt-0.5 text-primary">{routeInfo.unitId}</p>
+              {(typeof routeInfo.totalAT === 'number' || typeof routeInfo.totalAD === 'number') && (
+                <p className="text-xl sm:text-2xl md:text-3xl text-foreground mt-0.5">
+                  {typeof routeInfo.totalAT === 'number' && (
+                    <>
+                      Total AT: <span className="font-semibold">{routeInfo.totalAT}</span>
+                    </>
+                  )}
+                  {typeof routeInfo.totalAT === 'number' && typeof routeInfo.totalAD === 'number' && " | "}
+                  {typeof routeInfo.totalAD === 'number' && (
+                    <>
+                      Total AD: <span className="font-semibold">{routeInfo.totalAD}</span>
+                    </>
+                  )}
+                </p>
+              )}
+            </div>
+          </div>
+
           <DigitalClock currentTime={currentTime} />
+
            <Button
              onClick={handleManualRefresh}
-             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-3 sm:py-4 text-3xl"
+             className="w-full bg-button-custom-dark-gray hover:bg-button-custom-dark-gray/90 text-primary-foreground mt-auto py-3 sm:py-4 text-5xl"
              disabled={isLoading}
            >
              {isLoading ? 'Actualizando...' : 'Actualizar'}
