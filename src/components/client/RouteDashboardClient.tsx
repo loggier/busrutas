@@ -157,6 +157,9 @@ export default function RouteDashboardClient({
 
         {/* Left Column */}
         <div className="md:col-span-4 flex flex-col gap-2 sm:gap-3 md:gap-4 overflow-y-auto">
+          
+          <DigitalClock currentTime={currentTime} />
+
           <div className="p-2 sm:p-3 md:p-4 flex items-center gap-2 sm:gap-3 bg-card shadow-xl rounded-lg">
             <Image
               src="https://controlrutas.gpsplataforma.net/images/logo.png"
@@ -195,8 +198,6 @@ export default function RouteDashboardClient({
               )}
             </div>
           </div>
-
-          <DigitalClock currentTime={currentTime} />
 
            <Button
              onClick={handleManualRefresh}
