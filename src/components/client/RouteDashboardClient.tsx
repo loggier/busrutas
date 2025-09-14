@@ -51,9 +51,7 @@ export default function RouteDashboardClient({
     try {
       const dateObject = parseISO(routeInfo.currentDate);
       if (isValid(dateObject)) {
-        const dayName = format(dateObject, 'EEEE', { locale: es });
-        const capitalizedDayName = dayName.charAt(0).toUpperCase() + dayName.slice(1);
-        displayDate = `${capitalizedDayName}, ${format(dateObject, "d 'de' MMMM, yyyy", { locale: es })}`;
+        displayDate = format(dateObject, "dd/MM/yyyy", { locale: es });
       } else {
         console.warn("RouteDashboardClient: Parsed date is invalid:", routeInfo.currentDate);
       }
@@ -171,18 +169,18 @@ export default function RouteDashboardClient({
               priority
             />
             <div className="flex-1 text-center">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
-              <p className="text-base sm:text-lg md:text-xl text-muted-foreground mt-0.5">
-                {displayDate}
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
+              <p className="text-base sm:text-lg text-muted-foreground mt-0.5">
+                Fecha Despacho: <span className="font-semibold">{displayDate}</span>
               </p>
               {displayTime && (
-                <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
+                <p className="text-base sm:text-lg text-muted-foreground">
                   Hora Despacho: <span className="font-semibold">{displayTime}</span>
                 </p>
               )}
-              <p className="text-2xl sm:text-3xl md:text-4xl font-medium mt-0.5 text-primary">{routeInfo.unitId}</p>
+              <p className="text-xl sm:text-2xl font-medium mt-0.5 text-primary">{routeInfo.unitId}</p>
               {(typeof routeInfo.totalAT === 'number' || typeof routeInfo.totalAD === 'number') && (
-                <p className="text-base sm:text-lg md:text-xl text-foreground mt-0.5">
+                <p className="text-base sm:text-lg text-foreground mt-0.5">
                   {typeof routeInfo.totalAT === 'number' && (
                     <>
                       Total AT: <span className="font-semibold">{routeInfo.totalAT}</span>
