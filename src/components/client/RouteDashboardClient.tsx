@@ -94,8 +94,8 @@ export default function RouteDashboardClient({
     const resolvedRouteInfo = rawData.routeInfo;
     const processedControlPoints = Array.isArray(rawData.controlPoints) ? rawData.controlPoints : [];
     
-    const unitAhead = rawData.unitAhead && !Array.isArray(rawData.unitAhead) && Object.keys(rawData.unitAhead).length > 0 ? rawData.unitAhead : null;
-    const unitBehind = rawData.unitBehind && !Array.isArray(rawData.unitBehind) && Object.keys(rawData.unitBehind).length > 0 ? rawData.unitBehind : null;
+    const unitAhead = rawData.unitAhead && !Array.isArray(rawData.unitAhead) ? rawData.unitAhead : null;
+    const unitBehind = rawData.unitBehind && !Array.isArray(rawData.unitBehind) ? rawData.unitBehind : null;
 
     return {
       routeInfo: resolvedRouteInfo,
@@ -215,8 +215,8 @@ export default function RouteDashboardClient({
             </div>
           </div>
           
-          {unitAhead && <UnitInfoCard title="Unidad de Adelante" unit={unitAhead} />}
-          {unitBehind && <UnitInfoCard title="Unidad de Atrás" unit={unitBehind} />}
+          <UnitInfoCard title="Unidad de Adelante" unit={unitAhead} />
+          <UnitInfoCard title="Unidad de Atrás" unit={unitBehind} />
 
            <Button
              onClick={handleManualRefresh}

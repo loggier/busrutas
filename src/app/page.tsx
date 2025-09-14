@@ -52,8 +52,8 @@ export default function RouteSchedulePage() {
         resolvedRouteInfo.currentDate = new Date().toISOString().split('T')[0];
     }
     
-    const unitAhead = rawData.unitAhead && !Array.isArray(rawData.unitAhead) && Object.keys(rawData.unitAhead).length > 0 ? rawData.unitAhead : null;
-    const unitBehind = rawData.unitBehind && !Array.isArray(rawData.unitBehind) && Object.keys(rawData.unitBehind).length > 0 ? rawData.unitBehind : null;
+    const unitAhead = rawData.unitAhead && !Array.isArray(rawData.unitAhead) ? rawData.unitAhead : null;
+    const unitBehind = rawData.unitBehind && !Array.isArray(rawData.unitBehind) ? rawData.unitBehind : null;
 
     return {
       routeInfo: resolvedRouteInfo,
