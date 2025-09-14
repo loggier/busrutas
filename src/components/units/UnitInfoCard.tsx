@@ -1,7 +1,8 @@
 
 import type { UnitDetails } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowUp, ArrowDown, Ban } from 'lucide-react';
+import { ArrowUp, ArrowDown, Ban, Bus } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface UnitInfoCardProps {
   title: 'Unidad de Adelante' | 'Unidad de Atrás';
@@ -15,7 +16,10 @@ export default function UnitInfoCard({ title, unit }: UnitInfoCardProps) {
     return (
       <Card className="shadow-lg bg-card rounded-lg opacity-70">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3">
-          <CardTitle className="text-sm font-medium">{title}</CardTitle>
+          <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <Bus className="h-5 w-5 text-muted-foreground" />
+            <span>{isAhead ? 'Adelante' : 'Atrás'}</span>
+          </CardTitle>
           <Ban className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent className="p-3 pt-0">
@@ -47,12 +51,14 @@ export default function UnitInfoCard({ title, unit }: UnitInfoCardProps) {
   return (
     <Card className="shadow-lg bg-card rounded-lg">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        {isAhead ? (
-          <ArrowUp className="h-4 w-4 text-green-500" />
-        ) : (
-          <ArrowDown className="h-4 w-4 text-destructive" />
-        )}
+        <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <Bus className="h-5 w-5" />
+            {isAhead ? (
+              <ArrowUp className="h-5 w-5 text-green-500" />
+            ) : (
+              <ArrowDown className="h-5 w-5 text-destructive" />
+            )}
+        </CardTitle>
       </CardHeader>
       <CardContent className="p-3 pt-0">
         <div className="text-lg font-bold">{unit.unit}</div>
@@ -60,7 +66,7 @@ export default function UnitInfoCard({ title, unit }: UnitInfoCardProps) {
             <p className="text-xs text-muted-foreground">
                 Pasó a las {unit.time}
             </p>
-            <p className={`text-sm font-semibold ${statusColor}`}>
+            <p className={cn("text-sm font-semibold", statusColor)}>
                 {friendlyStatus}
             </p>
         </div>
