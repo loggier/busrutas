@@ -4,19 +4,9 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { LogOut, Info } from 'lucide-react';
-import Image from 'next/image';
+import { LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 interface DigitalClockProps {
   currentTime: Date | null;
@@ -69,15 +59,6 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
               variant="ghost"
               size="icon"
               className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-5 w-5 sm:h-6 sm:w-6 opacity-50 cursor-not-allowed"
-              aria-label="Información de la aplicación"
-              disabled
-            >
-              <Info size={14} />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-5 w-5 sm:h-6 sm:w-6 opacity-50 cursor-not-allowed"
               aria-label="Cerrar sesión"
               disabled
             >
@@ -101,42 +82,6 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
   return (
     <div className="bg-button-custom-dark-gray text-primary-foreground p-1.5 sm:p-2 rounded-lg shadow-md mb-2 sm:mb-3 md:mb-4 flex flex-col font-orbitron">
       <div className="flex justify-end space-x-1 mb-0.5 sm:mb-1">
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-primary-foreground hover:bg-white/20 hover:text-primary-foreground h-5 w-5 sm:h-6 sm:w-6"
-              aria-label="Información de la aplicación"
-            >
-              <Info size={16} />
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle className="text-center text-2xl">Información de la Aplicación</AlertDialogTitle>
-            </AlertDialogHeader>
-            <div className="flex flex-col items-center gap-4 py-4">
-              <Image
-                src="https://controlrutas.gpsplataforma.net/images/logo.png?t=1734027539"
-                alt="PuntoExacto Logo"
-                width={100} 
-                height={50}
-                className="object-contain"
-                data-ai-hint="company logo"
-              />
-              <p className="text-lg text-muted-foreground text-center">
-                Todos los derechos reservados PuntoExacto - 2025
-              </p>
-              <p className="text-lg text-muted-foreground text-center">
-                Versión 1.0.3
-              </p>
-            </div>
-            <AlertDialogFooter>
-              <AlertDialogAction>Cerrar</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
         <Button
           variant="ghost"
           size="icon"
