@@ -160,17 +160,17 @@ export default function RouteDashboardClient({
           
           <DigitalClock currentTime={currentTime} />
 
-          <div className="p-2 sm:p-3 md:p-4 flex items-center gap-2 sm:gap-3 bg-card shadow-xl rounded-lg">
+          <div className="p-2 sm:p-3 md:p-4 flex flex-col items-center gap-2 sm:gap-3 bg-card shadow-xl rounded-lg">
             <Image
               src="https://controlrutas.gpsplataforma.net/images/logo.png"
               alt="Logo de la Empresa"
               width={100}
               height={60}
-              className="h-12 sm:h-14 md:h-16 w-auto object-contain"
+              className="h-16 w-auto object-contain mb-2"
               data-ai-hint="company logo"
               priority
             />
-            <div className="flex-1">
+            <div className="flex-1 text-center">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
               <p className="text-xl sm:text-2xl md:text-3xl text-muted-foreground mt-0.5">
                 {displayDate}
