@@ -28,7 +28,6 @@ export default function UnitInfoCard({ title, unit }: UnitInfoCardProps) {
     );
   }
 
-  // The API sends status like "l: 5" or "e: 2", let's make it more friendly
   const statusParts = unit.status?.split(':') ?? [];
   const statusType = statusParts[0]?.trim();
   const statusValue = statusParts[1]?.trim();
@@ -36,12 +35,12 @@ export default function UnitInfoCard({ title, unit }: UnitInfoCardProps) {
   let friendlyStatus = unit.status ?? 'N/A';
   let statusColor = 'text-muted-foreground';
   
-  if(statusType === 'l') {
+  if (statusType === 'l' && statusValue) {
     friendlyStatus = `A ${statusValue} min`;
-    statusColor = 'text-green-500'; // Ahead is good
-  } else if (statusType === 'e') {
+    statusColor = 'text-green-500';
+  } else if (statusType === 'e' && statusValue) {
     friendlyStatus = `Hace ${statusValue} min`;
-    statusColor = 'text-destructive'; // Behind is not ideal
+    statusColor = 'text-destructive';
   }
 
 
