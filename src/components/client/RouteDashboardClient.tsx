@@ -58,7 +58,7 @@ export default function RouteDashboardClient({
   let displayDate = routeInfo.currentDate;
   if (routeInfo.currentDate && /^\d{4}-\d{2}-\d{2}$/.test(routeInfo.currentDate)) {
     try {
-      const dateObject = parseISO(routeInfo.currentDate);
+      const dateObject = parseISO(routeInfo.currentDate + 'T00:00:00'); // Add time to avoid timezone issues
       if (isValid(dateObject)) {
         displayDate = format(dateObject, "dd/MM/yyyy", { locale: es });
       } else {
@@ -94,8 +94,8 @@ export default function RouteDashboardClient({
     const resolvedRouteInfo = rawData.routeInfo;
     const processedControlPoints = Array.isArray(rawData.controlPoints) ? rawData.controlPoints : [];
     
-    const unitAhead = !Array.isArray(rawData.unitAhead) ? rawData.unitAhead : null;
-    const unitBehind = !Array.isArray(rawData.unitBehind) ? rawData.unitBehind : null;
+    const unitAhead = Array.isArray(rawData.unitAhead) || Object.keys(rawData.unitAhead).length === 0 ? null : rawData.unitAhead;
+    const unitBehind = Array.isArray(rawData.unitBehind) || Object.keys(rawData.unitBehind).length === 0 ? null : rawData.unitBehind;
 
     return {
       routeInfo: resolvedRouteInfo,
@@ -182,7 +182,7 @@ export default function RouteDashboardClient({
               alt="Logo de la Empresa"
               width={100}
               height={60}
-              className="h-16 w-auto object-contain mb-2"
+              className="h-16 w-auto object-contain"
               data-ai-hint="company logo"
               priority
             />

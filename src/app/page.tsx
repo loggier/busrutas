@@ -52,9 +52,8 @@ export default function RouteSchedulePage() {
         resolvedRouteInfo.currentDate = new Date().toISOString().split('T')[0];
     }
     
-    // La API devuelve un array vacío `[]` si no hay unidad, o un objeto si la hay.
-    const unitAhead = !Array.isArray(rawData.unitAhead) ? rawData.unitAhead : null;
-    const unitBehind = !Array.isArray(rawData.unitBehind) ? rawData.unitBehind : null;
+    const unitAhead = Array.isArray(rawData.unitAhead) || Object.keys(rawData.unitAhead).length === 0 ? null : rawData.unitAhead;
+    const unitBehind = Array.isArray(rawData.unitBehind) || Object.keys(rawData.unitBehind).length === 0 ? null : rawData.unitBehind;
 
     return {
       routeInfo: resolvedRouteInfo,
