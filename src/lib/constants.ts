@@ -1,5 +1,5 @@
 
-import type { RouteInfo, ControlPoint, UnitDetails } from '@/types';
+import type { RouteInfo, ControlPoint } from '@/types';
 
 export const MOCK_ROUTE_INFO: RouteInfo = {
   routeName: 'RUTA 123',
@@ -49,39 +49,3 @@ export const MOCK_CONTROL_POINTS: ControlPoint[] = [
     scheduledTime: '18:15',
   },
 ];
-
-export const MOCK_UNIT_AHEAD: UnitDetails = {
-  id: 'unit-ahead',
-  label: 'Unidad Adelante',
-  unitIdentifier: '39 (1875)',
-  totalAT: 22,
-  totalAD: 0,
-  lastKnownLocation: 'C. Ballen',
-  lastKnownTime: '17:29',
-  meta: 'M:',
-  metaTime: '17:41',
-  status: 'l: 12',
-  isPrimary: true,
-};
-
-export const MOCK_UNIT_BEHIND: UnitDetails = {
-  id: 'unit-behind',
-  label: 'Unidad Atrás',
-  unitIdentifier: '02 (2075)',
-  totalAT: 11,
-  totalAD: 1,
-  lastKnownLocation: 'Kennedy',
-  lastKnownTime: '17:43',
-  isPrimary: false,
-};
-
-export const EMPTY_UNIT_DETAILS: UnitDetails = {
-  id: 'empty-unit',
-  label: '', // Será sobreescrito
-  unitIdentifier: 'N/A',
-  totalAT: 0,
-  totalAD: 0,
-  lastKnownLocation: 'N/A',
-  lastKnownTime: '--:--',
-  isPrimary: false,
-};
