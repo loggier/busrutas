@@ -1,7 +1,7 @@
 {
-  "name": "Unidad PuntoExacto",
-  "short_name": "UnidadPE",
-  "description": "Aplicación de seguimiento y despacho para unidades de PuntoExacto.",
+  "name": "Bus",
+  "short_name": "Bus",
+  "description": "Aplicación de despacho.",
   "icons": [
     {
       "src": "./icons/icon-192x192.png",
