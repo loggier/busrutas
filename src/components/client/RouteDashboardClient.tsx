@@ -178,7 +178,7 @@ export default function RouteDashboardClient({
 
           <div className="p-2 sm:p-3 md:p-4 flex flex-col items-center gap-2 sm:gap-3 bg-card shadow-xl rounded-lg">
             <Image
-              src="https://controlrutas.gpsplataforma.net/images/logo.png"
+              src="https://controlrutas.gpsplataforma.net/images/logo-main.png"
               alt="Logo de la Empresa"
               width={100}
               height={60}

@@ -152,7 +152,7 @@ export default function LoginForm() {
     <Card className="w-full max-w-sm sm:max-w-md shadow-lg">
       <CardHeader className="items-center pt-4 sm:pt-6 pb-3 sm:pb-4">
         <Image
-          src="https://controlrutas.gpsplataforma.net/images/logo.png"
+          src="https://controlrutas.gpsplataforma.net/images/logo-main.png"
           alt="PuntoExacto Logo"
           width={300}
           height={150}
