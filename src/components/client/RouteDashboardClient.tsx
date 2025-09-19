@@ -10,7 +10,6 @@ import ControlPointsSection from '@/components/control-points/ControlPointsSecti
 import DigitalClock from '@/components/common/DigitalClock';
 import UnitInfoCard from '@/components/units/UnitInfoCard';
 import { Button } from '@/components/ui/button';
-import Image from 'next/image';
 import { format, parseISO, isValid } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -176,18 +175,7 @@ export default function RouteDashboardClient({
           
           <DigitalClock currentTime={currentTime} />
 
-          <div className="p-2 sm:p-3 md:p-4 bg-card shadow-xl rounded-lg">
-             <div className="flex justify-center mb-3">
-              <Image
-                src="https://controlrutas.gpsplataforma.net/images/logo-main.png"
-                alt="Logo de la Empresa"
-                width={150}
-                height={75}
-                className="h-12 w-auto object-contain"
-                data-ai-hint="company logo"
-                priority
-              />
-            </div>
+          <div className="p-3 sm:p-4 bg-card shadow-xl rounded-lg border border-primary/20">
             <div className="text-left">
               <h1 className="text-lg font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
               <p className="text-xs text-muted-foreground">
