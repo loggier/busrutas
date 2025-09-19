@@ -176,41 +176,38 @@ export default function RouteDashboardClient({
           
           <DigitalClock currentTime={currentTime} />
 
-          <div className="p-2 sm:p-3 md:p-4 flex flex-col items-center gap-2 sm:gap-3 bg-card shadow-xl rounded-lg">
-            <Image
-              src="https://controlrutas.gpsplataforma.net/images/logo-main.png"
-              alt="Logo de la Empresa"
-              width={100}
-              height={60}
-              className="h-16 w-auto object-contain"
-              data-ai-hint="company logo"
-              priority
-            />
-            <div className="flex-1 text-center">
-              <h1 className="text-xl sm:text-xl font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
-              <p className="text-sm text-muted-foreground mt-0.5">
-                Fecha Despacho: <span className="font-semibold">{displayDate}</span>
+          <div className="p-2 sm:p-3 md:p-4 bg-card shadow-xl rounded-lg">
+             <div className="flex justify-center mb-3">
+              <Image
+                src="https://controlrutas.gpsplataforma.net/images/logo-main.png"
+                alt="Logo de la Empresa"
+                width={150}
+                height={75}
+                className="h-12 w-auto object-contain"
+                data-ai-hint="company logo"
+                priority
+              />
+            </div>
+            <div className="text-left">
+              <h1 className="text-lg font-bold text-foreground tracking-wide">{routeInfo.routeName}</h1>
+              <p className="text-xs text-muted-foreground">
+                <span className="font-semibold">{displayDate}</span>
+                {displayTime && <span className="font-semibold ml-2">{displayTime}</span>}
               </p>
-              {displayTime && (
-                <p className="text-sm text-muted-foreground">
-                  Hora Despacho: <span className="font-semibold">{displayTime}</span>
-                </p>
-              )}
-              <p className="text-base font-medium mt-0.5 text-primary">{routeInfo.unitId}</p>
+              <p className="text-base font-medium mt-1 text-primary">{routeInfo.unitId}</p>
               {(typeof routeInfo.totalAT === 'number' || typeof routeInfo.totalAD === 'number') && (
-                <p className="text-sm text-foreground mt-0.5">
-                  {typeof routeInfo.totalAT === 'number' && (
-                    <>
-                      Retraso: <span className="font-semibold">{routeInfo.totalAT}</span>
-                    </>
+                <div className="flex gap-4 text-xs mt-1">
+                  {typeof routeInfo.totalAT === 'number' && routeInfo.totalAT > 0 && (
+                    <p>
+                      Retraso: <span className="font-semibold text-destructive">{routeInfo.totalAT} min</span>
+                    </p>
                   )}
-                  {typeof routeInfo.totalAT === 'number' && typeof routeInfo.totalAD === 'number' && " | "}
-                  {typeof routeInfo.totalAD === 'number' && (
-                    <>
-                      Adelanto: <span className="font-semibold">{routeInfo.totalAD}</span>
-                    </>
+                  {typeof routeInfo.totalAD === 'number' && routeInfo.totalAD > 0 && (
+                    <p>
+                      Adelanto: <span className="font-semibold text-green-500">{routeInfo.totalAD} min</span>
+                    </p>
                   )}
-                </p>
+                </div>
               )}
             </div>
           </div>
