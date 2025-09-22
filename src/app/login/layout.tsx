@@ -11,11 +11,7 @@ export default function LoginLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="es">
-      <body>
-        {children}
-      </body>
-    </html>
-  );
+  // El RootLayout en app/layout.tsx ya provee las etiquetas <html> y <body>.
+  // Envolver el children en un fragmento o un div simple es suficiente.
+  return <>{children}</>;
 }
