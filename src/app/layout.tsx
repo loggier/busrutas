@@ -39,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="es" className="dark">
       <body className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} antialiased font-sans`}>
         <div className="flex flex-col min-h-screen">
           <main className="flex-grow">

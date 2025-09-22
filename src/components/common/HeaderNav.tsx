@@ -23,10 +23,10 @@ export default function HeaderNav({ currentTime }: HeaderNavProps) {
 
   return (
     <header className="bg-card text-primary-foreground p-2 flex justify-between items-center shadow-lg border-b border-border">
-      <div className="font-bold text-lg">PuntoExacto</div>
+      <div className="font-bold text-lg">Control</div>
       <div className="flex items-center gap-4 font-orbitron font-bold">
         <RefreshCw size={20} className="cursor-pointer" />
-        <span>0 km/h</span>
+        <span></span>
         <span className="text-xl">{timeString}</span>
         <Button
           variant="ghost"
