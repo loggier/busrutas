@@ -9,14 +9,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { Info } from 'lucide-react';
+import { Info, Flag } from 'lucide-react';
 
 interface ControlPointsTableProps {
   controlPoints: ControlPoint[];
 }
 
 export default function ControlPointsTable({ controlPoints }: ControlPointsTableProps) {
-    if (controlPoints.length === 0) {
+  if (controlPoints.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center text-center h-full p-4">
         <Info className="h-10 w-10 text-primary mb-3" />
@@ -30,33 +30,56 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
     );
   }
 
+  const getStatusInfo = (point: ControlPoint) => {
+    const statusValue = point.status ? parseInt(point.status.replace(/[a-zA-Z: ]/g, ''), 10) : NaN;
+    const isLate = point.status?.includes('l:');
+    const isEarly = point.status?.includes('e:');
+
+    let text = point.status || '-';
+    let colorClass = 'text-foreground';
+
+    if (!isNaN(statusValue)) {
+      if (isLate) {
+        text = `+${statusValue} min`;
+        colorClass = 'text-red-600';
+      } else if (isEarly) {
+        text = `-${statusValue} min`;
+        colorClass = 'text-green-600';
+      }
+    }
+    
+    // Marcade would be the actual arrival time
+    const displayMarcade = point.marcade && point.marcade.length >= 5 ? point.marcade.substring(0, 5) : '-';
+
+    return { statusText: text, statusColor: colorClass, displayMarcade };
+  };
+
   return (
     <Table>
       <TableHeader>
         <TableRow className="bg-primary hover:bg-primary text-primary-foreground">
-          <TableHead className="w-[50px]">#</TableHead>
-          <TableHead>Relojes</TableHead>
-          <TableHead className="text-center">T</TableHead>
-          <TableHead className="text-center">Hora</TableHead>
-          <TableHead className="text-center">Marcade</TableHead>
-          <TableHead className="text-center">Flt+</TableHead>
-          <TableHead className="text-center">Flt-</TableHead>
-          <TableHead className="text-center">VM</TableHead>
+          <TableHead className="w-[10px]"></TableHead>
+          <TableHead>Punto de Control</TableHead>
+          <TableHead className="text-center">Hora Programada</TableHead>
+          <TableHead className="text-center">Hora Marcada</TableHead>
+          <TableHead className="text-center">Adelanto/Atraso</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {controlPoints.map((point) => (
-          <TableRow key={point.id} className={cn("border-b-primary/50", point.isCurrent ? 'bg-accent/30' : 'hover:bg-muted/50')}>
-            <TableCell className="font-medium">{point.order ?? '-'}</TableCell>
-            <TableCell>{point.name}</TableCell>
-            <TableCell className="text-center">{point.t ?? '-'}</TableCell>
-            <TableCell className="text-center">{point.scheduledTime ? point.scheduledTime.substring(0,5) : '-'}</TableCell>
-            <TableCell className="text-center">{point.marcade ?? '--'}</TableCell>
-            <TableCell className="text-center">{point.flt_mas ?? '--'}</TableCell>
-            <TableCell className="text-center">{point.flt_menos ?? '--'}</TableCell>
-            <TableCell className="text-center">{point.vm ?? '--'}</TableCell>
-          </TableRow>
-        ))}
+        {controlPoints.map((point) => {
+          const { statusText, statusColor, displayMarcade } = getStatusInfo(point);
+          return (
+            <TableRow key={point.id} className={cn(point.isCurrent ? 'bg-accent/30 font-bold' : 'hover:bg-muted/50')}>
+              <TableCell className="p-1">
+                {point.isCurrent && <Flag className="text-destructive" size={20} />}
+              </TableCell>
+              <TableCell className="font-medium">{point.name}</TableCell>
+              <TableCell className="text-center">{point.scheduledTime ? point.scheduledTime.substring(0, 5) : '-'}</TableCell>
+              <TableCell className="text-center">{displayMarcade}</TableCell>
+              <TableCell className={cn("text-center font-semibold", statusColor)}>{statusText}</TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );
