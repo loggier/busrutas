@@ -8,34 +8,33 @@ body {
 
 @layer base {
   :root {
-    --background: 4 6% 96%; /* Light Coral */
-    --foreground: 0 0% 0%; /* Black */
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
 
-    --card: 4 6% 100%;
-    --card-foreground: 0 0% 0%;
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 4 6% 100%;
-    --popover-foreground: 0 0% 0%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 4 89% 59%; /* Vivid Coral */
-    --primary-foreground: 0 0% 100%;
+    --primary: 4 89% 59%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 34 100% 63%; /* Pale Orange for hover/secondary actions */
-    --secondary-foreground: 0 0% 0%;
+    --secondary: 34 100% 63%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 4 6% 90%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 222 47% 21%;
+    --muted-foreground: 210 40% 88%;
 
-    --accent: 34 100% 63%; /* Pale Orange */
-    --accent-foreground: 0 0% 0%;
+    --accent: 34 100% 63%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 4 6% 85%;
-    --input: 4 6% 85%;
-    --ring: 4 89% 59%;
-
+    --border: 217 30% 25%;
+    --input: 217 30% 25%;
+    --ring: 217 91% 65%;
     --radius: 0.5rem;
   }
 
@@ -64,8 +63,8 @@ body {
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 91% 55%;
-    --input: 217 91% 55%;
+    --border: 217 30% 25%;
+    --input: 217 30% 25%;
     --ring: 217 91% 65%;
   }
 }

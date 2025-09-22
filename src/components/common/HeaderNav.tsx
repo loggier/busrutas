@@ -22,22 +22,17 @@ export default function HeaderNav({ currentTime }: HeaderNavProps) {
   const timeString = currentTime ? format(currentTime, 'HH:mm:ss') : '--:--:--';
 
   return (
-    <header className="bg-primary text-primary-foreground p-2 flex justify-between items-center shadow-lg">
-      <nav className="flex items-center gap-3 text-sm font-bold">
-        <a href="#" className="border-b-2 border-white pb-1">SALIDAS</a>
-        <a href="#" className="opacity-70 hover:opacity-100">MAPA</a>
-        <a href="#" className="opacity-70 hover:opacity-100">MENSAJE</a>
-        <a href="#" className="opacity-70 hover:opacity-100">DISPATCH</a>
-      </nav>
-      <div className="flex items-center gap-3 font-orbitron font-bold">
+    <header className="bg-card text-primary-foreground p-2 flex justify-between items-center shadow-lg border-b border-border">
+      <div className="font-bold text-lg">PuntoExacto</div>
+      <div className="flex items-center gap-4 font-orbitron font-bold">
         <RefreshCw size={20} className="cursor-pointer" />
         <span>0 km/h</span>
-        <span className="text-lg">{timeString}</span>
+        <span className="text-xl">{timeString}</span>
         <Button
           variant="ghost"
           size="icon"
           onClick={handleLogoutClick}
-          className="hover:bg-white/20 h-8 w-8"
+          className="hover:bg-destructive/80 h-8 w-8"
           aria-label="Cerrar sesión"
         >
           <Power size={22} />

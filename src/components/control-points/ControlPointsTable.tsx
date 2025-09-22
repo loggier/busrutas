@@ -41,10 +41,13 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
     if (!isNaN(statusValue)) {
       if (isLate) {
         text = `+${statusValue} min`;
-        colorClass = 'text-red-600';
+        colorClass = 'text-red-500'; // Late color
       } else if (isEarly) {
         text = `-${statusValue} min`;
-        colorClass = 'text-green-600';
+        colorClass = 'text-green-500'; // Early color
+      } else if (statusValue === 0) {
+        text = `0 min`;
+        colorClass = 'text-green-500'; // On-time color
       }
     }
     
@@ -57,7 +60,7 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
   return (
     <Table>
       <TableHeader>
-        <TableRow className="bg-primary hover:bg-primary text-primary-foreground">
+        <TableRow className="hover:bg-primary/90">
           <TableHead className="w-[10px]"></TableHead>
           <TableHead>Punto de Control</TableHead>
           <TableHead className="text-center">Hora Programada</TableHead>
@@ -69,7 +72,7 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
         {controlPoints.map((point) => {
           const { statusText, statusColor, displayMarcade } = getStatusInfo(point);
           return (
-            <TableRow key={point.id} className={cn(point.isCurrent ? 'bg-accent/30 font-bold' : 'hover:bg-muted/50')}>
+            <TableRow key={point.id} className={cn(point.isCurrent ? 'bg-primary/20 font-bold' : 'hover:bg-muted/50')}>
               <TableCell className="p-1">
                 {point.isCurrent && <Flag className="text-destructive" size={20} />}
               </TableCell>

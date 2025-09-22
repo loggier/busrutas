@@ -140,9 +140,10 @@ export default function RouteDashboardClient({
 
   return (
     <div className="h-screen bg-background text-foreground flex flex-col overflow-hidden">
-      <div className="p-2 grid grid-cols-1 md:grid-cols-4 gap-2">
-        {/* Columna Izquierda */}
-        <div className="md:col-span-1 flex flex-col gap-2">
+      <HeaderNav currentTime={currentTime} />
+      <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Columna Izquierda - Info */}
+        <div className="md:col-span-1 flex flex-col gap-4">
            <Card className="shadow-lg bg-card text-card-foreground">
                 <CardHeader className="p-3">
                     <CardTitle className="text-lg">Información de Despacho</CardTitle>
@@ -156,15 +157,10 @@ export default function RouteDashboardClient({
                     {routeInfo.totalAD != null && <p><strong>Atraso Total:</strong> {routeInfo.totalAD} min</p>}
                 </CardContent>
             </Card>
-            <Separator />
-            <div className="grid grid-cols-2 gap-2">
-              <UnitInfoCard title="Unidad de Adelante" unit={unitAhead} />
-              <UnitInfoCard title="Unidad de Atrás" unit={unitBehind} />
-            </div>
         </div>
 
-        {/* Columna Derecha */}
-        <main className="md:col-span-3 flex-1 overflow-y-auto">
+        {/* Columna Derecha - Tabla */}
+        <main className="md:col-span-2 flex-1 overflow-y-auto">
           <ControlPointsTable controlPoints={controlPoints} />
         </main>
       </div>
