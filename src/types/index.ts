@@ -1,12 +1,20 @@
 
 export interface ControlPoint {
   id: string;
-  name: string;
-  scheduledTime: string;
+  order?: number; // #
+  name: string; // Relojes
+  t?: number; // T
+  scheduledTime: string; // Hora
+  marcade?: string; // Marcade
+  flt_mas?: string | number; // Flt+
+  flt_menos?: string | number; // Flt-
+  vm?: string | number; // VM
+  isCurrent?: boolean;
+  
+  // Old fields that may still be in the API response
   meta?: string;
   metaTime?: string;
   status?: string;
-  isCurrent?: boolean;
 }
 
 export interface UnitDetails {

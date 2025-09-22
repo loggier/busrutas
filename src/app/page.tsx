@@ -3,30 +3,23 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import type { RouteInfo, ControlPoint, UnitDetails } from '@/types';
+import type { RouteInfo, ControlPoint } from '@/types';
 import RouteDashboardClient from '@/components/client/RouteDashboardClient';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from '@/hooks/use-toast';
 
-interface ProcessedClientData {
-  routeInfo: RouteInfo;
-  controlPoints: ControlPoint[];
-  unitAhead: UnitDetails | null;
-  unitBehind: UnitDetails | null;
-}
-
 interface RawApiData {
   routeInfo: RouteInfo;
   controlPoints: ControlPoint[];
-  unitAhead: UnitDetails | [] | null;
-  unitBehind: UnitDetails | [] | null;
+  unitAhead: any; // Removed from use
+  unitBehind: any; // Removed from use
 }
 
 export default function RouteSchedulePage() {
   const router = useRouter();
   const { toast } = useToast();
   const [currentUnitId, setCurrentUnitId] = useState<string | null>(null);
-  const [pageData, setPageData] = useState<ProcessedClientData | null>(null);
+  const [pageData, setPageData] = useState<{ routeInfo: RouteInfo; controlPoints: ControlPoint[] } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const handleLogoutAndRedirect = useCallback((message: string) => {
@@ -39,8 +32,8 @@ export default function RouteSchedulePage() {
     router.push('/login');
   }, [router, toast]);
   
-  const processRawDataForPage = useCallback((rawData: RawApiData, unitId: string): ProcessedClientData | null => {
-    if (!rawData.routeInfo || !rawData.routeInfo.unitId) {
+  const processRawDataForPage = useCallback((rawData: RawApiData, unitId: string): { routeInfo: RouteInfo; controlPoints: ControlPoint[] } | null => {
+    if (!rawData || !rawData.routeInfo || !rawData.routeInfo.unitId) {
         console.warn(`No se encontraron datos de ruta para la unidad ${unitId}.`);
         return null;
     }
@@ -51,15 +44,10 @@ export default function RouteSchedulePage() {
     if (resolvedRouteInfo.currentDate && !/^\d{4}-\d{2}-\d{2}$/.test(resolvedRouteInfo.currentDate)) {
         resolvedRouteInfo.currentDate = new Date().toISOString().split('T')[0];
     }
-    
-    const unitAhead = rawData.unitAhead && !Array.isArray(rawData.unitAhead) ? rawData.unitAhead : null;
-    const unitBehind = rawData.unitBehind && !Array.isArray(rawData.unitBehind) ? rawData.unitBehind : null;
 
     return {
       routeInfo: resolvedRouteInfo,
       controlPoints: processedControlPoints,
-      unitAhead,
-      unitBehind
     };
   }, []);
 
@@ -102,19 +90,10 @@ export default function RouteSchedulePage() {
 
   if (isLoading || !currentUnitId || !pageData) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 w-full max-w-7xl">
-          <div className="md:col-span-4 space-y-4">
-              <Skeleton className="h-24 w-full" />
-              <Skeleton className="h-48 w-full" />
-              <Skeleton className="h-20 w-full" />
-              <Skeleton className="h-20 w-full" />
-              <Skeleton className="h-12 w-full" />
-          </div>
-          <div className="md:col-span-8 space-y-4">
-            <Skeleton className="h-full w-full min-h-[60vh]" />
-          </div>
-        </div>
+      <div className="flex flex-col h-screen bg-background p-4 space-y-4">
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-8 w-full" />
+        <Skeleton className="flex-grow w-full" />
       </div>
     );
   }
@@ -123,8 +102,6 @@ export default function RouteSchedulePage() {
     <RouteDashboardClient
       initialRouteInfo={pageData.routeInfo}
       initialControlPoints={pageData.controlPoints}
-      initialUnitAhead={pageData.unitAhead}
-      initialUnitBehind={pageData.unitBehind}
       currentUnitId={currentUnitId}
     />
   );
