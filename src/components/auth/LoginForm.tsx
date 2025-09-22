@@ -149,7 +149,7 @@ export default function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-sm sm:max-w-md shadow-lg">
+    <Card className="w-full max-w-sm sm:max-w-md shadow-lg bg-card text-card-foreground">
       <CardHeader className="items-center pt-4 sm:pt-6 pb-3 sm:pb-4">
         <Image
           src="https://controlrutas.gpsplataforma.net/images/logo-main.png"

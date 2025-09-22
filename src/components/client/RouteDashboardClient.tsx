@@ -137,7 +137,7 @@ export default function RouteDashboardClient({
   }, [initialRouteInfo, initialControlPoints, initialUnitAhead, initialUnitBehind]);
 
   return (
-    <div className="h-screen bg-background text-foreground flex flex-col overflow-hidden">
+    <div className="dark h-screen bg-background text-foreground flex flex-col overflow-hidden">
       <HeaderNav currentTime={currentTime} />
       <div className="p-4 flex-1 flex flex-col gap-4">
         <Card className="border-border bg-card">
