@@ -51,8 +51,9 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
       }
     }
     
-    // Marcade would be the actual arrival time
-    const displayMarcade = point.marcade && point.marcade.length >= 5 ? point.marcade.substring(0, 5) : '-';
+    // Use `marcade` if available, otherwise fall back to `metaTime` for backward compatibility.
+    const arrivalTime = point.marcade || point.metaTime;
+    const displayMarcade = arrivalTime && arrivalTime.length >= 5 ? arrivalTime.substring(0, 5) : '-';
 
     return { statusText: text, statusColor: colorClass, displayMarcade };
   };
