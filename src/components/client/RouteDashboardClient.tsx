@@ -9,7 +9,6 @@ import { useToast } from '@/hooks/use-toast';
 import HeaderNav from '@/components/common/HeaderNav';
 import ControlPointsTable from '@/components/control-points/ControlPointsTable';
 import UnitInfoCard from '@/components/units/UnitInfoCard';
-import DigitalClock from '../common/DigitalClock';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import { Separator } from '../ui/separator';
 
@@ -69,15 +68,14 @@ export default function RouteDashboardClient({
         return null;
     }
 
-    // Safely process unit data
-    const unitAhead = (rawData.unitAhead && typeof rawData.unitAhead === 'object' && !Array.isArray(rawData.unitAhead) && Object.keys(rawData.unitAhead).length > 0) ? rawData.unitAhead : null;
-    const unitBehind = (rawData.unitBehind && typeof rawData.unitBehind === 'object' && !Array.isArray(rawData.unitBehind) && Object.keys(rawData.unitBehind).length > 0) ? rawData.unitBehind : null;
+    const unitAheadData = (rawData.unitAhead && typeof rawData.unitAhead === 'object' && !Array.isArray(rawData.unitAhead) && Object.keys(rawData.unitAhead).length > 0) ? rawData.unitAhead : null;
+    const unitBehindData = (rawData.unitBehind && typeof rawData.unitBehind === 'object' && !Array.isArray(rawData.unitBehind) && Object.keys(rawData.unitBehind).length > 0) ? rawData.unitBehind : null;
 
     return {
       routeInfo: rawData.routeInfo,
       controlPoints: Array.isArray(rawData.controlPoints) ? rawData.controlPoints : [],
-      unitAhead,
-      unitBehind,
+      unitAhead: unitAheadData,
+      unitBehind: unitBehindData,
     };
   }, []);
 
@@ -141,26 +139,31 @@ export default function RouteDashboardClient({
   return (
     <div className="h-screen bg-background text-foreground flex flex-col overflow-hidden">
       <HeaderNav currentTime={currentTime} />
-      <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Columna Izquierda - Info */}
-        <div className="md:col-span-1 flex flex-col gap-4">
-           <Card className="shadow-lg bg-card text-card-foreground">
-                <CardHeader className="p-3">
-                    <CardTitle className="text-lg">Información de Despacho</CardTitle>
-                </CardHeader>
-                <CardContent className="p-3 text-sm space-y-1">
-                    <p><strong>Ruta:</strong> {routeInfo.routeName}</p>
-                    <p><strong>Fecha:</strong> {routeInfo.currentDate}</p>
-                    <p><strong>Salida:</strong> {routeInfo.currentTime?.substring(0, 5)}</p>
-                    <p><strong>Unidad:</strong> {routeInfo.unitId}</p>
-                    {routeInfo.totalAT != null && <p><strong>Adelanto Total:</strong> {routeInfo.totalAT} min</p>}
-                    {routeInfo.totalAD != null && <p><strong>Atraso Total:</strong> {routeInfo.totalAD} min</p>}
-                </CardContent>
-            </Card>
-        </div>
+      <div className="p-4 flex-1 flex flex-col gap-4">
+        <Card className="border-border bg-card">
+          <CardContent className="p-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 text-sm">
+              <div className="flex flex-col">
+                <span className="text-muted-foreground">Ruta:</span>
+                <span className="font-bold text-base">{routeInfo.routeName}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-muted-foreground">Fecha:</span>
+                <span className="font-bold text-base">{routeInfo.currentDate}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-muted-foreground">Salida:</span>
+                <span className="font-bold text-base">{routeInfo.currentTime?.substring(0, 5)}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-muted-foreground">Unidad:</span>
+                <span className="font-bold text-base">{routeInfo.unitId}</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Columna Derecha - Tabla */}
-        <main className="md:col-span-2 flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto">
           <ControlPointsTable controlPoints={controlPoints} />
         </main>
       </div>
