@@ -23,19 +23,19 @@ export default function HeaderNav({ currentTime }: HeaderNavProps) {
 
   return (
     <header className="bg-card text-primary-foreground p-2 flex justify-between items-center shadow-lg border-b border-border">
-      <div className="font-bold text-lg">Control</div>
+      <div className="font-bold text-xl">Control</div>
       <div className="flex items-center gap-4 font-orbitron font-bold">
-        <RefreshCw size={20} className="cursor-pointer" />
+        <RefreshCw size={24} className="cursor-pointer" />
         <span></span>
-        <span className="text-xl">{timeString}</span>
+        <span className="text-2xl">{timeString}</span>
         <Button
           variant="ghost"
           size="icon"
           onClick={handleLogoutClick}
-          className="hover:bg-destructive/80 h-8 w-8"
+          className="hover:bg-destructive/80 h-9 w-9"
           aria-label="Cerrar sesión"
         >
-          <Power size={22} />
+          <Power size={26} />
         </Button>
       </div>
     </header>

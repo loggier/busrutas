@@ -9,8 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import HeaderNav from '@/components/common/HeaderNav';
 import ControlPointsTable from '@/components/control-points/ControlPointsTable';
 import UnitInfoCard from '@/components/units/UnitInfoCard';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
-import { Separator } from '../ui/separator';
+import { Card, CardContent } from '../ui/card';
 
 interface RawApiDataForClient {
   routeInfo: RouteInfo;
@@ -142,22 +141,22 @@ export default function RouteDashboardClient({
       <div className="p-4 flex-1 flex flex-col gap-4">
         <Card className="border-border bg-card">
           <CardContent className="p-2">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 text-sm">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 text-lg">
               <div className="flex flex-col">
                 <span className="text-muted-foreground">Ruta:</span>
-                <span className="font-bold text-base">{routeInfo.routeName}</span>
+                <span className="font-bold text-xl">{routeInfo.routeName}</span>
               </div>
               <div className="flex flex-col">
                 <span className="text-muted-foreground">Fecha:</span>
-                <span className="font-bold text-base">{routeInfo.currentDate}</span>
+                <span className="font-bold text-xl">{routeInfo.currentDate}</span>
               </div>
               <div className="flex flex-col">
                 <span className="text-muted-foreground">Salida:</span>
-                <span className="font-bold text-base">{routeInfo.currentTime?.substring(0, 5)}</span>
+                <span className="font-bold text-xl">{routeInfo.currentTime?.substring(0, 5)}</span>
               </div>
               <div className="flex flex-col">
                 <span className="text-muted-foreground">Unidad:</span>
-                <span className="font-bold text-base">{routeInfo.unitId}</span>
+                <span className="font-bold text-xl">{routeInfo.unitId}</span>
               </div>
             </div>
           </CardContent>

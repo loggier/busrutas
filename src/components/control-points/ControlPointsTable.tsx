@@ -19,11 +19,11 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
   if (controlPoints.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center text-center h-full p-4">
-        <Info className="h-10 w-10 text-primary mb-3" />
-        <p className="text-xl sm:text-2xl font-semibold text-foreground">
+        <Info className="h-12 w-12 text-primary mb-3" />
+        <p className="text-2xl sm:text-3xl font-semibold text-foreground">
           La unidad no tiene despacho asignado.
         </p>
-        <p className="text-base text-muted-foreground mt-1 sm:mt-2">
+        <p className="text-lg text-muted-foreground mt-1 sm:mt-2">
           No hay puntos de control para mostrar.
         </p>
       </div>
@@ -59,7 +59,7 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
   };
 
   return (
-    <Table>
+    <Table className="text-lg">
       <TableHeader>
         <TableRow className="hover:bg-primary/90">
           <TableHead className="w-[10px]"></TableHead>
@@ -73,9 +73,9 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
         {controlPoints.map((point) => {
           const { statusText, statusColor, displayMarcade } = getStatusInfo(point);
           return (
-            <TableRow key={point.id} className={cn(point.isCurrent ? 'bg-primary/20 font-bold' : 'hover:bg-muted/50')}>
-              <TableCell className="p-1">
-                {point.isCurrent && <Flag className="text-destructive" size={20} />}
+            <TableRow key={point.id} className={cn('text-xl', point.isCurrent ? 'bg-primary/20 font-bold' : 'hover:bg-muted/50')}>
+              <TableCell className="p-1.5">
+                {point.isCurrent && <Flag className="text-destructive" size={24} />}
               </TableCell>
               <TableCell className="font-medium">{point.name}</TableCell>
               <TableCell className="text-center">{point.scheduledTime ? point.scheduledTime.substring(0, 5) : '-'}</TableCell>
