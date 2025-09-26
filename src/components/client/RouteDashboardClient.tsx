@@ -145,19 +145,19 @@ export default function RouteDashboardClient({
           <CardContent className="p-2 flex flex-wrap items-center justify-between">
             <div className="flex items-center gap-x-4 gap-y-2 text-xl flex-grow flex-nowrap">
               <div className="flex items-baseline gap-2">
-                <span className="text-muted-foreground">Ruta:</span>
+                <span className="text-foreground">Ruta:</span>
                 <span className="font-bold">{routeInfo.routeName}</span>
               </div>
               <div className="flex items-baseline gap-2">
-                <span className="text-muted-foreground">Fecha:</span>
+                <span className="text-foreground">Fecha:</span>
                 <span className="font-bold">{routeInfo.currentDate}</span>
               </div>
               <div className="flex items-baseline gap-2">
-                <span className="text-muted-foreground">Salida:</span>
+                <span className="text-foreground">Salida:</span>
                 <span className="font-bold">{routeInfo.currentTime?.substring(0, 5)}</span>
               </div>
               <div className="flex items-baseline gap-2">
-                <span className="text-muted-foreground">Unidad:</span>
+                <span className="text-foreground">Unidad:</span>
                 <span className="font-bold">{routeInfo.unitId}</span>
               </div>
             </div>
