@@ -49,7 +49,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
   const renderTime = () => {
     if (!timeString) {
       return (
-        <div className="text-2xl sm:text-3xl md:text-4xl tracking-wider">
+        <div className="text-3xl sm:text-4xl md:text-5xl tracking-wider">
           <span>--</span>
           <span className="opacity-50 mx-1">:</span>
           <span>--</span>
@@ -60,7 +60,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
     }
     const [hours, minutes, seconds] = timeString.split(':');
     return (
-      <div className="text-2xl sm:text-3xl md:text-4xl tracking-wider font-orbitron">
+      <div className="text-xl tracking-wider font-orbitron">
         <span>{hours}</span>
         <span className={`transition-opacity duration-150 ease-in-out mx-0.5 sm:mx-1 ${showColon ? 'opacity-100' : 'opacity-25'}`}>:</span>
         <span>{minutes}</span>
