@@ -6,7 +6,6 @@ import { useCurrentTime } from '@/hooks/use-current-time';
 import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
-import HeaderNav from '@/components/common/HeaderNav';
 import ControlPointsTable from '@/components/control-points/ControlPointsTable';
 import UnitInfoCard from '@/components/units/UnitInfoCard';
 import { Card, CardContent } from '../ui/card';
@@ -138,11 +137,10 @@ export default function RouteDashboardClient({
 
   return (
     <div className="dark h-screen bg-background text-foreground flex flex-col overflow-hidden">
-      <HeaderNav currentTime={currentTime} />
       <div className="p-4 flex-1 flex flex-col gap-4">
         <Card className="border-border bg-card">
           <CardContent className="p-2 flex flex-wrap items-center justify-between">
-            <div className="flex items-center gap-x-4 gap-y-2 text-xl flex-grow">
+            <div className="flex items-center gap-x-4 gap-y-2 text-xl flex-grow flex-nowrap">
               <div className="flex items-baseline gap-2">
                 <span className="text-muted-foreground">Ruta:</span>
                 <span className="font-bold">{routeInfo.routeName}</span>
