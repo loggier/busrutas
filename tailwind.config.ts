@@ -10,9 +10,8 @@ export default {
   theme: {
   	extend: {
   		fontFamily: {
-        sans: ["var(--font-orbitron)"],
+        sans: ["var(--font-roboto)"],
         mono: ["var(--font-geist-mono)"],
-        orbitron: ["var(--font-orbitron)"],
       },
   		colors: {
   			background: 'hsl(var(--background))',
