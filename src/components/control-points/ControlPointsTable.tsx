@@ -32,26 +32,28 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
 
   const getStatusInfo = (point: ControlPoint) => {
     const statusValue = point.status ? parseInt(point.status.replace(/[a-zA-Z: ]/g, ''), 10) : NaN;
-    const isLate = point.status?.includes('l:');
-    const isEarly = point.status?.includes('e:');
-
+    
     let text = point.status || '-';
     let colorClass = 'text-foreground';
 
     if (!isNaN(statusValue)) {
-      if (isLate) {
-        text = `+${statusValue} min`;
-        colorClass = 'text-red-400';
-      } else if (isEarly) {
-        text = `-${statusValue} min`;
-        colorClass = 'text-green-400';
-      } else if (statusValue === 0) {
-        text = `0 min`;
-        colorClass = 'text-green-400';
-      }
+        if (point.status?.includes('l:')) {
+            text = `+${statusValue} min`;
+            colorClass = 'text-red-400';
+        } else if (point.status?.includes('e:')) {
+            text = `-${statusValue} min`;
+            colorClass = 'text-green-400';
+        } else {
+             if (statusValue > 0) {
+                text = `+${statusValue} min`;
+                colorClass = 'text-red-400';
+            } else if (statusValue <= 0) {
+                text = `${statusValue} min`;
+                colorClass = 'text-green-400';
+            }
+        }
     }
     
-    // Use `marcade` if available, otherwise fall back to `metaTime` for backward compatibility.
     const arrivalTime = point.marcade || point.metaTime;
     const displayMarcade = arrivalTime && arrivalTime.length >= 5 ? arrivalTime.substring(0, 5) : '-';
 
@@ -59,7 +61,7 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
   };
 
   return (
-    <Table className="text-2xl">
+    <Table className="text-3xl">
       <TableHeader>
         <TableRow className="bg-secondary hover:bg-secondary/90 border-b-2 border-border">
           <TableHead className="w-[10px] text-secondary-foreground"></TableHead>
@@ -73,9 +75,9 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
         {controlPoints.map((point) => {
           const { statusText, statusColor, displayMarcade } = getStatusInfo(point);
           return (
-            <TableRow key={point.id} className={cn('text-2xl border-border', point.isCurrent ? 'bg-primary font-bold' : 'hover:bg-primary/80')}>
+            <TableRow key={point.id} className={cn('text-3xl border-border', point.isCurrent ? 'bg-primary font-bold' : 'hover:bg-primary/80')}>
               <TableCell className="p-1.5">
-                {point.isCurrent && <Flag className="text-white" size={24} />}
+                {point.isCurrent && <Flag className="text-white" size={28} />}
               </TableCell>
               <TableCell className="font-medium">{point.name}</TableCell>
               <TableCell className="text-center">{point.scheduledTime ? point.scheduledTime.substring(0, 5) : '-'}</TableCell>
