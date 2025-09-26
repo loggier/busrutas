@@ -82,7 +82,7 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
               <TableCell className="font-medium">{point.name}</TableCell>
               <TableCell className="text-center">{point.scheduledTime ? point.scheduledTime.substring(0, 5) : '-'}</TableCell>
               <TableCell className="text-center">{displayMarcade}</TableCell>
-              <TableCell className={cn("text-center font-semibold", point.isCurrent ? 'text-white' : statusColor)}>{statusText}</TableCell>
+              <TableCell className={cn("text-center font-semibold", statusColor)}>{statusText}</TableCell>
             </TableRow>
           );
         })}
