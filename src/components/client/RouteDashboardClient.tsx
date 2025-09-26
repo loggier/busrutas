@@ -10,6 +10,7 @@ import HeaderNav from '@/components/common/HeaderNav';
 import ControlPointsTable from '@/components/control-points/ControlPointsTable';
 import UnitInfoCard from '@/components/units/UnitInfoCard';
 import { Card, CardContent } from '../ui/card';
+import DigitalClock from '../common/DigitalClock';
 
 interface RawApiDataForClient {
   routeInfo: RouteInfo;
@@ -140,8 +141,8 @@ export default function RouteDashboardClient({
       <HeaderNav currentTime={currentTime} />
       <div className="p-4 flex-1 flex flex-col gap-4">
         <Card className="border-border bg-card">
-          <CardContent className="p-2">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 text-lg">
+          <CardContent className="p-2 flex flex-wrap items-center justify-between">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 text-lg flex-grow">
               <div className="flex flex-col">
                 <span className="text-muted-foreground">Ruta:</span>
                 <span className="font-bold text-xl">{routeInfo.routeName}</span>
@@ -158,6 +159,9 @@ export default function RouteDashboardClient({
                 <span className="text-muted-foreground">Unidad:</span>
                 <span className="font-bold text-xl">{routeInfo.unitId}</span>
               </div>
+            </div>
+            <div className="flex-shrink-0 ml-4">
+              <DigitalClock currentTime={currentTime} />
             </div>
           </CardContent>
         </Card>
