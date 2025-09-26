@@ -31,23 +31,23 @@ body {
   }
 
   .dark {
-    --background: 210 40% 96.1%; /* Azul claro de fondo */
-    --foreground: 222.2 47.4% 11.2%; /* Texto oscuro */
-    --card: 210 40% 96.1%;
-    --card-foreground: 222.2 47.4% 11.2%;
+    --background: 207 90% 54%; /* Azul principal de la tabla */
+    --foreground: 0 0% 100%; /* Texto blanco */
+    --card: 217.2 91.2% 59.8%;
+    --card-foreground: 0 0% 100%;
     --popover: 210 40% 96.1%;
     --popover-foreground: 222.2 47.4% 11.2%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 217.2 91.2% 59.8%;
+    --primary: 217.2 91.2% 59.8%; /* Azul oscuro para fila seleccionada */
+    --primary-foreground: 0 0% 100%; /* Texto blanco */
+    --secondary: 217.2 91.2% 59.8%; /* Azul oscuro para cabecera de tabla */
+    --secondary-foreground: 0 0% 100%; /* Texto blanco */
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
     --accent: 210 40% 96.1%;
     --accent-foreground: 217.2 91.2% 59.8%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
+    --border: 217.2 91.2% 65%; /* Borde azul un poco más claro */
     --input: 214.3 31.8% 91.4%;
     --ring: 217.2 91.2% 59.8%;
   }

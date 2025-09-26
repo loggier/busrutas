@@ -41,13 +41,13 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
     if (!isNaN(statusValue)) {
       if (isLate) {
         text = `+${statusValue} min`;
-        colorClass = 'text-red-500'; // Late color
+        colorClass = 'text-red-400';
       } else if (isEarly) {
         text = `-${statusValue} min`;
-        colorClass = 'text-green-500'; // Early color
+        colorClass = 'text-green-400';
       } else if (statusValue === 0) {
         text = `0 min`;
-        colorClass = 'text-green-500'; // On-time color
+        colorClass = 'text-green-400';
       }
     }
     
@@ -61,26 +61,26 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
   return (
     <Table className="text-2xl">
       <TableHeader>
-        <TableRow className="bg-secondary hover:bg-secondary/90 border-b-2 border-primary">
-          <TableHead className="w-[10px]"></TableHead>
-          <TableHead>Punto de Control</TableHead>
-          <TableHead className="text-center">Hora Programada</TableHead>
-          <TableHead className="text-center">Hora Marcada</TableHead>
-          <TableHead className="text-center">Adelanto/Atraso</TableHead>
+        <TableRow className="bg-secondary hover:bg-secondary/90 border-b-2 border-border">
+          <TableHead className="w-[10px] text-secondary-foreground"></TableHead>
+          <TableHead className="text-secondary-foreground">Punto de Control</TableHead>
+          <TableHead className="text-center text-secondary-foreground">Hora Programada</TableHead>
+          <TableHead className="text-center text-secondary-foreground">Hora Marcada</TableHead>
+          <TableHead className="text-center text-secondary-foreground">Adelanto/Atraso</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {controlPoints.map((point) => {
           const { statusText, statusColor, displayMarcade } = getStatusInfo(point);
           return (
-            <TableRow key={point.id} className={cn('text-2xl', point.isCurrent ? 'bg-primary/20 font-bold' : 'hover:bg-muted/50')}>
+            <TableRow key={point.id} className={cn('text-2xl border-border', point.isCurrent ? 'bg-primary font-bold' : 'hover:bg-primary/80')}>
               <TableCell className="p-1.5">
-                {point.isCurrent && <Flag className="text-destructive" size={24} />}
+                {point.isCurrent && <Flag className="text-white" size={24} />}
               </TableCell>
               <TableCell className="font-medium">{point.name}</TableCell>
               <TableCell className="text-center">{point.scheduledTime ? point.scheduledTime.substring(0, 5) : '-'}</TableCell>
               <TableCell className="text-center">{displayMarcade}</TableCell>
-              <TableCell className={cn("text-center font-semibold", statusColor)}>{statusText}</TableCell>
+              <TableCell className={cn("text-center font-semibold", point.isCurrent ? 'text-white' : statusColor)}>{statusText}</TableCell>
             </TableRow>
           );
         })}
