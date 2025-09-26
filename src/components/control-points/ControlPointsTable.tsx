@@ -59,9 +59,9 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
   };
 
   return (
-    <Table className="text-lg">
+    <Table className="text-2xl">
       <TableHeader>
-        <TableRow className="hover:bg-primary/90">
+        <TableRow className="bg-secondary hover:bg-secondary/90 border-b-2 border-primary">
           <TableHead className="w-[10px]"></TableHead>
           <TableHead>Punto de Control</TableHead>
           <TableHead className="text-center">Hora Programada</TableHead>
@@ -73,7 +73,7 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
         {controlPoints.map((point) => {
           const { statusText, statusColor, displayMarcade } = getStatusInfo(point);
           return (
-            <TableRow key={point.id} className={cn('text-xl', point.isCurrent ? 'bg-primary/20 font-bold' : 'hover:bg-muted/50')}>
+            <TableRow key={point.id} className={cn('text-2xl', point.isCurrent ? 'bg-primary/20 font-bold' : 'hover:bg-muted/50')}>
               <TableCell className="p-1.5">
                 {point.isCurrent && <Flag className="text-destructive" size={24} />}
               </TableCell>
