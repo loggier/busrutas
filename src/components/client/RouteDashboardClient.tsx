@@ -142,27 +142,31 @@ export default function RouteDashboardClient({
     <div className="dark h-screen bg-background text-foreground flex flex-col overflow-hidden">
       <div className="p-4 flex-1 flex flex-col gap-4">
         <Card className="border-border bg-secondary">
-          <CardContent className="p-2 flex flex-wrap items-center justify-between">
-            <div className="flex items-center gap-x-4 gap-y-2 text-xl flex-grow flex-nowrap">
+          <CardContent className="p-2 flex flex-col items-center justify-center">
+            <div className="w-full flex justify-center text-xl mb-1">
               <div className="flex items-baseline gap-2">
                 <span className="text-foreground">Ruta:</span>
                 <span className="font-bold">{routeInfo.routeName}</span>
               </div>
-              <div className="flex items-baseline gap-2">
-                <span className="text-foreground">Fecha:</span>
-                <span className="font-bold">{routeInfo.currentDate}</span>
-              </div>
-              <div className="flex items-baseline gap-2">
-                <span className="text-foreground">Salida:</span>
-                <span className="font-bold">{routeInfo.currentTime?.substring(0, 5)}</span>
-              </div>
-              <div className="flex items-baseline gap-2">
-                <span className="text-foreground">Unidad:</span>
-                <span className="font-bold">{routeInfo.unitId}</span>
-              </div>
             </div>
-            <div className="flex-shrink-0 ml-4">
-              <DigitalClock currentTime={currentTime} />
+            <div className="w-full flex flex-wrap items-center justify-between text-xl">
+              <div className="flex items-center gap-x-4 gap-y-2 flex-grow">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-foreground">Fecha:</span>
+                  <span className="font-bold">{routeInfo.currentDate}</span>
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-foreground">Salida:</span>
+                  <span className="font-bold">{routeInfo.currentTime?.substring(0, 5)}</span>
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-foreground">Unidad:</span>
+                  <span className="font-bold">{routeInfo.unitId}</span>
+                </div>
+              </div>
+              <div className="flex-shrink-0 ml-4">
+                <DigitalClock currentTime={currentTime} />
+              </div>
             </div>
           </CardContent>
         </Card>
