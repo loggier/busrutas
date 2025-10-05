@@ -60,7 +60,7 @@ export default function DigitalClock({ currentTime }: DigitalClockProps) {
     }
     const [hours, minutes, seconds] = timeString.split(':');
     return (
-      <div className="text-xl tracking-wider font-orbitron">
+      <div className="text-3xl tracking-wider font-roboto">
         <span>{hours}</span>
         <span className={`transition-opacity duration-150 ease-in-out mx-0.5 sm:mx-1 ${showColon ? 'opacity-100' : 'opacity-25'}`}>:</span>
         <span>{minutes}</span>

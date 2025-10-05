@@ -143,13 +143,13 @@ export default function RouteDashboardClient({
       <div className="p-4 flex-1 flex flex-col gap-4">
         <Card className="border-border bg-secondary">
           <CardContent className="p-2 flex flex-col items-center justify-center">
-            <div className="w-full flex justify-center text-2xl mb-1">
+            <div className="w-full flex justify-center text-3xl mb-1">
               <div className="flex items-baseline gap-2">
                 <span className="text-foreground">Ruta:</span>
                 <span className="font-bold">{routeInfo.routeName}</span>
               </div>
             </div>
-            <div className="w-full flex flex-wrap items-center justify-between text-2xl">
+            <div className="w-full flex flex-wrap items-center justify-between text-3xl">
               <div className="flex items-center gap-x-4 gap-y-2 flex-grow">
                 <div className="flex items-baseline gap-2">
                   <span className="text-foreground">Fecha:</span>
