@@ -37,7 +37,9 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
     const statusValue = point.status ? parseInt(point.status.replace(/[a-zA-Z: ]/g, ''), 10) : NaN;
     
     let text = point.status || '-';
-    let colorClass = point.isCurrent ? 'text-white' : 'text-foreground';
+    let colorClass = 'text-foreground';
+    if(point.isCurrent) colorClass = 'text-white';
+
 
     if (!isNaN(statusValue)) {
         if (point.status?.includes('l:')) {
@@ -64,17 +66,27 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
   };
 
   const getArrivalTimeText = (point: ControlPoint) => {
-    if (point.marcade || !currentTime || !point.scheduledTime) {
+    // Si ya hay una hora marcada, siempre debe mostrar un guión.
+    if (point.marcade) {
+      return '-';
+    }
+    
+    if (!currentTime || !point.scheduledTime) {
       return '-';
     }
     
     try {
       let scheduledDateTime: Date;
-      if (point.scheduledTime.length > 5) {
-        scheduledDateTime = parse(point.scheduledTime, 'HH:mm:ss', new Date());
-      } else {
-        scheduledDateTime = parse(point.scheduledTime, 'HH:mm', new Date());
-      }
+      // Normalizamos el objeto Date actual a solo fecha para unirlo con la hora programada
+      const today = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate());
+
+      const timeParts = point.scheduledTime.split(':');
+      if (timeParts.length < 2) return '-';
+
+      scheduledDateTime = new Date(today);
+      scheduledDateTime.setHours(parseInt(timeParts[0], 10));
+      scheduledDateTime.setMinutes(parseInt(timeParts[1], 10));
+      scheduledDateTime.setSeconds(timeParts.length > 2 ? parseInt(timeParts[2], 10) : 0);
 
       if (isNaN(scheduledDateTime.getTime())) {
           return '-';
