@@ -64,6 +64,7 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
   };
 
   const getArrivalTimeText = (point: ControlPoint) => {
+    // Si el punto ya tiene hora marcada, no calculamos nada.
     if (point.marcade || !currentTime || !point.scheduledTime) {
       return '-';
     }
@@ -134,3 +135,4 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
     </Table>
   );
 }
+
