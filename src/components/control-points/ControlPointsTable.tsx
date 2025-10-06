@@ -64,14 +64,24 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
   };
 
   const getArrivalTimeText = (point: ControlPoint) => {
-    // Si ya hay una hora marcada, no necesitamos calcular el tiempo de llegada.
     if (point.marcade || !currentTime || !point.scheduledTime) {
       return '-';
     }
     
     try {
-      // Usamos parse de date-fns para crear un objeto de fecha con la hora programada en el día de hoy.
-      const scheduledDateTime = parse(point.scheduledTime, 'HH:mm', new Date());
+      // Intenta parsear la hora usando 'HH:mm:ss' o 'HH:mm'
+      let scheduledDateTime: Date;
+      if (point.scheduledTime.length > 5) {
+        scheduledDateTime = parse(point.scheduledTime, 'HH:mm:ss', new Date());
+      } else {
+        scheduledDateTime = parse(point.scheduledTime, 'HH:mm', new Date());
+      }
+
+      // Si el parseo resulta en una fecha inválida, devuelve un guion
+      if (isNaN(scheduledDateTime.getTime())) {
+          return '-';
+      }
+
       const diff = differenceInMinutes(scheduledDateTime, currentTime);
 
       if (diff < 0) {
@@ -81,7 +91,7 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
 
     } catch (e) {
       console.error("Error parsing date: ", e);
-      return '-'; // Devuelve un guion si hay un error al parsear.
+      return '-';
     }
   };
 
@@ -116,7 +126,7 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
               <TableCell className="text-center">{point.scheduledTime ? point.scheduledTime.substring(0, 5) : '-'}</TableCell>
               <TableCell className="text-center">{arrivalTimeText}</TableCell>
               <TableCell className="text-center">{displayMarcade}</TableCell>
-              <TableCell className={cn("text-center font-semibold", point.isCurrent ? statusColor : statusColor)}>{statusText}</TableCell>
+              <TableCell className={cn("text-center font-semibold", statusColor)}>{statusText}</TableCell>
             </TableRow>
           );
         })}
