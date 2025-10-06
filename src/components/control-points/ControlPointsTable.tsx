@@ -10,12 +10,15 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { Info, Flag } from 'lucide-react';
+import { differenceInMinutes, parse } from 'date-fns';
+
 
 interface ControlPointsTableProps {
   controlPoints: ControlPoint[];
+  currentTime: Date | null;
 }
 
-export default function ControlPointsTable({ controlPoints }: ControlPointsTableProps) {
+export default function ControlPointsTable({ controlPoints, currentTime }: ControlPointsTableProps) {
   if (controlPoints.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center text-center h-full p-4">
@@ -60,6 +63,26 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
     return { statusText: text, statusColor: colorClass, displayMarcade };
   };
 
+  const getArrivalTimeText = (point: ControlPoint) => {
+    if (point.marcade || !currentTime || !point.scheduledTime) {
+      return '-';
+    }
+    
+    try {
+      const scheduledDateTime = parse(point.scheduledTime, 'HH:mm', new Date());
+      const diff = differenceInMinutes(scheduledDateTime, currentTime);
+
+      if (diff < 0) {
+        return `Hace ${Math.abs(diff)} min`;
+      }
+      return `Faltan ${diff} min`;
+
+    } catch (e) {
+      return '-';
+    }
+  };
+
+
   return (
     <Table className="text-3xl">
       <TableHeader>
@@ -67,6 +90,7 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
           <TableHead className="w-[10px] text-secondary-foreground"></TableHead>
           <TableHead className="text-secondary-foreground">Punto de Control</TableHead>
           <TableHead className="text-center text-secondary-foreground">Hora Programada</TableHead>
+          <TableHead className="text-center text-secondary-foreground">Tiempo de Llegada</TableHead>
           <TableHead className="text-center text-secondary-foreground">Hora Marcada</TableHead>
           <TableHead className="text-center text-secondary-foreground">Adelanto/Atraso</TableHead>
         </TableRow>
@@ -74,15 +98,22 @@ export default function ControlPointsTable({ controlPoints }: ControlPointsTable
       <TableBody>
         {controlPoints.map((point) => {
           const { statusText, statusColor, displayMarcade } = getStatusInfo(point);
+          const arrivalTimeText = getArrivalTimeText(point);
+          const rowClasses = cn(
+            'text-3xl border-border',
+            point.isCurrent ? 'bg-primary font-bold' : 'hover:bg-primary/80'
+          );
+          
           return (
-            <TableRow key={point.id} className={cn('text-3xl border-border', point.isCurrent ? 'bg-primary font-bold' : 'hover:bg-primary/80')}>
+            <TableRow key={point.id} className={rowClasses}>
               <TableCell className="p-1.5">
                 {point.isCurrent && <Flag className="text-white" size={28} />}
               </TableCell>
               <TableCell className="font-medium">{point.name}</TableCell>
               <TableCell className="text-center">{point.scheduledTime ? point.scheduledTime.substring(0, 5) : '-'}</TableCell>
+              <TableCell className="text-center">{arrivalTimeText}</TableCell>
               <TableCell className="text-center">{displayMarcade}</TableCell>
-              <TableCell className={cn("text-center font-semibold", statusColor)}>{statusText}</TableCell>
+              <TableCell className={cn("text-center font-semibold", point.isCurrent ? statusColor : statusColor)}>{statusText}</TableCell>
             </TableRow>
           );
         })}

@@ -172,7 +172,7 @@ export default function RouteDashboardClient({
         </Card>
 
         <main className="flex-1 overflow-y-auto">
-          <ControlPointsTable controlPoints={controlPoints} />
+          <ControlPointsTable controlPoints={controlPoints} currentTime={currentTime} />
         </main>
       </div>
     </div>
