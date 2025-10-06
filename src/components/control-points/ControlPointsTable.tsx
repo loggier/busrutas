@@ -37,7 +37,7 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
     const statusValue = point.status ? parseInt(point.status.replace(/[a-zA-Z: ]/g, ''), 10) : NaN;
     
     let text = point.status || '-';
-    let colorClass = 'text-foreground';
+    let colorClass = point.isCurrent ? 'text-white' : 'text-foreground';
 
     if (!isNaN(statusValue)) {
         if (point.status?.includes('l:')) {
@@ -64,13 +64,11 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
   };
 
   const getArrivalTimeText = (point: ControlPoint) => {
-    // Si el punto ya tiene hora marcada, no calculamos nada.
     if (point.marcade || !currentTime || !point.scheduledTime) {
       return '-';
     }
     
     try {
-      // Intenta parsear la hora usando 'HH:mm:ss' o 'HH:mm'
       let scheduledDateTime: Date;
       if (point.scheduledTime.length > 5) {
         scheduledDateTime = parse(point.scheduledTime, 'HH:mm:ss', new Date());
@@ -78,17 +76,17 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
         scheduledDateTime = parse(point.scheduledTime, 'HH:mm', new Date());
       }
 
-      // Si el parseo resulta en una fecha inválida, devuelve un guion
       if (isNaN(scheduledDateTime.getTime())) {
           return '-';
       }
 
-      const diff = differenceInMinutes(scheduledDateTime, currentTime);
+      const diff = differenceInMinutes(currentTime, scheduledDateTime);
 
-      if (diff < 0) {
-        return `Hace ${Math.abs(diff)} min`;
+      if (diff >= 0) { // La hora programada ya pasó
+        return `Hace ${diff} min`;
       }
-      return `Faltan ${diff} min`;
+      // La hora programada es en el futuro
+      return `${Math.abs(diff)} min`;
 
     } catch (e) {
       console.error("Error parsing date: ", e);
@@ -115,7 +113,7 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
           const arrivalTimeText = getArrivalTimeText(point);
           const rowClasses = cn(
             'text-3xl border-border',
-            point.isCurrent ? 'bg-primary font-bold' : 'hover:bg-primary/80'
+            point.isCurrent ? 'bg-primary font-bold text-white' : 'hover:bg-primary/80'
           );
           
           return (
