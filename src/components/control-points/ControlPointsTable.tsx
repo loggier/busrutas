@@ -38,23 +38,32 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
     
     let text = point.status || '-';
     let colorClass = 'text-foreground';
-    if(point.isCurrent) colorClass = 'text-white';
+    if (point.isCurrent) {
+        // For the current row, we want colors to be based on status, not just white
+        if (!isNaN(statusValue)) {
+            if (statusValue > 0) colorClass = 'text-red-400';
+            else colorClass = 'text-green-400';
+        } else {
+            colorClass = 'text-white';
+        }
+    } else {
+        if (!isNaN(statusValue)) {
+            if (statusValue > 0) colorClass = 'text-red-400';
+            else colorClass = 'text-green-400';
+        }
+    }
 
 
     if (!isNaN(statusValue)) {
         if (point.status?.includes('l:')) {
             text = `+${statusValue} min`;
-            colorClass = 'text-red-400';
         } else if (point.status?.includes('e:')) {
             text = `-${statusValue} min`;
-            colorClass = 'text-green-400';
         } else {
              if (statusValue > 0) {
                 text = `+${statusValue} min`;
-                colorClass = 'text-red-400';
             } else if (statusValue <= 0) {
                 text = `${statusValue} min`;
-                colorClass = 'text-green-400';
             }
         }
     }
@@ -65,19 +74,14 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
     return { statusText: text, statusColor: colorClass, displayMarcade };
   };
 
-  const getArrivalTimeText = (point: ControlPoint) => {
-    // Si ya hay una hora marcada, siempre debe mostrar un guión.
-    if (point.marcade) {
-      return '-';
-    }
-    
+  const getArrivalTimeText = (point: ControlPoint): string => {
+    // This function is now only called if point.marcade is falsy.
     if (!currentTime || !point.scheduledTime) {
       return '-';
     }
     
     try {
       let scheduledDateTime: Date;
-      // Normalizamos el objeto Date actual a solo fecha para unirlo con la hora programada
       const today = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate());
 
       const timeParts = point.scheduledTime.split(':');
@@ -94,10 +98,9 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
 
       const diff = differenceInMinutes(currentTime, scheduledDateTime);
 
-      if (diff >= 0) { // La hora programada ya pasó
+      if (diff >= 0) {
         return `Hace ${diff} min`;
       }
-      // La hora programada es en el futuro
       return `${Math.abs(diff)} min`;
 
     } catch (e) {
@@ -122,7 +125,7 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
       <TableBody>
         {controlPoints.map((point) => {
           const { statusText, statusColor, displayMarcade } = getStatusInfo(point);
-          const arrivalTimeText = getArrivalTimeText(point);
+          const arrivalTimeText = point.marcade ? '-' : getArrivalTimeText(point);
           const rowClasses = cn(
             'text-3xl border-border',
             point.isCurrent ? 'bg-primary font-bold text-white' : 'hover:bg-primary/80'
