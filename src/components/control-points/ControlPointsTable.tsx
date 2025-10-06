@@ -38,19 +38,19 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
     
     let text = point.status || '-';
     let colorClass = 'text-foreground';
-    if (point.isCurrent) {
-        // For the current row, we want colors to be based on status, not just white
-        if (!isNaN(statusValue)) {
-            if (statusValue > 0) colorClass = 'text-red-400';
-            else colorClass = 'text-green-400';
-        } else {
-            colorClass = 'text-white';
-        }
-    } else {
-        if (!isNaN(statusValue)) {
-            if (statusValue > 0) colorClass = 'text-red-400';
-            else colorClass = 'text-green-400';
-        }
+   
+    if (!isNaN(statusValue)) {
+        if (statusValue > 0) colorClass = 'text-red-400';
+        else colorClass = 'text-green-400';
+    }
+
+    if(point.isCurrent) {
+      if (!isNaN(statusValue)) {
+          if (statusValue > 0) colorClass = 'text-red-400';
+          else colorClass = 'text-green-400';
+      } else {
+          colorClass = 'text-white';
+      }
     }
 
 
@@ -75,7 +75,6 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
   };
 
   const getArrivalTimeText = (point: ControlPoint): string => {
-    // This function is now only called if point.marcade is falsy.
     if (!currentTime || !point.scheduledTime) {
       return '-';
     }
@@ -125,7 +124,7 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
       <TableBody>
         {controlPoints.map((point) => {
           const { statusText, statusColor, displayMarcade } = getStatusInfo(point);
-          const arrivalTimeText = point.marcade ? '-' : getArrivalTimeText(point);
+          const arrivalTimeText = getArrivalTimeText(point);
           const rowClasses = cn(
             'text-3xl border-border',
             point.isCurrent ? 'bg-primary font-bold text-white' : 'hover:bg-primary/80'
@@ -138,7 +137,7 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
               </TableCell>
               <TableCell className="font-medium">{point.name}</TableCell>
               <TableCell className="text-center">{point.scheduledTime ? point.scheduledTime.substring(0, 5) : '-'}</TableCell>
-              <TableCell className="text-center">{arrivalTimeText}</TableCell>
+              <TableCell className="text-center">{displayMarcade !== '-' ? '-' : arrivalTimeText}</TableCell>
               <TableCell className="text-center">{displayMarcade}</TableCell>
               <TableCell className={cn("text-center font-semibold", statusColor)}>{statusText}</TableCell>
             </TableRow>
