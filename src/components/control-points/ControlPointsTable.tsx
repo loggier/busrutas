@@ -135,4 +135,3 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
     </Table>
   );
 }
-
