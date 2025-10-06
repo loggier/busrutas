@@ -64,11 +64,13 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
   };
 
   const getArrivalTimeText = (point: ControlPoint) => {
+    // Si ya hay una hora marcada, no necesitamos calcular el tiempo de llegada.
     if (point.marcade || !currentTime || !point.scheduledTime) {
       return '-';
     }
     
     try {
+      // Usamos parse de date-fns para crear un objeto de fecha con la hora programada en el día de hoy.
       const scheduledDateTime = parse(point.scheduledTime, 'HH:mm', new Date());
       const diff = differenceInMinutes(scheduledDateTime, currentTime);
 
@@ -78,7 +80,8 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
       return `Faltan ${diff} min`;
 
     } catch (e) {
-      return '-';
+      console.error("Error parsing date: ", e);
+      return '-'; // Devuelve un guion si hay un error al parsear.
     }
   };
 
