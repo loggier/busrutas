@@ -138,6 +138,15 @@ export default function RouteDashboardClient({
     setUnitBehind(initialUnitBehind);
   }, [initialRouteInfo, initialControlPoints, initialUnitAhead, initialUnitBehind]);
 
+  const formatDate = (dateString: string) => {
+    if (!dateString || !/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+      return dateString;
+    }
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`;
+  };
+
+
   return (
     <div className="dark h-screen bg-background text-foreground flex flex-col overflow-hidden">
       <div className="p-4 flex-1 flex flex-col gap-4">
@@ -152,12 +161,12 @@ export default function RouteDashboardClient({
             <div className="w-full flex flex-wrap items-center justify-between text-3xl">
               <div className="flex items-center gap-x-4 gap-y-2 flex-grow">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-foreground">Fecha:</span>
-                  <span className="font-bold">{routeInfo.currentDate}</span>
-                </div>
-                <div className="flex items-baseline gap-2">
                   <span className="text-foreground">Salida:</span>
                   <span className="font-bold">{routeInfo.currentTime?.substring(0, 5)}</span>
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-foreground">Fecha:</span>
+                  <span className="font-bold">{formatDate(routeInfo.currentDate)}</span>
                 </div>
                 <div className="flex items-baseline gap-2">
                   <span className="text-foreground">Unidad:</span>

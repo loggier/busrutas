@@ -45,12 +45,11 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
     }
 
     if(point.isCurrent) {
-      if (!isNaN(statusValue)) {
-          if (statusValue > 0) colorClass = 'text-red-400';
-          else colorClass = 'text-green-400';
-      } else {
-          colorClass = 'text-white';
-      }
+        colorClass = 'text-white';
+        if (!isNaN(statusValue)) {
+            if (statusValue > 0) colorClass = 'text-red-400';
+            else colorClass = 'text-green-400';
+        }
     }
 
 
@@ -116,7 +115,7 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
           <TableHead className="w-[10px] text-secondary-foreground"></TableHead>
           <TableHead className="text-secondary-foreground">Punto de Control</TableHead>
           <TableHead className="text-center text-secondary-foreground">Hora Programada</TableHead>
-          <TableHead className="text-center text-secondary-foreground">Tiempo de Llegada</TableHead>
+          <TableHead className="text-center text-secondary-foreground">Min. falta</TableHead>
           <TableHead className="text-center text-secondary-foreground">Hora Marcada</TableHead>
           <TableHead className="text-center text-secondary-foreground">Adelanto/Atraso</TableHead>
         </TableRow>
@@ -139,7 +138,7 @@ export default function ControlPointsTable({ controlPoints, currentTime }: Contr
               <TableCell className="text-center">{point.scheduledTime ? point.scheduledTime.substring(0, 5) : '-'}</TableCell>
               <TableCell className="text-center">{displayMarcade !== '-' ? '-' : arrivalTimeText}</TableCell>
               <TableCell className="text-center">{displayMarcade}</TableCell>
-              <TableCell className={cn("text-center font-semibold", statusColor)}>{statusText}</TableCell>
+              <TableCell className={cn("text-center font-semibold", point.isCurrent ? statusColor : statusColor)}>{statusText}</TableCell>
             </TableRow>
           );
         })}
