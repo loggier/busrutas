@@ -64,7 +64,7 @@ export default function LoginForm() {
       setInstallPromptEvent(null);
       toast({
           title: 'Aplicación Instalada',
-          description: 'Unidad PuntoExacto se ha instalado correctamente.',
+          description: 'App se ha instalado correctamente.',
           variant: 'default',
       });
     };
@@ -153,7 +153,7 @@ export default function LoginForm() {
       <CardHeader className="items-center pt-4 sm:pt-6 pb-3 sm:pb-4">
         <Image
           src="https://controlrutas.gpsplataforma.net/images/logo-main.png"
-          alt="PuntoExacto Logo"
+          alt="Control Logo"
           width={300}
           height={150}
           className="object-contain mb-2 sm:mb-4 w-[225px] h-auto"

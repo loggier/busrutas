@@ -22,14 +22,14 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: 'Unidad PuntoExacto',
-  description: 'Aplicación de seguimiento y despacho para unidades de PuntoExacto.',
+  title: 'Control Rutas & Paradas',
+  description: 'Aplicación de seguimiento y despacho para unidades de Control Rutas & Paradas.',
   manifest: '/manifest.json',
   themeColor: '#F44336', // Corresponds to --primary color (Vivid Coral)
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Unidad PuntoExacto',
+    title: 'Control Rutas & Paradas',
     // startupImage: [], // Puedes añadir imágenes de inicio para iOS aquí
   },
 };
